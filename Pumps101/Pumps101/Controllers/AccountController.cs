@@ -377,6 +377,7 @@ namespace Pumps101.Controllers
                     result = await UserManager.AddLoginAsync(user.Id, info.Login);
                     if (result.Succeeded)
                     {
+                        //await UserManager.AddToRoleAsync(user.Id, "canEdit");
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                         return RedirectToLocal(returnUrl);
                     }
