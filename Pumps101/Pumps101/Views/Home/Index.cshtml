@@ -2,23 +2,35 @@
     var Resource = { img: {}, sfx: {} }
     var canvas;
     var ctx;
-    var backgroundLoaded = false;
-    Resource.img.background = new Image();
+    var width;
+    var height;
+    var GridSize = 40;
+
     function drawcanvas() {
         canvas = document.getElementById("canvas");
         ctx = canvas.getContext("2d");
+        width = canvas.width;
+        height = canvas.height;
+        rows = height / GridSize;
+        columns = width / GridSize;
+        drawGrid();
+    }
 
-        if (backgroundLoaded) {
-            ctx.drawImage(Resource.img.background, 0, 0, canvas.width, canvas.height);
+    function drawGrid() {
+        ctx.strokeStyle = "black";
+        var i;
+        for (i = 0; i < height; i += GridSize) {
+            ctx.lineWidth = 1;
+            ctx.moveTo(0, i);
+            ctx.lineTo(width, i);
+            ctx.stroke();
         }
-        else {
-            Resource.img.background.onload = function () {
-                ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
-            };
-            Resource.img.background.src = '@Url.Content("/Content/Images/outer_space.jpg")';
-            backgroundLoaded = true;
+        for (i = 0; i < width; i += GridSize) {
+            ctx.lineWidth = 1;
+            ctx.moveTo(i, 0);
+            ctx.lineTo(i, height);
+            ctx.stroke();
         }
-
     }
 </script>
 

@@ -43,6 +43,7 @@
         ctx.fillText('Orientiation changes: ' + oc, cwidth / 2, cheight / 2);
         ctx.fillText('Resize events: ' + rc, cwidth / 2, cheight / 2 + 10);
         drawcanvas();
+        console.log("drew Canvas");
     }
 
     // Install resize and orientation change handlers. Note Android may firef both
