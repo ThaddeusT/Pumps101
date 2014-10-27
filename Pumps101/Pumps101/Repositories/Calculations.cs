@@ -18,8 +18,6 @@ namespace Pumps101.Repositories
         private double _hpCorrect = 0;  // once they check the value once it will be set so they don't have to recalculate
         private double[] _tankPressure;		// psig
         private int _maxNumberOfChances;
-       
-
 
         public double getPipeDiam() { return _diam; }
         public double getLiquidDensity() { return _density; }
@@ -63,7 +61,6 @@ namespace Pumps101.Repositories
             else if (!withHeight && withPressure)   workPerMass = getWorkFromVelocities(0, v2) + getPressureFromWork();
             else                                    workPerMass = getWorkFromVelocities(0, v2) + getWorkFromHeight() + getPressureFromWork();
             
-
             // returns correct hp
             return convertWorkToHorsePower(workPerMass, volumetricFlowRate, _density);
         }
@@ -95,12 +92,10 @@ namespace Pumps101.Repositories
             return work;
         }
 
-
-
         // Setting Level //
 
          /// <summary>
-         /// Currently, dynamically sets values for levels 1-3
+         /// Currently, dynamically sets values for levels 1-3 and gets correct HP
          /// </summary>
          /// <param name="chances">the number of chance they have to get it correct</param>
         private void setLevelOneToThree(int chances)
@@ -111,7 +106,6 @@ namespace Pumps101.Repositories
             _diams = new double[] { 0.75, 1, 1.25, 1.5 };
             _density = 62.4;
             _diam = _diams[rn.Next(4)];
-
 
             _tankElevation = new int[2];
             _tankPressure = new double[2];
@@ -134,39 +128,11 @@ namespace Pumps101.Repositories
             _volume = rn.Next(3001) + 2000;
             _lvlIsSet = true;
             _maxNumberOfChances = 3;
-        }
 
-
-        /// <summary>
-        /// Checks user input against correct hp for level 1-3
-        /// </summary>
-        /// <param name="horsePowerUser">the hp the user is guessing</param>
-        /// <returns>int (number of stars for guess) = -1 - error: level not set, 0 - inccorect , 1 - 10% margin of error, 2 - 5% margin of error, 3 - 1% margin of error </returns>
-        public int checkLevelOneToThree(double horsePowerUser)   // set horse power level
-        {
-            if (_lvlIsSet)
+            if (_hpCorrect == 0)
             {
-                // gets correct horsePower if not already set
-                if (_hpCorrect == 0)
-                {
-                    _hpCorrect = getHorsePower((_level > 1), (_level > 2));
-                }
-
-                if (horsePowerUser <= _hpCorrect + (0.01 * _hpCorrect) && horsePowerUser >= _hpCorrect - (0.01 * _hpCorrect))
-                {
-                    return 3;
-                }
-                else if (horsePowerUser <= _hpCorrect + (0.05 * _hpCorrect) && horsePowerUser >= _hpCorrect - (0.05 * _hpCorrect))
-                {
-                    return 2;
-                }
-                else if (horsePowerUser <= _hpCorrect + (0.1 * _hpCorrect) && horsePowerUser >= _hpCorrect - (0.1 * _hpCorrect))
-                {
-                    return 1;
-                }
-                else return 0;
+                _hpCorrect = getHorsePower((_level > 1), (_level > 2));
             }
-            return -1;
         }
     }
 }
