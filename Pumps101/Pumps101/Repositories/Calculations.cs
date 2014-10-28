@@ -5,6 +5,9 @@ using System.Web;
 
 namespace Pumps101.Repositories
 {
+
+    // lvl 1-6 is getting hp
+    // level 7 is getting hp and Net Positive Suction
     public class Calculations
     {
         private bool _lvlIsSet;
@@ -13,16 +16,23 @@ namespace Pumps101.Repositories
         private double _A;
         private double _B;
         private double _C;
+        // model
         private double _diam;		// in inches
         private double _density;	// in (lbm/ft^3)
         private double _time; 	// in hours
         private double _volume;  	// in cubic feet
         private int[] _tankElevation; 	// in feet ( everything is 200 - 800ft higher than 1st tank)
-        private int[] _vertLength;      // in feet ( ranging 500ft - 1500ft, this is the horizontal pipe segments)
-        private double _hpCorrect = 0;  // once they check the value once it will be set so they don't have to recalculate
+        private int[] _vertLength;      // in feet ( ranging 500ft - 1500ft, this is the horizontal pipe segments)        
         private double[] _tankPressure;		// psig
-        private double _viscosity;
+        private double _viscosity;      //  lbm/feet second
+        private double _vaporPressure;   // psi
         private int _maxNumberOfChances;
+
+        // answers
+        // level 1-6 
+        private double _hp_correct;  // once they check the value once it will be set so they don't have to recalculate
+        // level 7 - 10
+        private double _NPSH_correct;
 
         public double getPipeDiam() { return _diam; }
         public double getLiquidDensity() { return _density; }
@@ -49,11 +59,11 @@ namespace Pumps101.Repositories
 
         /// <summary>
         ///  Gets correct horse power based of the values dynamically set for the level
-        ///  Used by level 1-6
+        ///  Used by level 1-10
         /// </summary>
         /// <param name="withHeight"> lvl 2 - 6 = Make the calculation accounting for tank height</param>
         /// <param name="withPressure"> lvl 3 - 6 = Make the calculation accounting for tank pressure</param>
-        /// <param name="Re"> level 4 - 5 = Reynalds number </param>
+        /// <param name="Re"> level 4 - 5 = Reynalds number (not used by later levels </param>
         /// <returns>Correct hp to set the pump at</returns>
         private double getHorsePower(bool withHeight, bool withPressure, bool Re)
         {
@@ -95,13 +105,13 @@ namespace Pumps101.Repositories
             return convertWorkToHorsePower(workPerMass, volumetricFlowRate, _density);
         }
 
-        // used by level 2 and 3
+        // used by level 2 - 10
         private double getWorkFromHeight()
         {
             return (_tankElevation[1] - _tankElevation[0]) * 32.174;
         }
 
-        // used by level 3
+        // used by level 3 - 10
         private double getPressureFromWork()
         {
             double deltaP = _tankPressure[1] - _tankPressure[0];
@@ -111,19 +121,30 @@ namespace Pumps101.Repositories
         }
 
         // This will always work for getting power!! 
-        // used by level 1-3
+        // used by level 1-10
         private double convertWorkToHorsePower(double workPerMass, double volumetricFlowRate, double density)
         {
             double hp = (((workPerMass / 32.174) * volumetricFlowRate) * density) / 550;
             return hp;
         }
 
-        // used by level 1-3
+        // used by level 1-10
         private double getWorkFromVelocities(double v1, double v2)
         {
             double work = .5 * (Math.Pow(v2, 2) - Math.Pow(v1, 2));
             return work;
         }
+
+
+        // Net Positive Suction Head
+        // Level 7 -10
+        private double getNetPositiveSuctionHead()
+        {
+            return (144 / _density) * (_tankPressure[0] - _vaporPressure) + (_tankElevation[0] - _tankElevation[1]) - (_vertLength[0] + _tankElevation[0]);
+        }
+
+        // 
+
 
         // Setting Level //
 
@@ -198,15 +219,17 @@ namespace Pumps101.Repositories
                 if (i != 0)
                 {
                     _tankElevation[i] = _tankElevation[0] + (200 + rn.Next(800));
-                    _tankPressure[i] = (double)Math.Round((_tankPressure[0] + (double)(rn.Next(19) + 5) + rn.NextDouble()) * 10) / 10;
+                    _tankPressure[i] = (double)Math.Round((_tankPressure[0] + (double)rn.Next(5,24) + rn.NextDouble()) * 10) / 10;
                 }
                 else
                 {
                     _tankElevation[i] = rn.Next(350) + 150;
-                    _tankPressure[i] = (double)Math.Round((double)((rn.Next(44) + 5) + rn.NextDouble()) * 10) / 10;
+                    _tankPressure[i] = (double)Math.Round((double)(rn.Next(5,49) + rn.NextDouble()) * 10) / 10;
                 }
 
             }
+            _vaporPressure = _tankPressure[0] - rn.Next(8, 15);
+            if (_vaporPressure < 3) { _vaporPressure = 3; }
 
             _vertLength[0] = rn.Next(500, 1500);
             _vertLength[1] = rn.Next(500, 1500);
@@ -216,10 +239,12 @@ namespace Pumps101.Repositories
             _lvlIsSet = true;
             _maxNumberOfChances = 3;
 
-            if (_hpCorrect == 0)
-            {
-                _hpCorrect = getHorsePower((_level > 1), (_level > 2), (_level > 3 && _level < 6));
+            _hp_correct = getHorsePower((_level > 1), (_level > 2), (_level > 3 && _level < 6));
+            
+            if(_level > 6){
+                _NPSH_correct = getNetPositiveSuctionHead();
             }
+            
         }
     }
 }
