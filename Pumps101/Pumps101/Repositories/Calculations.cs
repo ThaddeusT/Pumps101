@@ -16,6 +16,7 @@ namespace Pumps101.Repositories
         private double _A;
         private double _B;
         private double _C;
+        private double _volumetricFlowRate = 0;
         // model
         private double _diam;		// in inches
         private double _density;	// in (lbm/ft^3)
@@ -33,6 +34,8 @@ namespace Pumps101.Repositories
         private double _hp_correct;  // once they check the value once it will be set so they don't have to recalculate
         // level 7 - 10
         private double _NPSH_correct;
+        // level 8 - 10
+        private string _pumpType;
 
         public double getPipeDiam() { return _diam; }
         public double getLiquidDensity() { return _density; }
@@ -69,10 +72,10 @@ namespace Pumps101.Repositories
         {
             double v2;
             double workPerMass = 0;
-            double volumetricFlowRate = (_volume / (_time * 3600));
+            _volumetricFlowRate = (_volume / (_time * 3600));
             double crossSectionalArea = (Math.PI * (Math.Pow(_diam / 12, 2) / 4));
 
-            v2 = volumetricFlowRate / crossSectionalArea;
+            v2 = _volumetricFlowRate / crossSectionalArea;
             if(!withHeight && !withPressure)        workPerMass = getWorkFromVelocities(0, v2);
             else if (withHeight && !withPressure)   workPerMass = getWorkFromVelocities(0, v2) + getWorkFromHeight();
             else                                    workPerMass = getWorkFromVelocities(0, v2) + getWorkFromHeight() + getPressureFromWork();
@@ -102,7 +105,7 @@ namespace Pumps101.Repositories
             }
 
             // returns correct hp
-            return convertWorkToHorsePower(workPerMass, volumetricFlowRate, _density);
+            return convertWorkToHorsePower(workPerMass, _volumetricFlowRate, _density);
         }
 
         // used by level 2 - 10
@@ -137,14 +140,29 @@ namespace Pumps101.Repositories
 
 
         // Net Positive Suction Head
-        // Level 7 -10
+        // Level 7 - 10
         private double getNetPositiveSuctionHead()
         {
             return (144 / _density) * (_tankPressure[0] - _vaporPressure) + (_tankElevation[0] - _tankElevation[1]) - (_vertLength[0] + _tankElevation[0]);
         }
 
-        // 
-
+        // Based on flow rate decide what pump to use
+        // level 8 - 10
+        private string getPumpToUse()
+        {
+            if(_volumetricFlowRate <= 0.006)
+            {
+                return "Diaphragm";
+            }
+            else if(_volumetricFlowRate <= 0.1)
+            {
+                return "Rotary";
+            }
+            else
+            {
+                return "Centrifugal";
+            }
+        }
 
         // Setting Level //
 
@@ -155,12 +173,12 @@ namespace Pumps101.Repositories
         private void setLevel(int chances)
         {
             Random rn = new Random();
-            double timeUnrounded = (rn.NextDouble() * (2 - 0.75) + 0.75);
 
             if (_level < 4) { 
                 _diams = new double[] { 0.75, 1, 1.25, 1.5 };
                 _diam = _diams[rn.Next(4)];
             }
+            // later levels have more options for diam
             else
             {
                 _diams = new double[] { 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5};
@@ -233,9 +251,25 @@ namespace Pumps101.Repositories
 
             _vertLength[0] = rn.Next(500, 1500);
             _vertLength[1] = rn.Next(500, 1500);
-            _viscosity = rn.Next(526, 1201) * 0.0001; 
+            _viscosity = rn.Next(526, 1201) * 0.0001;
+
+            double timeUnrounded = 0;
+
+            // use higher volume and less time for later levels
+            if (_level > 7)
+            {
+                timeUnrounded = (rn.NextDouble() * (1.25) + 0.25);
+                _volume = rn.Next(5000, 1000);
+            }
+            else
+            {
+                timeUnrounded = (rn.NextDouble() * (2 - 0.75) + 0.75);
+                _volume = rn.Next(2000, 5000);
+            }
             _time = ((int)Math.Round(timeUnrounded * 100)) / 100.0;
-            _volume = rn.Next(3001) + 2000;
+            
+
+
             _lvlIsSet = true;
             _maxNumberOfChances = 3;
 
@@ -243,6 +277,10 @@ namespace Pumps101.Repositories
             
             if(_level > 6){
                 _NPSH_correct = getNetPositiveSuctionHead();
+            }
+            if(_level > 7)
+            {
+                _pumpType = getPumpToUse();
             }
             
         }
