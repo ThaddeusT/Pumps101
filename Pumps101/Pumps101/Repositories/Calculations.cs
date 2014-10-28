@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Pumps101.Models;
 
 namespace Pumps101.Repositories
 {
@@ -9,8 +10,6 @@ namespace Pumps101.Repositories
     // level 7 is getting hp and Net Positive Suction
     public class Calculations
     {
-        private bool _lvlIsSet;
-        private int _level;
         private static double[] _diams;
         private double _A;
         private double _B;
@@ -22,6 +21,7 @@ namespace Pumps101.Repositories
         //
 
         private int _maxNumberOfChances;
+        private int _level;
 
         //lvl 1 - 10
         private double _diam;		// in inches
@@ -46,7 +46,7 @@ namespace Pumps101.Repositories
         private double _efficencyFactor;    // %
 
         //lvl 7 - 10
-        private double _vaporPressure;      // psi
+        private double _vaporPressure = -1;      // psi
 
         // lvl 8 - 10
         // give them choice in pump to use
@@ -57,7 +57,7 @@ namespace Pumps101.Repositories
 
         // lvl 10
         // material can be "Cast Iron" "Cast Steel" "Stainless Steel" "Nickel Alloy"
-        private string _material;
+        private string _material = null;
 
         
         //
@@ -66,18 +66,11 @@ namespace Pumps101.Repositories
         // level 1-6 
         private double _hp_correct;  // once they check the value once it will be set so they don't have to recalculate
         // level 7 - 10
-        private double _NPSH_correct;
+        private double _NPSH_correct = -1;
         // level 8 - 10
-        private string _pumpType_correct;
+        private string _pumpType_correct = -1;
         // level 10
-        private double _cost_correct;
-
-
-        Calculations(int level, int chances)
-	    {
-            _level = level;
-		    setLevel(chances);
-	    }
+        private double _cost_correct = -1;
 
 
         // The Calculations // 
@@ -287,8 +280,9 @@ namespace Pumps101.Repositories
         /// Currently, dynamically sets values for levels 1-10 and gets correct HP and all other correct values
         /// </summary>
         /// <param name="chances">the number of chance they have to get it correct</param>
-        private void setLevel(int chances)
+        private LevelModel setLevel(int level, int chances)
         {
+            _level = level;
             Random rn = new Random();
             if (_level < 4) { 
                 _diams = new double[] { 0.75, 1, 1.25, 1.5 };
@@ -381,7 +375,6 @@ namespace Pumps101.Repositories
                 _volume = rn.Next(2000, 5001);
             }
             _time = ((int)Math.Round(timeUnrounded * 100)) / 100.0;
-            _lvlIsSet = true;
             _maxNumberOfChances = 3;
             _hp_correct = getHorsePower((_level > 1), (_level > 2), (_level > 3 && _level < 6));
             
@@ -399,6 +392,8 @@ namespace Pumps101.Repositories
                 _material = materialArr[rn.Next(4)];
                 _cost_correct = getCost();
             }
+
+            return new LevelModel(_level,_maxNumberOfChances, _diam, _density, _time, _volume, _tankElevation, _tankPressure, _viscosity, _vertLength, _efficencyFactor, _vaporPressure, _material, _hp_correct, _NPSH_correct, _pumpType_correct, _cost_correct);
         }
     }
 }

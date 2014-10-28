@@ -10,7 +10,6 @@ namespace Pumps101.Models
         #region Fields
 
         private int m_level;
-        private 
 
         #endregion
 
@@ -21,6 +20,5 @@ namespace Pumps101.Models
         #region Properties
 
         #endregion
-
     }
 }
