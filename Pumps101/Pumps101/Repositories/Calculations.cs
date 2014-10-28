@@ -10,13 +10,18 @@ namespace Pumps101.Repositories
         private bool _lvlIsSet;
         private int _level;
         private static double[] _diams;
+        private double _A;
+        private double _B;
+        private double _C;
         private double _diam;		// in inches
         private double _density;	// in (lbm/ft^3)
         private double _time; 	// in hours
         private double _volume;  	// in cubic feet
         private int[] _tankElevation; 	// in feet ( everything is 200 - 800ft higher than 1st tank)
+        private int[] _vertLength;      // in feet ( ranging 500ft - 1500ft, this is the horizontal pipe segments)
         private double _hpCorrect = 0;  // once they check the value once it will be set so they don't have to recalculate
         private double[] _tankPressure;		// psig
+        private double _viscosity;
         private int _maxNumberOfChances;
 
         public double getPipeDiam() { return _diam; }
@@ -34,7 +39,7 @@ namespace Pumps101.Repositories
             _level = level;
 		    if(level > 0 && level < 4)
 		    {
-			    setLevelOneToThree(chances);
+			    setLevel(chances);
 		    }
 	    }
 
@@ -44,32 +49,58 @@ namespace Pumps101.Repositories
 
         /// <summary>
         ///  Gets correct horse power based of the values dynamically set for the level
+        ///  Used by level 1-6
         /// </summary>
-        /// <param name="withHeight">Make the calculation accounting for tank height</param>
-        /// <param name="withPressure">Make the calculation accounting for tank pressure</param>
+        /// <param name="withHeight"> lvl 2 - 6 = Make the calculation accounting for tank height</param>
+        /// <param name="withPressure"> lvl 3 - 6 = Make the calculation accounting for tank pressure</param>
+        /// <param name="Re"> level 4 - 5 = Reynalds number </param>
         /// <returns>Correct hp to set the pump at</returns>
-        private double getHorsePower(bool withHeight, bool withPressure)
+        private double getHorsePower(bool withHeight, bool withPressure, bool Re)
         {
-            double v2, workPerMass;
+            double v2;
+            double workPerMass = 0;
             double volumetricFlowRate = (_volume / (_time * 3600));
             double crossSectionalArea = (Math.PI * (Math.Pow(_diam / 12, 2) / 4));
 
-
             v2 = volumetricFlowRate / crossSectionalArea;
             if(!withHeight && !withPressure)        workPerMass = getWorkFromVelocities(0, v2);
-            else if (withHeight && !withPressure)   workPerMass = getWorkFromVelocities(0, v2) + getWorkFromHeight();            
-            else if (!withHeight && withPressure)   workPerMass = getWorkFromVelocities(0, v2) + getPressureFromWork();
+            else if (withHeight && !withPressure)   workPerMass = getWorkFromVelocities(0, v2) + getWorkFromHeight();
             else                                    workPerMass = getWorkFromVelocities(0, v2) + getWorkFromHeight() + getPressureFromWork();
             
+            // level 4
+            if (_level > 3)
+            {
+                double f;
+                int L = _vertLength[0] + _vertLength[1] + _tankElevation[0] + _tankElevation[1];
+                // only lvl 4 and 5
+                if (Re) { 
+                    double rey = (_density * v2 * (_diam / 12)) / _viscosity;
+                    f = 0.0791 / Math.Pow(rey, 0.25);
+                }
+                else
+                {
+                    f = (((_A * Math.Pow(v2, 2)) + (_B * v2) + _C) * (2 * (_diam / 12))) / (_density* Math.Pow(v2, 2)) ;
+                }
+                
+                workPerMass += 0.5 * Math.Pow(v2, 2) * (L / (_diam / 48)) * f;
+
+                if (_level > 4)
+                {
+                    workPerMass += 0;
+                }
+            }
+
             // returns correct hp
             return convertWorkToHorsePower(workPerMass, volumetricFlowRate, _density);
         }
 
+        // used by level 2 and 3
         private double getWorkFromHeight()
         {
             return (_tankElevation[1] - _tankElevation[0]) * 32.174;
         }
 
+        // used by level 3
         private double getPressureFromWork()
         {
             double deltaP = _tankPressure[1] - _tankPressure[0];
@@ -78,14 +109,15 @@ namespace Pumps101.Repositories
 
         }
 
-        // This will always work for getting power!!
+        // This will always work for getting power!! 
+        // used by level 1-3
         private double convertWorkToHorsePower(double workPerMass, double volumetricFlowRate, double density)
         {
             double hp = (((workPerMass / 32.174) * volumetricFlowRate) * density) / 550;
             return hp;
         }
 
-
+        // used by level 1-3
         private double getWorkFromVelocities(double v1, double v2)
         {
             double work = .5 * (Math.Pow(v2, 2) - Math.Pow(v1, 2));
@@ -98,14 +130,65 @@ namespace Pumps101.Repositories
          /// Currently, dynamically sets values for levels 1-3 and gets correct HP
          /// </summary>
          /// <param name="chances">the number of chance they have to get it correct</param>
-        private void setLevelOneToThree(int chances)
+        private void setLevel(int chances)
         {
             Random rn = new Random();
             double timeUnrounded = (rn.NextDouble() * (2 - 0.75) + 0.75);
 
-            _diams = new double[] { 0.75, 1, 1.25, 1.5 };
+            if (_level < 4) { 
+                _diams = new double[] { 0.75, 1, 1.25, 1.5 };
+                _diam = _diams[rn.Next(4)];
+            }
+            else
+            {
+                _diams = new double[] { 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5};
+                _diam = _diams[rn.Next(7)];
+                switch ((int)(_diam*10))
+                {
+                    case 15:
+                        _A = 0.104;
+                        _B = 0.1111;
+                        _C = -0.0606;
+                        break;
+                    case 20:
+                        _A = 0.075;
+                        _B = 0.0812;
+                        _C = -0.0494;
+                        break;
+                    case 25:
+                        _A = 0.0601;
+                        _B = 0.0667;
+                        _C = -0.0445;
+                        break;
+                    case 30:
+                        _A = 0.046;
+                        _B = 0.0518;
+                        _C = -0.0372;
+                        break;
+                    case 35:
+                        _A = 0.0385;
+                        _B = 0.0432;
+                        _C = -0.0334;
+                        break;
+                    case 40:
+                        _A = 0.033;
+                        _B = 0.0373;
+                        _C = -0.0311;
+                        break;
+                    case 45:
+                        _A = 0.0251;
+                        _B = 0.027;
+                        _C = -0.0209;
+                        break;
+                    case 50:
+                        _A = 0.104;
+                        _B = 0.1111;
+                        _C = -0.0606;
+                        break;
+                }
+
+            }
             _density = 62.4;
-            _diam = _diams[rn.Next(4)];
 
             _tankElevation = new int[2];
             _tankPressure = new double[2];
@@ -124,6 +207,9 @@ namespace Pumps101.Repositories
 
             }
 
+            _vertLength[0] = rn.Next(500, 1500);
+            _vertLength[1] = rn.Next(500, 1500);
+            _viscosity = rn.Next(526, 1201) * 0.0001; 
             _time = ((int)Math.Round(timeUnrounded * 100)) / 100.0;
             _volume = rn.Next(3001) + 2000;
             _lvlIsSet = true;
@@ -131,7 +217,7 @@ namespace Pumps101.Repositories
 
             if (_hpCorrect == 0)
             {
-                _hpCorrect = getHorsePower((_level > 1), (_level > 2));
+                _hpCorrect = getHorsePower((_level > 1), (_level > 2), (_level > 3 && _level < 6));
             }
         }
     }
