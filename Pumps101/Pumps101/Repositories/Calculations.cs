@@ -86,7 +86,8 @@ namespace Pumps101.Repositories
 
                 if (_level > 4)
                 {
-                    workPerMass += 0;
+                    // value 3.4 assumes we always have 2 90 degree elbows (always 1.5) and 2gate valve(open) always (0.2)
+                    workPerMass += 0.5 * Math.Pow(v2, 2) * 3.4;
                 }
             }
 
