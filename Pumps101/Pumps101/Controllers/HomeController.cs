@@ -15,13 +15,13 @@ namespace Pumps101.Controllers
         {
             get
             {
-                return new CalculationsRepository(1,3);
+                return new CalculationsRepository();
             }
         }
 
         public ActionResult Index()
         {
-            GameModel model = repository.CreateGameModel();
+            LevelModel model = repository.getLevel(1, 3);
             return View(model);
         }
 

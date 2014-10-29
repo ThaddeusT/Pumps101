@@ -1,4 +1,4 @@
-﻿@model Pumps101.Models.GameModel
+﻿@model Pumps101.Models.LevelModel
 
 <script type="text/javascript">
     var Resource = { img: {}, sfx: {} }
@@ -42,19 +42,15 @@
         if (imagesLoaded) {
             @if(Model.Level == 1)
             {
-                @:ctx.drawImage(Resource.img.container, (((width / 2) - 200) - 120), (height / 2), 118, 150);
-                                                                    @:ctx.drawImage(Resource.img.container, (((width / 2)) + 200), (height / 2), 118, 150);
-                                        @:ctx.drawImage(Resource.img.pump, (width / 2) - 50, (height / 2), 100, 150);
-                                                                        }
+                @:ctx.drawImage(Resource.img.pump, (width / 2) - 50, (height / 2), 100, 150);
+            }
         }
         else {
             Resource.img.container.onload = function () {
                 @if(Model.Level == 1)
                 {
-                    @:ctx.drawImage(Resource.img.container, (((width / 2) - 200) - 120), (height / 2), 118, 150);
-                                                                                    @:ctx.drawImage(Resource.img.container, ((width / 2) + 200), (height / 2), 118, 150);
-                                                    @:ctx.drawImage(Resource.img.pump, (width / 2) - 50, (height / 2), 100, 150);
-                                }
+                    @:ctx.drawImage(Resource.img.pump, (width / 2) - 50, (height / 2), 100, 150);
+                }
             };
             Resource.img.container.src = '@Url.Content("/Content/Images/container.PNG")';
             Resource.img.pump.src = '@Url.Content("/Content/Images/pump.PNG")';

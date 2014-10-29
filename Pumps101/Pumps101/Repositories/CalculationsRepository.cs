@@ -8,7 +8,7 @@ namespace Pumps101.Repositories
 {
     // lvl 1-6 is getting hp
     // level 7 is getting hp and Net Positive Suction
-    public class Calculations
+    public class CalculationsRepository
     {
         private static double[] _diams;
         private double _A;
@@ -68,7 +68,7 @@ namespace Pumps101.Repositories
         // level 7 - 10
         private double _NPSH_correct = -1;
         // level 8 - 10
-        private string _pumpType_correct = -1;
+        private string _pumpType_correct = "";
         // level 10
         private double _cost_correct = -1;
 
@@ -280,7 +280,7 @@ namespace Pumps101.Repositories
         /// Currently, dynamically sets values for levels 1-10 and gets correct HP and all other correct values
         /// </summary>
         /// <param name="chances">the number of chance they have to get it correct</param>
-        private LevelModel setLevel(int level, int chances)
+        public LevelModel getLevel(int level, int chances)
         {
             _level = level;
             Random rn = new Random();
@@ -358,6 +358,7 @@ namespace Pumps101.Repositories
             }
             _vaporPressure = _tankPressure[0] - rn.Next(8, 16);
             if (_vaporPressure < 3) { _vaporPressure = 3; }
+            _vertLength = new int[2];
             _vertLength[0] = rn.Next(500, 1501);
             _vertLength[1] = rn.Next(500, 1501);
             _viscosity = rn.Next(526, 1202) * 0.0001;
@@ -375,7 +376,7 @@ namespace Pumps101.Repositories
                 _volume = rn.Next(2000, 5001);
             }
             _time = ((int)Math.Round(timeUnrounded * 100)) / 100.0;
-            _maxNumberOfChances = 3;
+            _maxNumberOfChances = chances;
             _hp_correct = getHorsePower((_level > 1), (_level > 2), (_level > 3 && _level < 6));
             
             if(_level > 6){

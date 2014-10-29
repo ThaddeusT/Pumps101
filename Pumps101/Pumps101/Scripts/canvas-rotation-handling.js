@@ -2,7 +2,7 @@
 
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
-
+    var orientation = "";
     var rc = 0;  // resize counter
     var oc = 0;  // orientiation counter
     var ios = navigator.userAgent.match(/(iPhone)|(iPod)/); // is iPhone
@@ -42,6 +42,7 @@
         ctx.textAlign = 'center';
         ctx.fillText('Orientiation changes: ' + oc, cwidth / 2, cheight / 2);
         ctx.fillText('Resize events: ' + rc, cwidth / 2, cheight / 2 + 10);
+
         drawcanvas();
         console.log("drew Canvas");
     }
@@ -59,5 +60,12 @@
     window.onorientationchange = function () {
         clearTimeout(otimeout);
         otimeout = setTimeout(orientationChange, 50);
+        switch (window.orientation)
+        {
+            case 0:
+                orientation = "Portrait";
+                alert(orientation);
+                break;
+        }
     }
 });
