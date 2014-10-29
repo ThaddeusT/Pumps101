@@ -10,13 +10,15 @@
     Resource.img.container = new Image();
     Resource.img.pump = new Image();
     var imagesLoaded = false;
+    var columns = 0;
+    var rows = 0;
     function drawcanvas() {
         canvas = document.getElementById("canvas");
         ctx = canvas.getContext("2d");
         width = canvas.width;
         height = canvas.height;
-        rows = height / GridSize;
-        columns = width / GridSize;
+        rows = Math.round(height / GridSize);
+        columns = Math.round(width / GridSize);
         drawGrid();
         drawImages();
     }
@@ -42,15 +44,17 @@
         if (imagesLoaded) {
             @if(Model.Level == 1)
             {
-                @:ctx.drawImage(Resource.img.pump, (width / 2) - 50, (height / 2), 100, 150);
-            }
+                @:alert("Grid: " + rows + "," + columns);
+                            @:ctx.drawImage(Resource.img.pump, ((columns / 2) - 1) * GridSize, (rows / 2) * GridSize, GridSize * 2, GridSize * 2);
+                        }
         }
         else {
             Resource.img.container.onload = function () {
                 @if(Model.Level == 1)
                 {
-                    @:ctx.drawImage(Resource.img.pump, (width / 2) - 50, (height / 2), 100, 150);
-                }
+                    @:alert("Grid: " + rows + "," + columns);
+                    @:ctx.drawImage(Resource.img.pump, ((columns / 2)-1) * GridSize, (rows / 2) * GridSize, GridSize * 2, GridSize * 2);
+                                }
             };
             Resource.img.container.src = '@Url.Content("/Content/Images/container.PNG")';
             Resource.img.pump.src = '@Url.Content("/Content/Images/pump.PNG")';

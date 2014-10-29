@@ -7,10 +7,6 @@
     var oc = 0;  // orientiation counter
     var ios = navigator.userAgent.match(/(iPhone)|(iPod)/); // is iPhone
 
-    function orientationChange() {
-        // inc orientation counter
-        oc++;
-    }
     function resizeCanvas() {
         // inc resize counter
         rc++;
@@ -38,13 +34,21 @@
         }
 
         // write number of orientation changes and resize events
-        ctx.fillStyle = 'white';
-        ctx.textAlign = 'center';
-        ctx.fillText('Orientiation changes: ' + oc, cwidth / 2, cheight / 2);
-        ctx.fillText('Resize events: ' + rc, cwidth / 2, cheight / 2 + 10);
-
-        drawcanvas();
-        console.log("drew Canvas");
+        if (orientation == "Portrait") {
+            ctx.beginPath();
+            ctx.lineWidth = "4";
+            ctx.strokeStyle = "purple";
+            ctx.fillStyle = 'purple';
+            ctx.rect(0, 0, cwidth, cheight);
+            ctx.fill();
+            ctx.fillStyle = 'white';
+            ctx.textAlign = 'center';
+            ctx.fillText('Please Rotate Device To Landscape', cwidth / 2, cheight / 2);
+        }
+        else {
+            drawcanvas();
+            console.log("drew Canvas");
+        }
     }
 
     // Install resize and orientation change handlers. Note Android may firef both
@@ -57,15 +61,78 @@
     resizeCanvas();
 
     var otimeout;
+
+    function toggleFullScreen() {
+        var doc = window.document;
+        var docEl = doc.documentElement;
+
+        var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+        var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+        if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+            requestFullScreen.call(docEl);
+        }
+        else {
+            cancelFullScreen.call(doc);
+        }
+    }
+
+    function hideAddressBar() {
+        if (document.documentElement.scrollHeight < window.outerHeight / window.devicePixelRatio)
+            document.documentElement.style.height = (window.outerHeight / window.devicePixelRatio) + 'px';
+        setTimeout(window.scrollTo(1, 1), 0);
+    }
+    window.addEventListener("load", function () {
+        switch (window.orientation) {
+            case 0:
+                orientation = "Portrait";
+                break;
+            case 180:
+                orientation = "Portrait";
+                break;
+            case -90:
+                orientation = "Landscape";
+                break;
+            case 90:
+                orientation = "Landscape";
+                break;
+        }
+        if (orientation == "Portrait") {
+            ctx.beginPath();
+            ctx.lineWidth = "4";
+            ctx.strokeStyle = "purple";
+            ctx.fillStyle = 'purple';
+            ctx.rect(0, 0, cwidth, cheight);
+            ctx.fill();
+            ctx.fillStyle = 'white';
+            ctx.textAlign = 'center';
+            ctx.fillText('Please Rotate Device To Landscape', cwidth / 2, cheight / 2);
+        }
+        else {
+            drawcanvas();
+            console.log("drew Canvas");
+        }
+        hideAddressBar();
+        toggleFullScreen();
+    });
+
     window.onorientationchange = function () {
-        clearTimeout(otimeout);
-        otimeout = setTimeout(orientationChange, 50);
         switch (window.orientation)
         {
             case 0:
                 orientation = "Portrait";
-                alert(orientation);
+                break;
+            case 180:
+                orientation = "Portrait";
+                break;
+            case -90:
+                orientation = "Landscape";
+                break;
+            case 90:
+                orientation = "Landscape";
                 break;
         }
+        hideAddressBar();
+        toggleFullScreen();
     }
 });
