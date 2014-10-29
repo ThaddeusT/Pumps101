@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Pumps101.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
 namespace Pumps101.Repositories
 {
-    public class Calculations
+    public class CalculationsRepository
     {
         private bool _lvlIsSet;
         private int _level;
@@ -31,7 +32,7 @@ namespace Pumps101.Repositories
         public bool isLvlSet() { return _lvlIsSet; }
 
 
-        Calculations(int level, int chances)
+        public CalculationsRepository(int level, int chances)
 	    {
             _level = level;
 		    if(level > 0 && level < 4)
@@ -40,6 +41,10 @@ namespace Pumps101.Repositories
 		    }
 	    }
 
+        public GameModel CreateGameModel()
+        {
+            return new GameModel(_level, getPipeDiam(), getLiquidDensity(), getTime(), getVolume(), getTankElevations()[0], getTankElevations()[1], getTankPressure()[0], getTankPressure()[1]);
+        }
 
         // The Calculations // 
 
@@ -135,7 +140,6 @@ namespace Pumps101.Repositories
             _lvlIsSet = true;
             _maxNumberOfChances = 3;
         }
-
 
         /// <summary>
         /// Checks user input against correct hp for level 1-3
