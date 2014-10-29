@@ -11,6 +11,7 @@ namespace Pumps101.Models
 
         //General Parameters of Game Components
         private int m_level;
+<<<<<<< .mine
         private double m_pipeDiameter;
         private double m_liquidDensity;
         private double m_time;
@@ -19,6 +20,16 @@ namespace Pumps101.Models
         private int m_tank2Elevation;
         private double m_tank1Pressure;
         private double m_tank2Pressure;
+=======
+
+
+
+
+
+
+
+
+>>>>>>> .theirs
 
         //View Parameters
         private int m_container1X;
@@ -184,6 +195,5 @@ namespace Pumps101.Models
         }
 
         #endregion
-
     }
 }
