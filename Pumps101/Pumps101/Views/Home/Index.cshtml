@@ -12,6 +12,7 @@
     var imagesLoaded = false;
     var columns = 0;
     var rows = 0;
+    var level = @Model.Level;
     function drawcanvas() {
         canvas = document.getElementById("canvas");
         ctx = canvas.getContext("2d");
@@ -22,6 +23,7 @@
         columns = Math.round(width / GridSize);
         drawGrid();
         drawImages();
+        drawComponents();
     }
 
     function drawGrid() {
@@ -43,27 +45,129 @@
 
     function drawImages() {
         if (imagesLoaded) {
-            @if(Model.Level == 1)
+            switch(level)
             {
-                @:ctx.drawImage(Resource.img.pump, ((columns / 2) - 1) * GridSize, (rows / 2) * GridSize, GridSize * 2, GridSize * 2);
+                case 1: ctx.drawImage(Resource.img.pump, ((columns / 2)-2) * GridSize, ((rows / 2)-1)*GridSize, GridSize * 3, GridSize * 3);
+                    break;
             }
         }
         else {
             Resource.img.container.onload = function () {
-                @if(Model.Level == 1)
+                switch(level)
                 {
-                    @:ctx.drawImage(Resource.img.pump, ((columns / 2)-1) * GridSize, (rows / 2) * GridSize, GridSize * 2, GridSize * 2);
+                    case 1: ctx.drawImage(Resource.img.pump, ((columns / 2)-2) * GridSize, ((rows / 2)-1)*GridSize, GridSize * 3, GridSize * 3);
+                        break;
                 }
             };
-            Resource.img.container.src = '@Url.Content("/Content/Images/container.PNG")';
             Resource.img.pump.src = '@Url.Content("/Content/Images/pump.PNG")';
+            Resource.img.container.src ='@Url.Content("/Content/Images/container.PNG")';
             imagesLoaded = true;
         }
     }
+
+    function drawComponents()
+    {
+        ctx.fillStyle = 'red';
+        ctx.font = '16pt Arial'
+        ctx.textAlign = 'center';
+        ctx.fillText('Level '+level, cwidth / 2, GridSize*2);
+
+        ctx.fillStyle ='black';
+        ctx.font = '10pt Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Time to Move All Liquid: @Model.Time Hours', (cwidth / 2), GridSize*3);
+        ctx.fillText('Diameter of Pipes: @Model.Diameter inches', (cwidth / 2), GridSize*4);
+
+        ctx.fillStyle ='black';
+        ctx.font = '7pt Arial';
+        ctx.textAlign = 'left';
+        
+        var leftContainerTextx = ((columns / 2)-2) * GridSize -((Math.round(columns / 4)) * GridSize);
+        ctx.fillText('Volume: @Model.Volume ft^3', leftContainerTextx+1, ((rows / 2)-1)*GridSize);
+        ctx.fillText('Liquid Density: @Model.Density lbm/ft^3', leftContainerTextx+1, ((rows / 2)-2)*GridSize);
+
+        var rightContainerTestx = ((columns / 2)+1) * GridSize +(Math.round(columns / 4) * GridSize)+(GridSize * 3);
+        ctx.fillText('Volume: @Model.Volume ft^3', rightContainerTestx+1, ((rows / 2)-2)*GridSize);
+        ctx.fillText('Liquid Density: @Model.Density lbm/ft^3', rightContainerTestx+1, ((rows / 2)-1)*GridSize);
+
+        switch(level)
+        {
+            case 1:
+                ctx.strokeStyle = "black";
+
+                ctx.beginPath();
+                var x = ((columns / 2)+1) * GridSize;
+                var xright = x+(Math.round(columns / 4) * GridSize);
+                var y = (((rows / 2))*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xright, y);
+                ctx.stroke();
+
+                ctx.beginPath();
+                x = ((columns / 2)+1) * GridSize;
+                y = (((rows / 2))*GridSize)+(.5*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xright, y);
+                ctx.stroke();
+
+                var x = ((columns / 2)-2) * GridSize;
+                var xleft = x-((Math.round(columns / 4)) * GridSize);
+                var y = (((rows / 2))*GridSize);
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(xleft, y);
+                ctx.stroke();
+
+                ctx.beginPath();
+                x = ((columns / 2)-2) * GridSize;
+                y = (((rows / 2))*GridSize)+(.5*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xleft, y);
+                ctx.stroke();
+
+                leftContainerX = xleft-(3*GridSize);
+                ContainerY = (y-(.5*GridSize)) - (2*GridSize);
+                rightContainerX = xright;
+
+                ctx.drawImage(Resource.img.container, leftContainerX, ContainerY, GridSize * 3, GridSize * 3);
+                ctx.rect(leftContainerX, ContainerY, GridSize * 3, GridSize * 3);
+                ctx.stroke();
+                ctx.drawImage(Resource.img.container, rightContainerX, ContainerY, GridSize * 3, GridSize * 3);
+                ctx.rect(rightContainerX, ContainerY, GridSize * 3, GridSize * 3);
+                ctx.stroke();
+
+                $("#hpEntry").css("top", ((rows / 2)-3)*GridSize+"px");
+                $("#hpEntry").css("left", ((columns / 2)-3) * GridSize+"px");
+                $("#HPGuess").css("width", 2*GridSize+"px");
+                $("#HPGuess").css("font-size", "x-small");
+                $("#hpEntry label").css("font-size", "x-small");
+
+                break;
+        }
+    }
+
+    function submitPage()
+    {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("SubmitLevel","Home")',
+            data: {level: level, HPGuess: $("#HPGuess").val()},
+            success: function(content) {
+                $('#container').html(content);  // replace
+            }
+        });
+    }
 </script>
-
-
-<canvas id="canvas">
-    HTML5 Canvas not supported.
-</canvas>
+    <canvas id="canvas">
+        HTML5 Canvas not supported.
+    </canvas>
+    <table id="hpEntry">
+    <tr>
+        <td>@Html.LabelFor(m => m.HPGuess)</td>
+        <td>@Html.TextBoxFor(m => m.HPGuess)</td>
+    </tr>
+</table>
+    <menu id="controls">
+        <input type="submit" value="Submit Answer" onclick="submitPage()" />
+    </menu>
 <div id="fix">&copy; @DateTime.Now.Year - Pumps101</div>

@@ -25,18 +25,11 @@ namespace Pumps101.Controllers
             return View(model);
         }
 
-        public ActionResult About()
+        [HttpPost]
+        public ActionResult SubmitLevel(int level = 0, int HPGuess = 0)
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            LevelModel model = repository.getLevel(1, 3);
+            return View("Index",model);
         }
     }
 }

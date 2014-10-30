@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -11,6 +12,7 @@ namespace Pumps101.Models
 
         private int _maxNumberOfChances;
         private int _level;
+        private double _hpGuess;
         //lvl 1 - 10
         private double _diam;		// in inches
         private double _density;	// in (lbm/ft^3)
@@ -58,6 +60,10 @@ namespace Pumps101.Models
 
         #region Constructors
 
+        public LevelModel()
+        {
+        }
+
         public LevelModel(int level, int chances, double diam, double density, double time, double volume, int[] tankElevation, double[] tankPressure, double viscosity, int[] vertLength, double efficFactor, double vaporPressure, string material, double hp_correct, double NPSH_correct, string pumpType_correct, double cost_correct)
         {
             _level = level;
@@ -100,6 +106,22 @@ namespace Pumps101.Models
             get
             {
                 return _level;
+            }
+        }
+
+        [Display(Name = "Horse Power:")]
+        public double HPGuess
+        {
+            get
+            {
+                return _hpGuess;
+            }
+            set
+            {
+                if(value != _hpGuess)
+                {
+                    _hpGuess = value;
+                }
             }
         }
 

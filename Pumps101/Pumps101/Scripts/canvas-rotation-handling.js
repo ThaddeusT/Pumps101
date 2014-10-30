@@ -5,7 +5,9 @@
     var orientation = "";
     var rc = 0;  // resize counter
     var oc = 0;  // orientiation counter
-    var ios = navigator.userAgent.match(/(iPhone)|(iPod)/); // is iPhone
+    var ios = navigator.userAgent.match(/(iPhone)|(iPod)/); // is iPhone 
+    var last_width = 0;
+    var last_height = 1;
 
     function resizeCanvas() {
         // inc resize counter
@@ -19,35 +21,45 @@
         var width = $("#container").width();
         var height = $("#container").height();
 
-        cheight = height - 20; // subtract the fix height
-        cwidth = width;
+        if (width != last_width && width != last_height) {
+            last_width = width;
+            last_height = height;
+            cheight = height; // subtract the fix height
+            cwidth = width;
 
-        // set canvas width and height
-        $("#canvas").attr('width', cwidth);
-        $("#canvas").attr('height', cheight)
+            // set canvas width and height
+            $("#canvas").attr('width', cwidth);
+            $("#canvas").attr('height', cheight)
 
-        // hides the WebKit url bar
-        if (ios) {
-            setTimeout(function () {
-                window.scrollTo(0, 1);
-            }, 100);
-        }
+            // hides the WebKit url bar
+            if (ios) {
+                setTimeout(function () {
+                    window.scrollTo(0, 1);
+                }, 100);
+            }
 
-        // write number of orientation changes and resize events
-        if (orientation == "Portrait") {
-            ctx.beginPath();
-            ctx.lineWidth = "4";
-            ctx.strokeStyle = "purple";
-            ctx.fillStyle = 'purple';
-            ctx.rect(0, 0, cwidth, cheight);
-            ctx.fill();
-            ctx.fillStyle = 'white';
-            ctx.textAlign = 'center';
-            ctx.fillText('Please Rotate Device To Landscape', cwidth / 2, cheight / 2);
-        }
-        else {
-            drawcanvas();
-            console.log("drew Canvas");
+            // write number of orientation changes and resize events
+            if (orientation == "Portrait") {
+                ctx.beginPath();
+                ctx.lineWidth = "4";
+                ctx.strokeStyle = "purple";
+                ctx.fillStyle = 'purple';
+                ctx.rect(0, 0, cwidth, cheight);
+                ctx.fill();
+                ctx.fillStyle = 'white';
+                ctx.textAlign = 'center';
+                ctx.fillText('Please Rotate Device To Landscape', cwidth / 2, cheight / 2);
+                $("#HPGuess").hide();
+                $("label").hide();
+                $("#controls").hide();
+            }
+            else {
+                drawcanvas();
+                console.log("drew Canvas");
+                $("#HPGuess").show();
+                $("label").show();
+                $("#controls").show();
+            }
         }
     }
 
@@ -107,10 +119,16 @@
             ctx.fillStyle = 'white';
             ctx.textAlign = 'center';
             ctx.fillText('Please Rotate Device To Landscape', cwidth / 2, cheight / 2);
+            $("#HPGuess").hide();
+            $("label").hide();
+            $("#controls").hide();
         }
         else {
             drawcanvas();
             console.log("drew Canvas");
+            $("#HPGuess").show();
+            $("label").show();
+            $("#controls").show();
         }
         hideAddressBar();
         toggleFullScreen();
