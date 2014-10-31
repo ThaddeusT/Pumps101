@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using Pumps101.Models;
+using System.Configuration;
+using System.Data;
 
 namespace Pumps101.Repositories
 {
+    
     // lvl 1-6 is getting hp
     // level 7 is getting hp and Net Positive Suction
     public class CalculationsRepository
@@ -19,6 +23,8 @@ namespace Pumps101.Repositories
         // 
         // MODEL
         //
+        private Guid _user;
+        private Boolean _authenticated;
 
         private int _maxNumberOfChances;
         private int _level;
@@ -57,7 +63,7 @@ namespace Pumps101.Repositories
 
         // lvl 10
         // material can be "Cast Iron" "Cast Steel" "Stainless Steel" "Nickel Alloy"
-        private string _material = null;
+        private string _material = "";
 
         
         //
@@ -71,6 +77,13 @@ namespace Pumps101.Repositories
         private string _pumpType_correct = "";
         // level 10
         private double _cost_correct = -1;
+
+        //The Constructor
+        public CalculationsRepository(Guid User, Boolean Authenticated)
+        {
+            _user = User;
+            _authenticated = Authenticated;
+        }
 
 
         // The Calculations // 
@@ -393,8 +406,102 @@ namespace Pumps101.Repositories
                 _material = materialArr[rn.Next(4)];
                 _cost_correct = getCost();
             }
+            addToDB();
 
             return new LevelModel(_level,_maxNumberOfChances, _diam, _density, _time, _volume, _tankElevation, _tankPressure, _viscosity, _vertLength, _efficencyFactor, _vaporPressure, _material, _hp_correct, _NPSH_correct, _pumpType_correct, _cost_correct);
         }
+
+        private void addToDB()
+        {
+            if (_authenticated)
+            {
+                int level_id = 0;
+                var conn = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+                using (SqlConnection connection = new SqlConnection(conn))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand("", connection))
+                    {
+                        command.CommandText = "INSERT INTO Levels VALUES (@level, @chances, @attempts, @active, @user)";
+                        command.Parameters.AddWithValue("@user", _user);
+                        command.Parameters.AddWithValue("@level", _level);
+                        command.Parameters.AddWithValue("@chances", _maxNumberOfChances);
+                        command.Parameters.AddWithValue("@attempts", 0);
+                        command.Parameters.AddWithValue("@active", 1);
+                        command.ExecuteNonQuery();
+                    }
+                    connection.Close();
+                }
+
+                using (SqlConnection connection = new SqlConnection(conn))
+                using (SqlCommand command = new SqlCommand("", connection))
+                {
+                    connection.Open();
+                    command.CommandText = "SELECT * FROM Levels WHERE is_active = 1";
+                    command.Parameters.AddWithValue("@user", _user.ToString().ToUpper());
+                    //string ld = command.ExecuteScalar().ToString();
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            //string u = ;
+                            if (reader["user"].ToString().CompareTo(_user.ToString().ToUpper()) == 0)
+                            {
+                                level_id = (int)reader["level_id"];
+                                break;
+                            }
+                        }
+                    }
+                    command.Connection.Close();
+                }
+
+                using (SqlConnection connection = new SqlConnection(conn))
+                using (SqlCommand command = new SqlCommand("", connection))
+                {
+                    connection.Open();
+                    command.CommandText = "INSERT INTO Level_Answers (level_id, hp, npsh, pump_type, cost) VALUES (@level_id, @hp, @npsh, @pump, @cost)";
+                    command.Parameters.AddWithValue("@level_id", level_id);
+                    command.Parameters.AddWithValue("@hp",_hp_correct);
+                    command.Parameters.AddWithValue("@npsh", _NPSH_correct);
+                    command.Parameters.AddWithValue("@pump", _pumpType_correct);
+                    command.Parameters.AddWithValue("@cost", _cost_correct);
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
+
+                using (SqlConnection connection = new SqlConnection(conn))
+                using (SqlCommand command = new SqlCommand("", connection))
+                {
+                    connection.Open();
+                    command.CommandText = "INSERT INTO Level_Setup VALUES (@level_id, @density, @diam, @time, @volume, @t1e, @t2e, @t1p, @t2p, @viscosity, @v1l, @v2l, @ef, @vp, @mat)";
+                    command.Parameters.AddWithValue("@level_id", level_id);
+                    command.Parameters.AddWithValue("@density", _density);
+                    command.Parameters.AddWithValue("@diam", _diam);
+                    command.Parameters.AddWithValue("@time", _time);
+                    command.Parameters.AddWithValue("@volume", _volume);
+                    command.Parameters.AddWithValue("@t1e", _tankElevation[0]);
+                    command.Parameters.AddWithValue("@t2e", _tankElevation[1]);
+                    command.Parameters.AddWithValue("@t1p", _tankPressure[0]);
+                    command.Parameters.AddWithValue("@t2p", _tankPressure[1]);
+                    command.Parameters.AddWithValue("@viscosity", _viscosity);
+                    command.Parameters.AddWithValue("@v1l", _vertLength[0]);
+                    command.Parameters.AddWithValue("@v2l", _vertLength[1]);
+                    command.Parameters.AddWithValue("@ef", _efficencyFactor);
+                    command.Parameters.AddWithValue("@vp", _vaporPressure);
+                    command.Parameters.AddWithValue("@mat", _material);
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
+
+            }
+            else
+            {
+                // TODO: Redirect to login
+            }
+
+
+        }
+
     }
 }
