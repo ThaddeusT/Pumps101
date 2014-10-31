@@ -84,6 +84,26 @@
 
         switch(level)
         {
+            case 0:
+                ctx.strokeStyle = "black";
+                var centerx = (columns / 2) * GridSize;
+                var centery = (rows / 2) * GridSize;
+
+                var buttonstoprowy = centery - ((rows/3)*GridSize);
+                var buttonsleftx =  centerx - ((columns/3)*GridSize);
+
+                ctx.rect(buttonsleftx, buttonstoprowy, GridSize * 2, GridSize * 2);
+                ctx.stroke();
+
+                ctx.rect(buttonsleftx+(3*GridSize), buttonstoprowy, GridSize * 2, GridSize * 2);
+                ctx.stroke();
+
+                ctx.rect(buttonsleftx+(7*GridSize), buttonstoprowy, GridSize * 2, GridSize * 2);
+                ctx.stroke();
+
+                break;
+
+
             case 1:
                 ctx.strokeStyle = "black";
 

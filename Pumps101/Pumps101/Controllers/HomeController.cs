@@ -25,8 +25,15 @@ namespace Pumps101.Controllers
 
         public ActionResult Index()
         {
-            LevelModel model = repository.getLevel(2, 3);
-            return View(model);
+            if (User.Identity.IsAuthenticated)
+            {
+                LevelModel model = repository.getLevel(0, 3);
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("Login","Account",null);
+            }
         }
 
         [HttpPost]
@@ -34,6 +41,11 @@ namespace Pumps101.Controllers
         {
             LevelModel model = repository.getLevel(1, 3);
             return View("Index",model);
+        }
+
+        public ActionResult Login()
+        {
+            return View("Login");
         }
     }
 }
