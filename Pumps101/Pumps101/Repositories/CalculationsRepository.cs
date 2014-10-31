@@ -295,6 +295,15 @@ namespace Pumps101.Repositories
         /// <param name="chances">the number of chance they have to get it correct</param>
         public LevelModel getLevel(int level, int chances)
         {
+            if (level == 0)
+            {
+                return new LevelModel(level, _user, _authenticated);
+            }
+
+
+
+
+
             //check to see if level exist
 
             // if level 0 level model

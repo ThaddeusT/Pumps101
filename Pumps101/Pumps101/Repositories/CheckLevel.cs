@@ -8,21 +8,26 @@ using System.Data.SqlClient;
 
 namespace Pumps101.Repositories
 {
+
+    // TODO : Pull correct vals from DB
     public static class CheckLevel
     {
         // Level 1-6
         // out is starts
         // returns string with a message about what they did wrong, empty string if no message should display
-        public static string checkLevel(int level_id, double horsePowerUser, double _hpCorrect, out int stars, out bool maxReached)
+        public static string checkLevel(int level_id, double horsePowerUser, out int stars, out bool maxReached)
         {
+            double _hpCorrect = 0;
             maxReached = isMaxReached(level_id);
             stars = compare(horsePowerUser, _hpCorrect);
             return "";
         }
 
         // Level 7
-        public static string checkLevel(int level_id, double horsePowerUser, double _hpCorrect, double npshUser, double _npshCorrect, out int stars, out bool maxReached)
+        public static string checkLevel(int level_id, double horsePowerUser, double npshUser, out int stars, out bool maxReached)
         {
+            double _hpCorrect = 0;
+            double _npshCorrect = 0;
             maxReached = isMaxReached(level_id);
             stars = 0;
             int hpS = compare(horsePowerUser, _hpCorrect);
@@ -50,8 +55,11 @@ namespace Pumps101.Repositories
 
 
         // Level 8
-        public static string checkLevel(int level_id, double horsePowerUser, double _hpCorrect, double npshUser, double _npshCorrect, string pumpUser, string _pumpCorrect, out int stars, out bool maxReached)
+        public static string checkLevel(int level_id, double horsePowerUser, double npshUser, string pumpUser, out int stars, out bool maxReached)
         {
+            double _hpCorrect = 0;
+            double _npshCorrect = 0;
+            string _pumpCorrect = "";
             maxReached = isMaxReached(level_id);
             stars = 0;
             int hpS = compare(horsePowerUser, _hpCorrect);
