@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
+using Microsoft.AspNet.Identity;
 
 namespace Pumps101.Controllers
 {
@@ -15,7 +17,9 @@ namespace Pumps101.Controllers
         {
             get
             {
-                return new CalculationsRepository();
+                String user = User.Identity.GetUserId();
+                Guid userGuid = new Guid(user);
+                return new CalculationsRepository(userGuid, User.Identity.IsAuthenticated);
             }
         }
 
