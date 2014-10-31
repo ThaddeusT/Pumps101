@@ -91,6 +91,12 @@ namespace Pumps101.Models
             _materials = new List<KeyValuePair<String,String>>();
         }
 
+        public LevelModel(int level, Guid User, Boolean Authenticated)
+        {
+            _level = level;
+            LevelsCompleted = new LevelsComplete(User, Authenticated);
+        }
+
         #endregion
 
         #region Properties
@@ -277,6 +283,8 @@ namespace Pumps101.Models
                 return _cost_correct;
             }
         }
+
+        public LevelsComplete LevelsCompleted { get; set; }
 
         #endregion
 
