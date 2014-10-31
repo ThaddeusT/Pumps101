@@ -171,6 +171,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Level.cs" />
     <Compile Include="Models\LevelModel.cs" />
     <Compile Include="Models\LevelsComplete.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
