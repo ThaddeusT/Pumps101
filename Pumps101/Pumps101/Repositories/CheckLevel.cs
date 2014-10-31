@@ -18,6 +18,20 @@ namespace Pumps101.Repositories
         public static string checkLevel(int level_id, double horsePowerUser, out int stars, out bool maxReached)
         {
             double _hpCorrect = 0;
+            var conn = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection connection = new SqlConnection(conn))
+            using (SqlCommand command = new SqlCommand("", connection))
+            {
+                connection.Open();
+                command.CommandText = "SELECT hp FROM Level_Answers WHERE level_id = @lvl_id";
+                command.Parameters.AddWithValue("@lvl_id", level_id);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    _hpCorrect = (double)reader["hp"];
+                }
+                command.Connection.Close();
+            }
             maxReached = isMaxReached(level_id);
             stars = compare(horsePowerUser, _hpCorrect);
             return "";
@@ -28,6 +42,22 @@ namespace Pumps101.Repositories
         {
             double _hpCorrect = 0;
             double _npshCorrect = 0;
+            var conn = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection connection = new SqlConnection(conn))
+            using (SqlCommand command = new SqlCommand("", connection))
+            {
+                connection.Open();
+                command.CommandText = "SELECT hp,npsh FROM Level_Answers WHERE level_id = @lvl_id";
+                command.Parameters.AddWithValue("@lvl_id", level_id);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    _hpCorrect = (double)reader["hp"];
+                    _npshCorrect = (double)reader["npsh"];
+                }
+                command.Connection.Close();
+            }
+            
             maxReached = isMaxReached(level_id);
             stars = 0;
             int hpS = compare(horsePowerUser, _hpCorrect);
@@ -60,6 +90,24 @@ namespace Pumps101.Repositories
             double _hpCorrect = 0;
             double _npshCorrect = 0;
             string _pumpCorrect = "";
+
+            var conn = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection connection = new SqlConnection(conn))
+            using (SqlCommand command = new SqlCommand("", connection))
+            {
+                connection.Open();
+                command.CommandText = "SELECT hp,npsh FROM Level_Answers WHERE level_id = @lvl_id";
+                command.Parameters.AddWithValue("@lvl_id", level_id);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    _hpCorrect = (double)reader["hp"];
+                    _npshCorrect = (double)reader["npsh"];
+                    _pumpCorrect = reader["pump_type"].ToString();
+                }
+                command.Connection.Close();
+            }
+
             maxReached = isMaxReached(level_id);
             stars = 0;
             int hpS = compare(horsePowerUser, _hpCorrect);
@@ -90,13 +138,38 @@ namespace Pumps101.Repositories
         }
 
         // Level 10
-        public static string checkLevel(int level_id, double horsePowerUser, double _hpCorrect, double npshUser, double _npshCorrect, string pumpUser, string _pumpCorrect, double costUser, double _costCorrect, out int stars, out bool maxReached)
+        public static string checkLevel(int level_id, double horsePowerUser, double npshUser, string pumpUser, double costUser, out int stars, out bool maxReached)
         {
+            double _hpCorrect = 0;
+            double _npshCorrect = 0;
+            string _pumpCorrect = "";
+            double _costCorrect = 0;
+            var conn = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection connection = new SqlConnection(conn))
+            using (SqlCommand command = new SqlCommand("", connection))
+            {
+                connection.Open();
+                command.CommandText = "SELECT hp,npsh FROM Level_Answers WHERE level_id = @lvl_id";
+                command.Parameters.AddWithValue("@lvl_id", level_id);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    _hpCorrect = (double)reader["hp"];
+                    _npshCorrect = (double)reader["npsh"];
+                    _pumpCorrect = reader["pump_type"].ToString();
+                    _costCorrect = (double)reader["cost"];
+                }
+                command.Connection.Close();
+            }
+
+
             maxReached = isMaxReached(level_id);
             stars = 0;
             int hpS = compare(horsePowerUser, _hpCorrect);
             int npshS = compare(npshUser, _npshCorrect);
             int costC = compare(costUser, _costCorrect);
+
+            
 
             if (pumpUser.Equals(_pumpCorrect))
             {

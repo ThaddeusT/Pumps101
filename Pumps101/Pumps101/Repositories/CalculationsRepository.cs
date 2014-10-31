@@ -295,20 +295,25 @@ namespace Pumps101.Repositories
         /// <param name="chances">the number of chance they have to get it correct</param>
         public LevelModel getLevel(int level, int chances)
         {
+            _level = level;
             if (level == 0)
             {
                 return new LevelModel(level, _user, _authenticated);
             }
 
-
-
+            // if level already exist
+            LevelModel lv;
+            if (findLevel(level, out lv))
+            {
+                return lv;
+            }
 
 
             //check to see if level exist
 
             // if level 0 level model
 
-            _level = level;
+            
             Random rn = new Random();
             if (_level < 4) { 
                 _diams = new double[] { 0.75, 1, 1.25, 1.5 };
@@ -450,7 +455,6 @@ namespace Pumps101.Repositories
                 {
                     connection.Open();
                     command.CommandText = "SELECT * FROM Levels WHERE is_active = 1";
-                    command.Parameters.AddWithValue("@user", _user.ToString().ToUpper());
                     //string ld = command.ExecuteScalar().ToString();
                     SqlDataReader reader = command.ExecuteReader();
                     if (reader.HasRows)
@@ -512,8 +516,83 @@ namespace Pumps101.Repositories
                 // TODO: Redirect to login
                 return 0;
             }
-            
+        }
 
+        private bool findLevel(int level, out LevelModel lv)
+        {
+            int level_id = -1;
+            int chances = -1;
+            double density = 0;
+            double diam = 0;
+            double time = 0;
+            double volume = 0;
+            double t1p = 0;
+            double t2p = 0;
+            double viscosity = 0;
+            double ef = 0;
+            double vp = 0;
+            int t1e = 0;
+            int t2e = 0;
+            int v1l = 0;
+            int v2l = 0;
+            string mat = "";
+            var conn = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection connection = new SqlConnection(conn))
+            using (SqlCommand command = new SqlCommand("", connection))
+            {
+                connection.Open();
+                command.CommandText = "SELECT level_id,user_id FROM Levels WHERE is_active = 1 AND level = @level";
+                command.Parameters.AddWithValue("@level", _level);
+                
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        if (reader["user"].ToString().CompareTo(_user.ToString().ToUpper()) == 0)
+                        {
+                            level_id = (int)reader["level_id"];
+                            chances = (int)reader["chances"];
+                            break;
+                        }
+                    }
+                }
+                command.Connection.Close();
+            }
+            if(level_id == -1)
+            {
+                lv = null;
+                return false;
+            }
+
+            using (SqlConnection connection = new SqlConnection(conn))
+            using (SqlCommand command = new SqlCommand("", connection))
+            {
+                connection.Open();
+                command.CommandText = "SELECT * FROM Level_Setup WHERE is_active = 1 AND level = @level";
+                command.Parameters.AddWithValue("@level", level_id);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {    
+                    density = (double)reader["density"];
+                    diam = (double)reader["diam"];
+                    time = (double)reader["time"];
+                    volume = (double)reader["volume"];
+                    t1e = (int)reader["tank_one_elevation"];
+                    t2e = (int)reader["tank_two_elevation"];
+                    t1p = (double)reader["tank_one_pressure"];
+                    t2p = (double)reader["tank_two_pressure"];
+                    viscosity = (double)reader["viscosity"];
+                    v1l = (int)reader["vert_one_length"];
+                    v2l = (int)reader["vert_two_length"];
+                    ef = (double)reader["efficency_factor"];
+                    vp = (double)reader["vapor_pressure"];
+                    mat = reader["material"].ToString();
+                }
+                command.Connection.Close();
+            }
+            lv = new LevelModel(level_id, level, chances, diam, density, time, volume, new int[] { t1e, t2e }, new double[] { t1p, t2p }, viscosity, new int[] { v1l, v2l }, ef, vp, mat);
+            return true;
         }
 
     }

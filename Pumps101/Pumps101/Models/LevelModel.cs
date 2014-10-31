@@ -44,7 +44,6 @@ namespace Pumps101.Models
         // material can be "Cast Iron" "Cast Steel" "Stainless Steel" "Nickel Alloy"
         private string _material;
 
-        private IEnumerable<KeyValuePair<String, String>> _materials;
         //
         // ANSWERS
         //
@@ -88,7 +87,27 @@ namespace Pumps101.Models
             _NPSH_correct = NPSH_correct;
             _pumpType_correct = pumpType_correct;
             _cost_correct = cost_correct;
-            _materials = new List<KeyValuePair<String,String>>();
+        }
+
+        public LevelModel(int lv_id, int level, int chances, double diam, double density, double time, double volume, int[] tankElevation, double[] tankPressure, double viscosity, int[] vertLength, double efficFactor, double vaporPressure, string material)
+        {
+            _level_id = lv_id;
+            _level = level;
+            _maxNumberOfChances = chances;
+            _diam = diam;
+            _density = density;
+            _time = time;
+            _volume = volume;
+            _tankOneElevation = tankElevation[0];
+            _tankTwoElevation = tankElevation[1];
+            _tankOnePressure = tankPressure[0];
+            _tankTwoPressure = tankPressure[1];
+            _viscosity = viscosity;
+            _vertLengthOne = vertLength[0];
+            _vertLengthTwo = vertLength[1];
+            _efficencyFactor = efficFactor;
+            _vaporPressure = vaporPressure;
+            _material = material;
         }
 
         public LevelModel(int level, Guid User, Boolean Authenticated)
@@ -241,14 +260,6 @@ namespace Pumps101.Models
             get
             {
                 return _material;
-            }
-        }
-
-        public IEnumerable<KeyValuePair<String, String>> Materials
-        {
-            get
-            {
-                return _materials;
             }
         }
 
