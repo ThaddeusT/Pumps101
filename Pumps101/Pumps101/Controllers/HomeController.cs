@@ -41,13 +41,17 @@ namespace Pumps101.Controllers
         {
             int star;
             bool max;
-            String message = "";
-            star = 3;
+            String message ="place_holder";
+            star = 0;
             max = false;
-            //CheckLevel.checkLevel(levelId, HPGuess, out star, out max);
+            message = CheckLevel.checkLevel(levelId, HPGuess, out star, out max);
             if (star == 0)
             {
-                message = "Incorrect guess";
+                if (message.Equals(""))
+                {
+                    message = "Incorrect guess";
+                }
+                //else message is already set
             }
             else
             {

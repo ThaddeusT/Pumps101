@@ -25,11 +25,10 @@ namespace Pumps101.Repositories
                 connection.Open();
                 command.CommandText = "SELECT hp FROM Level_Answers WHERE level_id = @lvl_id";
                 command.Parameters.AddWithValue("@lvl_id", level_id);
-                SqlDataReader reader = command.ExecuteReader();
-                if (reader.HasRows)
-                {
-                    _hpCorrect = (double)reader["hp"];
-                }
+                //SqlDataReader reader =  //.ExecuteReader();
+                
+                    _hpCorrect = (double)command.ExecuteScalar();
+                
                 command.Connection.Close();
             }
             maxReached = isMaxReached(level_id);
@@ -52,6 +51,7 @@ namespace Pumps101.Repositories
                 SqlDataReader reader = command.ExecuteReader();
                 if (reader.HasRows)
                 {
+                    reader.Read();
                     _hpCorrect = (double)reader["hp"];
                     _npshCorrect = (double)reader["npsh"];
                 }
@@ -101,6 +101,7 @@ namespace Pumps101.Repositories
                 SqlDataReader reader = command.ExecuteReader();
                 if (reader.HasRows)
                 {
+                    reader.Read();
                     _hpCorrect = (double)reader["hp"];
                     _npshCorrect = (double)reader["npsh"];
                     _pumpCorrect = reader["pump_type"].ToString();
@@ -154,6 +155,7 @@ namespace Pumps101.Repositories
                 SqlDataReader reader = command.ExecuteReader();
                 if (reader.HasRows)
                 {
+                    reader.Read();
                     _hpCorrect = (double)reader["hp"];
                     _npshCorrect = (double)reader["npsh"];
                     _pumpCorrect = reader["pump_type"].ToString();
@@ -248,11 +250,10 @@ namespace Pumps101.Repositories
                 command.CommandText = "SELECT chances,attempts FROM Levels WHERE level_id = @lvl_id";
                 command.Parameters.AddWithValue("@lvl_id", level_id);
                 SqlDataReader reader = command.ExecuteReader();
-                if (reader.HasRows)
-                {
-                    chances = (int)reader["chance"];
-                    attempts = (int)reader["attempts"];   
-                }
+                reader.Read();
+                chances = (int)reader["chances"];
+                attempts = (int)reader["attempts"];   
+                
                 command.Connection.Close();
             }
 
