@@ -505,13 +505,14 @@ namespace Pumps101.Repositories
                     command.ExecuteNonQuery();
                     connection.Close();
                 }
-
+                return level_id;
             }
             else
             {
                 // TODO: Redirect to login
+                return 0;
             }
-            return level_id;
+            
 
         }
 

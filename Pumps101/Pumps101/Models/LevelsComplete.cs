@@ -29,7 +29,7 @@ namespace Pumps101.Models
                 using (SqlCommand command = new SqlCommand("", connection))
                 {
                     connection.Open();
-                    command.CommandText = "SELECT * FROM Levels_Completed";
+                    command.CommandText = "SELECT * FROM Levels_Complete";
                     //string ld = command.ExecuteScalar().ToString();
                     SqlDataReader reader = command.ExecuteReader();
                     if (reader.HasRows)
@@ -60,7 +60,7 @@ namespace Pumps101.Models
                             connection.Open();
                             using (SqlCommand command = new SqlCommand("", connection))
                             {
-                                command.CommandText = "INSERT INTO Levels_Completed VALUES (@user, @level, @ccompleted, @stars)";
+                                command.CommandText = "INSERT INTO Levels_Complete VALUES (@user, @level, @completed, @stars)";
                                 command.Parameters.AddWithValue("@user", User);
                                 command.Parameters.AddWithValue("@level", i+1);
                                 command.Parameters.AddWithValue("@completed", false);

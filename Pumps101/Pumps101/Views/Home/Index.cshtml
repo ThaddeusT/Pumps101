@@ -21,7 +21,16 @@
         GridSize = Math.round(width * .02);
         rows = Math.round(height / GridSize);
         columns = Math.round(width / GridSize);
-        drawGrid();
+        if(level != 0)
+        {
+            drawGrid();
+        }
+        else
+        {
+            $("#hpEntry").hide();
+            $("#controls").hide();
+        }
+
         drawImages();
         drawComponents();
     }
@@ -69,67 +78,83 @@
 
     function drawComponents()
     {
-        ctx.fillStyle = 'red';
-        ctx.font = '16pt Arial'
-        ctx.textAlign = 'center';
-        ctx.fillText('Level '+level, cwidth / 2, GridSize*2);
+        if(level !=0)
+        {
+            ctx.fillStyle = 'red';
+            ctx.font = '16pt Arial'
+            ctx.textAlign = 'center';
+            ctx.fillText('Level '+level, cwidth / 2, GridSize*2);
 
-        ctx.fillStyle ='black';
-        ctx.font = '10pt Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText('Time to Move All Liquid: @Model.Time Hours', (cwidth / 2), GridSize*3);
-        ctx.fillText('Diameter of Pipes: @Model.Diameter inches', (cwidth / 2), GridSize*4);
-        ctx.fillText('Volume of Containers: @Model.Volume ft^3', (cwidth / 2), GridSize*5);
-        ctx.fillText('Liquid Density: @Model.Density lbm/ft^3', (cwidth / 2), GridSize*6);
+            ctx.fillStyle ='black';
+            ctx.font = '10pt Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Time to Move All Liquid: @Model.Time Hours', (cwidth / 2), GridSize*3);
+            ctx.fillText('Diameter of Pipes: @Model.Diameter inches', (cwidth / 2), GridSize*4);
+            ctx.fillText('Volume of Containers: @Model.Volume ft^3', (cwidth / 2), GridSize*5);
+            ctx.fillText('Liquid Density: @Model.Density lbm/ft^3', (cwidth / 2), GridSize*6);
+        }
 
         switch(level)
         {
             case 0:
+                ctx.fillStyle = 'white';
+                ctx.rect(0, 0, width, height);
+                ctx.fill();
+
                 ctx.strokeStyle = "black";
+                ctx.fillStyle = 'red';
+                ctx.font = '10pt Arial'
+                ctx.textAlign = 'center';
+
                 var centerx = (columns / 2) * GridSize;
                 var centery = (rows / 2) * GridSize;
 
                 var buttonstoprowy = centery - ((rows/3)*GridSize);
-                var buttonsleftx =  centerx - ((columns/3)*GridSize);
+                var buttonsleftx =  centerx - (5.5*GridSize);
 
-                ctx.rect(buttonsleftx, buttonstoprowy, GridSize * 2, GridSize * 2);
+                ctx.rect(buttonsleftx, buttonstoprowy, GridSize * 3, GridSize * 3);
                 ctx.stroke();
-                ctx.fillStyle = 'red';
-                ctx.font = '16pt Arial'
-                ctx.textAlign = 'center';
-                ctx.fillText('Level '+level, buttonsleftx+(GridSize * 1), buttonstoprowy);
+                ctx.fillText('Level @Model.LevelsCompleted.Levels[0].LevelNum', buttonsleftx+(GridSize * 1.5), buttonstoprowy+(GridSize * 1));
 
-                ctx.rect(buttonsleftx+(3*GridSize), buttonstoprowy, GridSize * 2, GridSize * 2);
+                ctx.rect(buttonsleftx+(4*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
                 ctx.stroke();
+                ctx.fillText('Level @Model.LevelsCompleted.Levels[1].LevelNum', buttonsleftx+(GridSize * 5.5), buttonstoprowy+(GridSize * 1));
 
-                ctx.rect(buttonsleftx+(7*GridSize), buttonstoprowy, GridSize * 2, GridSize * 2);
+                ctx.rect(buttonsleftx+(8*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
                 ctx.stroke();
+                ctx.fillText('Level @Model.LevelsCompleted.Levels[2].LevelNum', buttonsleftx+(GridSize * 9.5), buttonstoprowy+(GridSize * 1));
 
                 buttonstoprowy = buttonstoprowy + (GridSize * 4);
 
-                ctx.rect(buttonsleftx, buttonstoprowy, GridSize * 2, GridSize * 2);
+                ctx.rect(buttonsleftx, buttonstoprowy, GridSize * 3, GridSize * 3);
                 ctx.stroke();
+                ctx.fillText('Level @Model.LevelsCompleted.Levels[3].LevelNum', buttonsleftx+(GridSize * 1.5), buttonstoprowy+(GridSize * 1));
 
-                ctx.rect(buttonsleftx+(3*GridSize), buttonstoprowy, GridSize * 2, GridSize * 2);
+                ctx.rect(buttonsleftx+(4*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
                 ctx.stroke();
+                ctx.fillText('Level @Model.LevelsCompleted.Levels[4].LevelNum', buttonsleftx+(GridSize * 5.5), buttonstoprowy+(GridSize * 1));
 
-                ctx.rect(buttonsleftx+(7*GridSize), buttonstoprowy, GridSize * 2, GridSize * 2);
+                ctx.rect(buttonsleftx+(8*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
                 ctx.stroke();
+                ctx.fillText('Level @Model.LevelsCompleted.Levels[5].LevelNum', buttonsleftx+(GridSize * 9.5), buttonstoprowy+(GridSize * 1));
 
                 buttonstoprowy = buttonstoprowy + (GridSize * 4);
 
-                ctx.rect(buttonsleftx, buttonstoprowy, GridSize * 2, GridSize * 2);
+                ctx.rect(buttonsleftx, buttonstoprowy, GridSize * 3, GridSize * 3);
                 ctx.stroke();
+                ctx.fillText('Level @Model.LevelsCompleted.Levels[6].LevelNum', buttonsleftx+(GridSize * 1.5), buttonstoprowy+(GridSize * 1));
 
-                ctx.rect(buttonsleftx+(3*GridSize), buttonstoprowy, GridSize * 2, GridSize * 2);
+                ctx.rect(buttonsleftx+(4*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
                 ctx.stroke();
+                ctx.fillText('Level @Model.LevelsCompleted.Levels[7].LevelNum', buttonsleftx+(GridSize * 5.5), buttonstoprowy+(GridSize * 1));
 
-                ctx.rect(buttonsleftx+(7*GridSize), buttonstoprowy, GridSize * 2, GridSize * 2);
+                ctx.rect(buttonsleftx+(8*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
                 ctx.stroke();
+                ctx.fillText('Level @Model.LevelsCompleted.Levels[8].LevelNum', buttonsleftx+(GridSize * 9.5), buttonstoprowy+(GridSize * 1));
 
                 break;
 
-                
+
 
 
             case 1:

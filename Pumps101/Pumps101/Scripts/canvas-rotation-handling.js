@@ -9,6 +9,10 @@
     var last_width = 0;
     var last_height = 1;
 
+    $('#canvas').click(function (e) { //Default mouse Position 
+        alert(e.pageX + ' , ' + e.pageY);
+    });
+
     function resizeCanvas() {
         // inc resize counter
         rc++;
