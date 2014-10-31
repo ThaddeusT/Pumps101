@@ -45,23 +45,25 @@
 
     function drawImages() {
         if (imagesLoaded) {
-            switch(level)
-            {
-                case 1: ctx.drawImage(Resource.img.pump, ((columns / 2)-2) * GridSize, ((rows / 2)-1)*GridSize, GridSize * 3, GridSize * 3);
-                    break;
-            }
+            drawPump();
         }
         else {
             Resource.img.container.onload = function () {
-                switch(level)
-                {
-                    case 1: ctx.drawImage(Resource.img.pump, ((columns / 2)-2) * GridSize, ((rows / 2)-1)*GridSize, GridSize * 3, GridSize * 3);
-                        break;
-                }
+                drawPump();
             };
             Resource.img.pump.src = '@Url.Content("/Content/Images/pump.PNG")';
             Resource.img.container.src ='@Url.Content("/Content/Images/container.PNG")';
             imagesLoaded = true;
+        }
+    }
+
+    function drawPump(){
+        switch(level)
+        {
+            case 1: ctx.drawImage(Resource.img.pump, ((columns / 2)-2) * GridSize, ((rows / 2)-1)*GridSize, GridSize * 3, GridSize * 3);
+                break;
+            case 2: ctx.drawImage(Resource.img.pump, ((columns / 2)-2) * GridSize, ((rows / 2)+2)*GridSize, GridSize * 3, GridSize * 3);
+                break;
         }
     }
 
@@ -77,18 +79,8 @@
         ctx.textAlign = 'center';
         ctx.fillText('Time to Move All Liquid: @Model.Time Hours', (cwidth / 2), GridSize*3);
         ctx.fillText('Diameter of Pipes: @Model.Diameter inches', (cwidth / 2), GridSize*4);
-
-        ctx.fillStyle ='black';
-        ctx.font = '7pt Arial';
-        ctx.textAlign = 'left';
-        
-        var leftContainerTextx = ((columns / 2)-2) * GridSize -((Math.round(columns / 4)) * GridSize);
-        ctx.fillText('Volume: @Model.Volume ft^3', leftContainerTextx+1, ((rows / 2)-1)*GridSize);
-        ctx.fillText('Liquid Density: @Model.Density lbm/ft^3', leftContainerTextx+1, ((rows / 2)-2)*GridSize);
-
-        var rightContainerTestx = ((columns / 2)+1) * GridSize +(Math.round(columns / 4) * GridSize)+(GridSize * 3);
-        ctx.fillText('Volume: @Model.Volume ft^3', rightContainerTestx+1, ((rows / 2)-2)*GridSize);
-        ctx.fillText('Liquid Density: @Model.Density lbm/ft^3', rightContainerTestx+1, ((rows / 2)-1)*GridSize);
+        ctx.fillText('Volume of Containers: @Model.Volume ft^3', (cwidth / 2), GridSize*5);
+        ctx.fillText('Liquid Density: @Model.Density lbm/ft^3', (cwidth / 2), GridSize*6);
 
         switch(level)
         {
@@ -142,6 +134,90 @@
                 $("#HPGuess").css("font-size", "x-small");
                 $("#hpEntry label").css("font-size", "x-small");
 
+                break;
+
+            case 2:
+
+                ctx.strokeStyle = "black";
+
+                //Draw pipes and container to the right of the pump
+
+                ctx.beginPath();
+                var x = ((columns / 2)+1) * GridSize;
+                var xright = x+(Math.round(columns / 6) * GridSize);
+                var y = (((rows / 2)+3)*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xright, y);
+                ctx.stroke();
+
+                ctx.beginPath();
+                x = ((columns / 2)+1) * GridSize;
+                y = (((rows / 2)+3)*GridSize)+(.5*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xright+(.5*GridSize), y);
+                ctx.stroke();
+
+                rightContainerX = xright - (1.5*GridSize);
+                rightContainerY = y - (GridSize*10);
+
+                ctx.drawImage(Resource.img.container, rightContainerX, rightContainerY, GridSize * 3, GridSize * 3);
+                ctx.rect(rightContainerX, rightContainerY, GridSize * 3, GridSize * 3);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xright+(.5*GridSize), y);
+                ctx.lineTo(xright+(.5*GridSize), y-(GridSize*7));
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xright, y-(.5*GridSize));
+                ctx.lineTo(xright, y-(.5*GridSize)-(GridSize*6.5));
+                ctx.stroke();
+
+                //Draw pipes and container to the left of the pump
+                var x = ((columns / 2)-2) * GridSize;
+                var xleft = x-((Math.round(columns / 6)) * GridSize);
+                var y = (((rows / 2)+3)*GridSize);
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(xleft, y);
+                ctx.stroke();
+
+                ctx.beginPath();
+                x = ((columns / 2)-2) * GridSize;
+                y = (((rows / 2)+3)*GridSize)+(.5*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xleft-(.5*GridSize), y);
+                ctx.stroke();
+
+                leftContainerX = xleft - (1.5*GridSize);
+                leftContainerY = y - (GridSize*6);
+
+                ctx.drawImage(Resource.img.container, leftContainerX, leftContainerY, GridSize * 3, GridSize * 3);
+                ctx.rect(leftContainerX, leftContainerY, GridSize * 3, GridSize * 3);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xleft-(.5*GridSize), y);
+                ctx.lineTo(xleft-(.5*GridSize), y - (GridSize*3));
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xleft, y - (.5*GridSize));
+                ctx.lineTo(xleft, y - (GridSize*3));
+                ctx.stroke();
+
+                ctx.fillStyle ='black';
+                ctx.font = '10pt Arial';
+                ctx.textAlign = 'right';
+                ctx.fillText('Height: @Model.TankOneElevation ft', xleft-(GridSize*1), y - (GridSize*2));
+                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*3), rightContainerY+(GridSize*5));
+
+                $("#hpEntry").css("top", ((rows / 2))*GridSize+"px");
+                $("#hpEntry").css("left", ((columns / 2)-3) * GridSize+"px");
+                $("#HPGuess").css("width", 2*GridSize+"px");
+                $("#HPGuess").css("font-size", "x-small");
+                $("#hpEntry label").css("font-size", "x-small");
                 break;
         }
     }

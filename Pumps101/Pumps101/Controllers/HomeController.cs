@@ -21,7 +21,7 @@ namespace Pumps101.Controllers
 
         public ActionResult Index()
         {
-            LevelModel model = repository.getLevel(1, 3);
+            LevelModel model = repository.getLevel(2, 3);
             return View(model);
         }
 
