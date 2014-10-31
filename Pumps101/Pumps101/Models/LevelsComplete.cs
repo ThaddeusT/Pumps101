@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
@@ -17,11 +19,59 @@ namespace Pumps101.Models
 
         #region Constructors
 
-        public LevelsComplete(Guid user)
+        public LevelsComplete(Guid User, Boolean Authenticated)
         {
-            // TODO: get all levels for the user
-            // if level hasnt been created in database, add it
-            // set levels
+            if (Authenticated)
+            {
+                bool[] set = new bool[9];
+                var conn = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+                using (SqlConnection connection = new SqlConnection(conn))
+                using (SqlCommand command = new SqlCommand("", connection))
+                {
+                    connection.Open();
+                    command.CommandText = "SELECT * FROM Levels_Completed";
+                    //string ld = command.ExecuteScalar().ToString();
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        int count = 0;
+                        while (reader.Read() || count < 9)
+                        {
+                            //string u = ;
+                            if (reader["user"].ToString().CompareTo(User.ToString().ToUpper()) == 0)
+                            {
+                                _levels.Add(new Level((int)reader["level"], (int)reader["stars"], (bool)reader["completed"]));
+                                set[(int)reader["level"] - 1] = true;
+                                count++;
+                            }
+                        }
+                    }
+                    command.Connection.Close();
+                }
+
+                for (int i = 0; i < set.Length; i++)
+                {
+                    if (!set[i])
+                    {
+                        if(i != 0){_levels.Add(new Level(i+1, 0, true));}
+                        else {_levels.Add(new Level(i+1, 0, false));}
+                        using (SqlConnection connection = new SqlConnection(conn))
+                        {
+                            connection.Open();
+                            using (SqlCommand command = new SqlCommand("", connection))
+                            {
+                                command.CommandText = "INSERT INTO Levels_Completed VALUES (@user, @level, @ccompleted, @stars)";
+                                command.Parameters.AddWithValue("@user", User);
+                                command.Parameters.AddWithValue("@level", i+1);
+                                command.Parameters.AddWithValue("@completed", false);
+                                command.Parameters.AddWithValue("@stars", 0);
+                                command.ExecuteNonQuery();
+                            }
+                            connection.Close();
+                        }
+                    }
+                }
+            }
         }
 
         #endregion
