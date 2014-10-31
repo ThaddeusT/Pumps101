@@ -23,7 +23,7 @@ namespace Pumps101.Models
         #endregion
 
         #region Properties
-        public int Level
+        public int LevelNum
         {
             get { return _level; }
         }
