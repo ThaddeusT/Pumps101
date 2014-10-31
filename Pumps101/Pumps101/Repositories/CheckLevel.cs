@@ -3,6 +3,8 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Configuration;
+using System.Data.SqlClient;
 
 namespace Pumps101.Repositories
 {
@@ -11,15 +13,17 @@ namespace Pumps101.Repositories
         // Level 1-6
         // out is starts
         // returns string with a message about what they did wrong, empty string if no message should display
-        public static string checkLevel(double horsePowerUser, double _hpCorrect, out int stars)
+        public static string checkLevel(int level_id, double horsePowerUser, double _hpCorrect, out int stars, out bool maxReached)
         {
+            maxReached = isMaxReached(level_id);
             stars = compare(horsePowerUser, _hpCorrect);
             return "";
         }
 
         // Level 7
-        public static string checkLevel(double horsePowerUser, double _hpCorrect, double npshUser, double _npshCorrect, out int stars)
+        public static string checkLevel(int level_id, double horsePowerUser, double _hpCorrect, double npshUser, double _npshCorrect, out int stars, out bool maxReached)
         {
+            maxReached = isMaxReached(level_id);
             stars = 0;
             int hpS = compare(horsePowerUser, _hpCorrect);
             int npshS = compare(npshUser, _npshCorrect);
@@ -46,8 +50,9 @@ namespace Pumps101.Repositories
 
 
         // Level 8
-        public static string checkLevel(double horsePowerUser, double _hpCorrect, double npshUser, double _npshCorrect, string pumpUser, string _pumpCorrect, out int stars)
+        public static string checkLevel(int level_id, double horsePowerUser, double _hpCorrect, double npshUser, double _npshCorrect, string pumpUser, string _pumpCorrect, out int stars, out bool maxReached)
         {
+            maxReached = isMaxReached(level_id);
             stars = 0;
             int hpS = compare(horsePowerUser, _hpCorrect);
             int npshS = compare(npshUser, _npshCorrect);
@@ -77,8 +82,9 @@ namespace Pumps101.Repositories
         }
 
         // Level 10
-        public static string checkLevel(double horsePowerUser, double _hpCorrect, double npshUser, double _npshCorrect, string pumpUser, string _pumpCorrect, double costUser, double _costCorrect, out int stars)
+        public static string checkLevel(int level_id, double horsePowerUser, double _hpCorrect, double npshUser, double _npshCorrect, string pumpUser, string _pumpCorrect, double costUser, double _costCorrect, out int stars, out bool maxReached)
         {
+            maxReached = isMaxReached(level_id);
             stars = 0;
             int hpS = compare(horsePowerUser, _hpCorrect);
             int npshS = compare(npshUser, _npshCorrect);
@@ -148,7 +154,57 @@ namespace Pumps101.Repositories
             return 0;
         }
 
+        private static bool isMaxReached(int level_id)
+        {
+            int attempts = 0;
+            int chances = 0;
+            // increments attemps if attemps reached then filled the active status of level and return true 
+            var conn = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection connection = new SqlConnection(conn))
+            using (SqlCommand command = new SqlCommand("", connection))
+            {
+                connection.Open();
+                command.CommandText = "SELECT chances,attempts FROM Levels WHERE level_id = @lvl_id";
+                command.Parameters.AddWithValue("@lvl_id", level_id);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    chances = (int)reader["chance"];
+                    attempts = (int)reader["attempts"];   
+                }
+                command.Connection.Close();
+            }
 
+            attempts++;
+            if (attempts == chances)
+            {
+                using (SqlConnection connection = new SqlConnection(conn))
+                using (SqlCommand command = new SqlCommand("", connection))
+                {
+                    connection.Open();
+                    command.CommandText = "UPDATE Levels SET attempts = @new, is_active = false Where level_id = @lvl_id";
+                    command.Parameters.AddWithValue("@new", attempts);
+                    command.Parameters.AddWithValue("@lvl_id", level_id);
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
+                return true;
+            }
+            else
+            {
+                using (SqlConnection connection = new SqlConnection(conn))
+                using (SqlCommand command = new SqlCommand("", connection))
+                {
+                    connection.Open();
+                    command.CommandText = "UPDATE Levels SET attempts = @new Where level_id = @lvl_id";
+                    command.Parameters.AddWithValue("@new", attempts);
+                    command.Parameters.AddWithValue("@lvl_id", level_id);
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
+            return false;
+        }
 
     }
 }

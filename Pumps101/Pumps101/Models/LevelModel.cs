@@ -10,6 +10,7 @@ namespace Pumps101.Models
     {
         #region Fields 
 
+        private int _level_id;
         private int _maxNumberOfChances;
         private int _level;
         private double _hpGuess;
@@ -64,8 +65,9 @@ namespace Pumps101.Models
         {
         }
 
-        public LevelModel(int level, int chances, double diam, double density, double time, double volume, int[] tankElevation, double[] tankPressure, double viscosity, int[] vertLength, double efficFactor, double vaporPressure, string material, double hp_correct, double NPSH_correct, string pumpType_correct, double cost_correct)
+        public LevelModel(int lv_id, int level, int chances, double diam, double density, double time, double volume, int[] tankElevation, double[] tankPressure, double viscosity, int[] vertLength, double efficFactor, double vaporPressure, string material, double hp_correct, double NPSH_correct, string pumpType_correct, double cost_correct)
         {
+            _level_id = lv_id;
             _level = level;
             _maxNumberOfChances = chances;
             _diam = diam;

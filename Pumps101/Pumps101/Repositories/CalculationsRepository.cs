@@ -295,6 +295,10 @@ namespace Pumps101.Repositories
         /// <param name="chances">the number of chance they have to get it correct</param>
         public LevelModel getLevel(int level, int chances)
         {
+            //check to see if level exist
+
+            // if level 0 level model
+
             _level = level;
             Random rn = new Random();
             if (_level < 4) { 
@@ -406,12 +410,11 @@ namespace Pumps101.Repositories
                 _material = materialArr[rn.Next(4)];
                 _cost_correct = getCost();
             }
-            addToDB();
 
-            return new LevelModel(_level,_maxNumberOfChances, _diam, _density, _time, _volume, _tankElevation, _tankPressure, _viscosity, _vertLength, _efficencyFactor, _vaporPressure, _material, _hp_correct, _NPSH_correct, _pumpType_correct, _cost_correct);
+            return new LevelModel(addToDB(), _level, _maxNumberOfChances, _diam, _density, _time, _volume, _tankElevation, _tankPressure, _viscosity, _vertLength, _efficencyFactor, _vaporPressure, _material, _hp_correct, _NPSH_correct, _pumpType_correct, _cost_correct);
         }
 
-        private void addToDB()
+        private int addToDB()
         {
             if (_authenticated)
             {
@@ -499,7 +502,7 @@ namespace Pumps101.Repositories
             {
                 // TODO: Redirect to login
             }
-
+            return level_id;
 
         }
 
