@@ -10,7 +10,9 @@
     var last_height = 1;
 
     $('#canvas').click(function (e) { //Default mouse Position 
-        alert(e.pageX + ' , ' + e.pageY);
+        var clickx = e.pageX;
+        var clicky = e.pageY;
+        getLevel(clickx, clicky);
     });
 
     function resizeCanvas() {

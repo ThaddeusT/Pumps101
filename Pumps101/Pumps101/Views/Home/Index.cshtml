@@ -12,7 +12,12 @@
     var imagesLoaded = false;
     var columns = 0;
     var rows = 0;
+    var centerx = 0;
+    var centery = 0;
+    var buttonSize =0;
     var level = @Model.Level;
+
+
     function drawcanvas() {
         canvas = document.getElementById("canvas");
         ctx = canvas.getContext("2d");
@@ -21,6 +26,9 @@
         GridSize = Math.round(width * .02);
         rows = Math.round(height / GridSize);
         columns = Math.round(width / GridSize);
+        centerx = (columns / 2) * GridSize;
+        centery = (rows / 2) * GridSize;
+        buttonSize = GridSize * 3;
         if(level != 0)
         {
             drawGrid();
@@ -28,7 +36,7 @@
         else
         {
             $("#hpEntry").hide();
-            $("#controls").hide();
+            $("#submitButton").hide();
         }
 
         drawImages();
@@ -76,6 +84,21 @@
         }
     }
 
+    function getLevel(x,y)
+    {
+        firstButtonMinX = (centerx - (5.5*GridSize));
+        firstButtonMinY = centery - ((rows/3)*GridSize);
+        firstButtonMaxX = (x+buttonSize);
+        firstButtonMaxY = (y+buttonSize);
+        if(x>firstButtonMinX)
+        {
+            if(x < firstButtonMaxX && y>firstButtonMinY && y<firstButtonMaxY)
+            {
+                window.location.href = '@Url.Action("Index","Home",new{level = 1})';
+            }
+        }
+    }
+
     function drawComponents()
     {
         if(level !=0)
@@ -96,66 +119,9 @@
 
         switch(level)
         {
-            case 0:
-                ctx.fillStyle = 'white';
-                ctx.rect(0, 0, width, height);
-                ctx.fill();
-
-                ctx.strokeStyle = "black";
-                ctx.fillStyle = 'red';
-                ctx.font = '10pt Arial'
-                ctx.textAlign = 'center';
-
-                var centerx = (columns / 2) * GridSize;
-                var centery = (rows / 2) * GridSize;
-
-                var buttonstoprowy = centery - ((rows/3)*GridSize);
-                var buttonsleftx =  centerx - (5.5*GridSize);
-
-                ctx.rect(buttonsleftx, buttonstoprowy, GridSize * 3, GridSize * 3);
-                ctx.stroke();
-                ctx.fillText('Level @Model.LevelsCompleted.Levels[0].LevelNum', buttonsleftx+(GridSize * 1.5), buttonstoprowy+(GridSize * 1));
-
-                ctx.rect(buttonsleftx+(4*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
-                ctx.stroke();
-                ctx.fillText('Level @Model.LevelsCompleted.Levels[1].LevelNum', buttonsleftx+(GridSize * 5.5), buttonstoprowy+(GridSize * 1));
-
-                ctx.rect(buttonsleftx+(8*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
-                ctx.stroke();
-                ctx.fillText('Level @Model.LevelsCompleted.Levels[2].LevelNum', buttonsleftx+(GridSize * 9.5), buttonstoprowy+(GridSize * 1));
-
-                buttonstoprowy = buttonstoprowy + (GridSize * 4);
-
-                ctx.rect(buttonsleftx, buttonstoprowy, GridSize * 3, GridSize * 3);
-                ctx.stroke();
-                ctx.fillText('Level @Model.LevelsCompleted.Levels[3].LevelNum', buttonsleftx+(GridSize * 1.5), buttonstoprowy+(GridSize * 1));
-
-                ctx.rect(buttonsleftx+(4*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
-                ctx.stroke();
-                ctx.fillText('Level @Model.LevelsCompleted.Levels[4].LevelNum', buttonsleftx+(GridSize * 5.5), buttonstoprowy+(GridSize * 1));
-
-                ctx.rect(buttonsleftx+(8*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
-                ctx.stroke();
-                ctx.fillText('Level @Model.LevelsCompleted.Levels[5].LevelNum', buttonsleftx+(GridSize * 9.5), buttonstoprowy+(GridSize * 1));
-
-                buttonstoprowy = buttonstoprowy + (GridSize * 4);
-
-                ctx.rect(buttonsleftx, buttonstoprowy, GridSize * 3, GridSize * 3);
-                ctx.stroke();
-                ctx.fillText('Level @Model.LevelsCompleted.Levels[6].LevelNum', buttonsleftx+(GridSize * 1.5), buttonstoprowy+(GridSize * 1));
-
-                ctx.rect(buttonsleftx+(4*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
-                ctx.stroke();
-                ctx.fillText('Level @Model.LevelsCompleted.Levels[7].LevelNum', buttonsleftx+(GridSize * 5.5), buttonstoprowy+(GridSize * 1));
-
-                ctx.rect(buttonsleftx+(8*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
-                ctx.stroke();
-                ctx.fillText('Level @Model.LevelsCompleted.Levels[8].LevelNum', buttonsleftx+(GridSize * 9.5), buttonstoprowy+(GridSize * 1));
-
+            case 0:             
+                drawSelectButtons();
                 break;
-
-
-
 
             case 1:
                 ctx.strokeStyle = "black";
@@ -300,13 +266,73 @@
         $.ajax({
             type: 'POST',
             url: '@Url.Action("SubmitLevel","Home")',
-            data: {level: level, HPGuess: $("#HPGuess").val()},
+            data: {levelId: $("#LevelId").val(), HPGuess: $("#HPGuess").val()},
             success: function(content) {
                 $('#container').html(content);  // replace
             }
         });
     }
-</script>
+    </script>
+
+    @if (Model.LevelsCompleted != null)
+    {
+        <script type="text/javascript">
+        function drawSelectButtons()
+        {
+            ctx.fillStyle = 'white';
+            ctx.rect(0, 0, width, height);
+            ctx.fill();
+
+            ctx.strokeStyle = "black";
+            ctx.fillStyle = 'red';
+            ctx.font = '10pt Arial'
+            ctx.textAlign = 'center';
+
+            var buttonstoprowy = centery - ((rows/3)*GridSize);
+            var buttonsleftx =  centerx - (5.5*GridSize);
+
+            ctx.rect(buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
+            ctx.stroke();
+            ctx.fillText('Level @Model.LevelsCompleted.Levels[0].LevelNum', buttonsleftx+(GridSize * 1.5), buttonstoprowy+(GridSize * 1));
+
+            ctx.rect(buttonsleftx+(4*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
+            ctx.stroke();
+            ctx.fillText('Level @Model.LevelsCompleted.Levels[1].LevelNum', buttonsleftx+(GridSize * 5.5), buttonstoprowy+(GridSize * 1));
+
+            ctx.rect(buttonsleftx+(8*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
+            ctx.stroke();
+            ctx.fillText('Level @Model.LevelsCompleted.Levels[2].LevelNum', buttonsleftx+(GridSize * 9.5), buttonstoprowy+(GridSize * 1));
+
+            buttonstoprowy = buttonstoprowy + (GridSize * 4);
+
+            ctx.rect(buttonsleftx, buttonstoprowy, GridSize * 3, GridSize * 3);
+            ctx.stroke();
+            ctx.fillText('Level @Model.LevelsCompleted.Levels[3].LevelNum', buttonsleftx+(GridSize * 1.5), buttonstoprowy+(GridSize * 1));
+
+            ctx.rect(buttonsleftx+(4*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
+            ctx.stroke();
+            ctx.fillText('Level @Model.LevelsCompleted.Levels[4].LevelNum', buttonsleftx+(GridSize * 5.5), buttonstoprowy+(GridSize * 1));
+
+            ctx.rect(buttonsleftx+(8*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
+            ctx.stroke();
+            ctx.fillText('Level @Model.LevelsCompleted.Levels[5].LevelNum', buttonsleftx+(GridSize * 9.5), buttonstoprowy+(GridSize * 1));
+
+            buttonstoprowy = buttonstoprowy + (GridSize * 4);
+
+            ctx.rect(buttonsleftx, buttonstoprowy, GridSize * 3, GridSize * 3);
+            ctx.stroke();
+            ctx.fillText('Level @Model.LevelsCompleted.Levels[6].LevelNum', buttonsleftx+(GridSize * 1.5), buttonstoprowy+(GridSize * 1));
+
+            ctx.rect(buttonsleftx+(4*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
+            ctx.stroke();
+            ctx.fillText('Level @Model.LevelsCompleted.Levels[7].LevelNum', buttonsleftx+(GridSize * 5.5), buttonstoprowy+(GridSize * 1));
+
+            ctx.rect(buttonsleftx+(8*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
+            ctx.stroke();
+            ctx.fillText('Level @Model.LevelsCompleted.Levels[8].LevelNum', buttonsleftx+(GridSize * 9.5), buttonstoprowy+(GridSize * 1));
+        }
+    </script>
+    }
     <canvas id="canvas">
         HTML5 Canvas not supported.
     </canvas>
@@ -317,6 +343,7 @@
     </tr>
 </table>
     <menu id="controls">
-        <input type="submit" value="Submit Answer" onclick="submitPage()" />
+        <input type="submit" id="submitButton" value="Submit Answer" onclick="submitPage()" />
     </menu>
 <div id="fix">&copy; @DateTime.Now.Year - Pumps101</div>
+@Html.HiddenFor(m => m.LevelId)

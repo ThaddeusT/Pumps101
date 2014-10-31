@@ -23,11 +23,11 @@ namespace Pumps101.Controllers
             }
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int level = 0)
         {
             if (User.Identity.IsAuthenticated)
             {
-                LevelModel model = repository.getLevel(0, 3);
+                LevelModel model = repository.getLevel(level, 3);
                 return View(model);
             }
             else
@@ -37,10 +37,27 @@ namespace Pumps101.Controllers
         }
 
         [HttpPost]
-        public ActionResult SubmitLevel(int level = 0, int HPGuess = 0)
+        public ActionResult SubmitLevel(int levelId, int HPGuess = 0)
         {
-            LevelModel model = repository.getLevel(1, 3);
-            return View("Index",model);
+            int star;
+            bool max;
+            String message = "";
+            star = 3;
+            max = false;
+            //CheckLevel.checkLevel(levelId, HPGuess, out star, out max);
+            if (star == 0)
+            {
+                message = "Incorrect guess";
+            }
+            else
+            {
+                message = "Stars: " + star;
+            }
+            if (max)
+            {
+                return RedirectToAction("Index");
+            }
+            return View(message);
         }
 
         public ActionResult Login()

@@ -35,7 +35,7 @@ namespace Pumps101.Models
                     if (reader.HasRows)
                     {
                         int count = 0;
-                        while (reader.Read() || count < 9)
+                        while (reader.Read() && count < 9)
                         {
                             //string u = ;
                             if (reader["user"].ToString().CompareTo(User.ToString().ToUpper()) == 0)

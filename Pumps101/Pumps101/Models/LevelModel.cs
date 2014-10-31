@@ -297,6 +297,14 @@ namespace Pumps101.Models
 
         public LevelsComplete LevelsCompleted { get; set; }
 
+
+        public int LevelId
+        {
+            get
+            {
+                return _level_id;
+            }
+        }
         #endregion
 
     }

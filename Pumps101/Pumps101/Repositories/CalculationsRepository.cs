@@ -541,7 +541,7 @@ namespace Pumps101.Repositories
             using (SqlCommand command = new SqlCommand("", connection))
             {
                 connection.Open();
-                command.CommandText = "SELECT level_id,user_id FROM Levels WHERE is_active = 1 AND level = @level";
+                command.CommandText = "SELECT level_id,user FROM Levels WHERE is_active = 1 AND level = @level";
                 command.Parameters.AddWithValue("@level", _level);
                 
                 SqlDataReader reader = command.ExecuteReader();
@@ -549,12 +549,16 @@ namespace Pumps101.Repositories
                 {
                     while (reader.Read())
                     {
-                        if (reader["user"].ToString().CompareTo(_user.ToString().ToUpper()) == 0)
+                        try
                         {
-                            level_id = (int)reader["level_id"];
-                            chances = (int)reader["chances"];
-                            break;
+                            if (reader["user"].ToString().CompareTo(_user.ToString().ToUpper()) == 0)
+                            {
+                                level_id = (int)reader["level_id"];
+                                chances = (int)reader["chances"];
+                                break;
+                            }
                         }
+                        catch { break; }
                     }
                 }
                 command.Connection.Close();
