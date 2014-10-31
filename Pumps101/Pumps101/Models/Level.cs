@@ -14,7 +14,7 @@ namespace Pumps101.Models
         #endregion
 
         #region Constructors
-        Level(int lv, int stars, bool isLocked)
+        public Level(int lv, int stars, bool isLocked)
         {
             _level = lv;
             _stars = stars;
