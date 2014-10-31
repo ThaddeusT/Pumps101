@@ -264,7 +264,7 @@ namespace Pumps101.Repositories
                 using (SqlCommand command = new SqlCommand("", connection))
                 {
                     connection.Open();
-                    command.CommandText = "UPDATE Levels SET attempts = @new, is_active = false Where level_id = @lvl_id";
+                    command.CommandText = "UPDATE Levels SET attempts = @new, is_active = 0 WHERE level_id = @lvl_id";
                     command.Parameters.AddWithValue("@new", attempts);
                     command.Parameters.AddWithValue("@lvl_id", level_id);
                     command.ExecuteNonQuery();
