@@ -33,6 +33,10 @@ namespace Pumps101.Repositories
             }
             maxReached = isMaxReached(level_id);
             stars = compare(horsePowerUser, _hpCorrect);
+            if (stars > 0)
+            {
+                levelPassed(level_id, stars);
+            }
             return "";
         }
 
@@ -78,6 +82,10 @@ namespace Pumps101.Repositories
             else
             {
                 stars = (hpS + npshS) / 2;
+                if (stars > 0)
+                {
+                    levelPassed(level_id, stars);
+                }
             }
 
             return "";
@@ -133,7 +141,12 @@ namespace Pumps101.Repositories
             else
             {
                 stars = (hpS + npshS) / 2;
+                if(stars > 0)
+                {
+                    levelPassed(level_id, stars);
+                }
             }
+
 
             return "";
         }
@@ -215,6 +228,10 @@ namespace Pumps101.Repositories
             else
             {
                 stars = (hpS + npshS + costC) / 3;
+                if (stars > 0)
+                {
+                    levelPassed(level_id, stars);
+                }
             }
             return "";
         }
@@ -288,5 +305,115 @@ namespace Pumps101.Repositories
             return false;
         }
 
+        /// <summary>
+        ///  Called there is 1 or more stars
+        ///  Unlocks next level
+        ///  Deactivates current board
+        ///  Adds number of stars to Levels_Complete if it is higher than the current
+        /// </summary>
+        private static void levelPassed(int level_id, int stars)
+        {
+            int level = 0;
+            Guid user;
+            int ID = 0;
+            int stars_prev = 0;
+
+            var conn = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            using (SqlConnection connection = new SqlConnection(conn))
+            using (SqlCommand command = new SqlCommand("", connection))
+            {
+                connection.Open();
+                command.CommandText = "SELECT * FROM Levels WHERE level_id = @lvl_id";
+                command.Parameters.AddWithValue("@lvl_id", level_id);
+                SqlDataReader reader = command.ExecuteReader();
+                reader.Read();
+                user = (Guid)reader["user"];    
+                level = (int)reader["level"];
+                command.Connection.Close();
+            }
+
+            //deactivates level
+            using (SqlConnection connection = new SqlConnection(conn))
+            using (SqlCommand command = new SqlCommand("", connection))
+            {
+                connection.Open();
+                command.CommandText = "UPDATE Levels SET is_active = 0 Where level_id = @lvl_id";
+                command.Parameters.AddWithValue("@lvl_id", level_id);
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+
+            using (SqlConnection connection = new SqlConnection(conn))
+            using (SqlCommand command = new SqlCommand("", connection))
+            {
+                connection.Open();
+                command.CommandText = "SELECT * FROM Levels_Completed WHERE level = @level";
+                command.Parameters.AddWithValue("@level", level);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        if (reader["user"].ToString().CompareTo(user.ToString().ToUpper()) == 0)
+                        {
+                            ID = (int)reader["ID"];
+                            stars_prev = (int)reader["stars"];
+                            break;
+                        }
+                    }
+                }
+                command.Connection.Close();
+            }
+            if (stars > stars_prev)
+            {
+                //updates current level
+                using (SqlConnection connection = new SqlConnection(conn))
+                using (SqlCommand command = new SqlCommand("", connection))
+                {
+                    connection.Open();
+                    command.CommandText = "UPDATE Levels_Completed SET completed = 1, stars = @stars Where ID = @id";
+                    command.Parameters.AddWithValue("@id", ID);
+                    command.Parameters.AddWithValue("@stars", stars);
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
+            if (level != 9)
+            {
+                using (SqlConnection connection = new SqlConnection(conn))
+                using (SqlCommand command = new SqlCommand("", connection))
+                {
+                    connection.Open();
+                    command.CommandText = "SELECT * FROM Levels_Completed WHERE level = @level";
+                    command.Parameters.AddWithValue("@level", level + 1);
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            if (reader["user"].ToString().CompareTo(user.ToString().ToUpper()) == 0)
+                            {
+                                ID = (int)reader["ID"];
+                                break;
+                            }
+                        }
+                    }
+                    command.Connection.Close();
+                }
+                // unlocks next level
+                using (SqlConnection connection = new SqlConnection(conn))
+                using (SqlCommand command = new SqlCommand("", connection))
+                {
+                    connection.Open();
+                    command.CommandText = "UPDATE Levels SET locked = 0 Where ID = @id";
+                    command.Parameters.AddWithValue("@id", ID);
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
+
+
+
+        }
     }
 }
