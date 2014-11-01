@@ -36,7 +36,6 @@ namespace Pumps101.Controllers
             }
         }
 
-        [HttpPost]
         public ActionResult SubmitLevel(int levelId, int HPGuess = 0)
         {
             int star;
@@ -57,16 +56,7 @@ namespace Pumps101.Controllers
             {
                 message = "Stars: " + star;
             }
-            if (max)
-            {
-                return RedirectToAction("Index");
-            }
-            return View(message);
-        }
-
-        public ActionResult Login()
-        {
-            return View("Login");
+            return Json(new { message = message, star = star, max = max }, JsonRequestBehavior.AllowGet);
         }
     }
 }

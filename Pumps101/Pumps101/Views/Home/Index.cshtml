@@ -119,7 +119,7 @@
 
         switch(level)
         {
-            case 0:             
+            case 0:
                 drawSelectButtons();
                 break;
 
@@ -263,14 +263,14 @@
 
     function submitPage()
     {
-        $.ajax({
-            type: 'POST',
-            url: '@Url.Action("SubmitLevel","Home")',
-            data: {levelId: $("#LevelId").val(), HPGuess: $("#HPGuess").val()},
-            success: function(content) {
-                $('#container').html(content);  // replace
+        $.getJSON('@Url.Action("SubmitLevel","Home")', { levelId: $("#LevelId").val(), HPGuess: $("#HPGuess").val()},
+            function(data) {
+                alert(data.message);
+                alert(data.star);
+                alert(data.max);
             }
-        });
+        );
+
     }
     </script>
 
