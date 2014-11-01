@@ -10,15 +10,17 @@ namespace Pumps101.Models
         #region Fields
         private int _level;
         private bool _isLocked;
+        private bool _is_complete;
         private int _stars;
         #endregion
 
         #region Constructors
-        public Level(int lv, int stars, bool isLocked)
+        public Level(int lv, int stars, bool completed, bool isLocked)
         {
             _level = lv;
             _stars = stars;
             _isLocked = isLocked;
+            _is_complete = completed;
         }
         #endregion
 
@@ -34,6 +36,10 @@ namespace Pumps101.Models
         public int Stars
         {
             get { return _stars; }
+        }
+        public bool Is_Complete
+        {
+            get { return _is_complete; }
         }
         #endregion
     }

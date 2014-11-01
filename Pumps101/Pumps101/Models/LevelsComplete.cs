@@ -40,7 +40,7 @@ namespace Pumps101.Models
                             //string u = ;
                             if (reader["user"].ToString().CompareTo(User.ToString().ToUpper()) == 0)
                             {
-                                _levels.Add(new Level((int)reader["level"], (int)reader["stars"], (bool)reader["completed"]));
+                                _levels.Add(new Level((int)reader["level"], (int)reader["stars"], (bool)reader["completed"], (bool)reader["locked"]));
                                 set[(int)reader["level"] - 1] = true;
                                 count++;
                             }
@@ -53,18 +53,24 @@ namespace Pumps101.Models
                 {
                     if (!set[i])
                     {
-                        if(i != 0){_levels.Add(new Level(i+1, 0, true));}
-                        else {_levels.Add(new Level(i+1, 0, false));}
+                        if(i == 0){_levels.Add(new Level(i+1, 0, false, false));}
+                        else {_levels.Add(new Level(i+1, 0, false, true));}
                         using (SqlConnection connection = new SqlConnection(conn))
                         {
                             connection.Open();
                             using (SqlCommand command = new SqlCommand("", connection))
                             {
-                                command.CommandText = "INSERT INTO Levels_Complete VALUES (@user, @level, @completed, @stars)";
+                                command.CommandText = "INSERT INTO Levels_Complete VALUES (@user, @level, @completed, @stars, @locked)";
                                 command.Parameters.AddWithValue("@user", User);
                                 command.Parameters.AddWithValue("@level", i+1);
                                 command.Parameters.AddWithValue("@completed", false);
                                 command.Parameters.AddWithValue("@stars", 0);
+                                if(i == 0){
+                                    command.Parameters.AddWithValue("@locked", 0);
+                                }
+                                else{
+                                    command.Parameters.AddWithValue("@locked", 1);
+                                }
                                 command.ExecuteNonQuery();
                             }
                             connection.Close();
