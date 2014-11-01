@@ -9,6 +9,10 @@
     var GridSize = 0;
     Resource.img.container = new Image();
     Resource.img.pump = new Image();
+    Resource.img.star1 = new Image();
+    Resource.img.star2 = new Image();
+    Resource.img.star3 = new Image();
+    Resource.img.locked = new Image();
     var imagesLoaded = false;
     var columns = 0;
     var rows = 0;
@@ -70,6 +74,10 @@
             };
             Resource.img.pump.src = '@Url.Content("/Content/Images/pump.PNG")';
             Resource.img.container.src ='@Url.Content("/Content/Images/container.PNG")';
+            Resource.img.star1.src ='@Url.Content("/Content/Images/1Stars.PNG")';
+            Resource.img.star2.src ='@Url.Content("/Content/Images/2Stars.PNG")';
+            Resource.img.star3.src ='@Url.Content("/Content/Images/3Stars.PNG")';
+            Resource.img.locked.src ='@Url.Content("/Content/Images/Locked.PNG")';
             imagesLoaded = true;
         }
     }
@@ -272,65 +280,246 @@
         );
 
     }
-    </script>
+</script>
 
     @if (Model.LevelsCompleted != null)
     {
         <script type="text/javascript">
-        function drawSelectButtons()
+    function drawSelectButtons()
+    {
+        ctx.fillStyle = 'white';
+        ctx.rect(0, 0, width, height);
+        ctx.fill();
+
+        ctx.strokeStyle = "black";
+        ctx.fillStyle = 'red';
+        ctx.font = '10pt Arial'
+        ctx.textAlign = 'center';
+
+        var buttonstoprowy = centery - ((rows/3)*GridSize);
+        var buttonsleftx =  centerx - (5.5*GridSize);
+
+        @if(Model.LevelsCompleted.Levels[0].Locked)
         {
-            ctx.fillStyle = 'white';
-            ctx.rect(0, 0, width, height);
-            ctx.fill();
+            @:ctx.drawImage(Resource.img.locked, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
+                                }
+        else if (Model.LevelsCompleted.Levels[0].Stars == 0)
+        {
+            @:ctx.drawImage(Resource.img.pump, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
+                                }
+        else if (Model.LevelsCompleted.Levels[0].Stars == 1)
+        {
+            @:ctx.drawImage(Resource.img.star1, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
+                                }
+        else if (Model.LevelsCompleted.Levels[0].Stars == 2)
+        {
+            @:ctx.drawImage(Resource.img.star2, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
+                                }
+        else if (Model.LevelsCompleted.Levels[0].Stars == 3)
+        {
+            @:ctx.drawImage(Resource.img.star3, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
+                                }
+        ctx.rect(buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
+        ctx.stroke();
+        ctx.fillText('Level @Model.LevelsCompleted.Levels[0].LevelNum', buttonsleftx+(GridSize * 1.5), buttonstoprowy+(GridSize * 1));
 
-            ctx.strokeStyle = "black";
-            ctx.fillStyle = 'red';
-            ctx.font = '10pt Arial'
-            ctx.textAlign = 'center';
+        @if(Model.LevelsCompleted.Levels[1].Locked)
+        {
+            @:ctx.drawImage(Resource.img.locked, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
+                                                        }
+        else if (Model.LevelsCompleted.Levels[1].Stars == 0)
+        {
+            @:ctx.drawImage(Resource.img.pump, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
+                                                        }
+        else if (Model.LevelsCompleted.Levels[1].Stars == 1)
+        {
+            @:ctx.drawImage(Resource.img.star1, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
+                                                }
+        else if (Model.LevelsCompleted.Levels[1].Stars == 2)
+        {
+            @:ctx.drawImage(Resource.img.star2, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
+                                        }
+        else if (Model.LevelsCompleted.Levels[1].Stars == 3)
+        {
+            @:ctx.drawImage(Resource.img.star3, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
+                                }
+        ctx.rect(buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
+        ctx.stroke();
+        ctx.fillText('Level @Model.LevelsCompleted.Levels[1].LevelNum', buttonsleftx+(GridSize * 5.5), buttonstoprowy+(GridSize * 1));
 
-            var buttonstoprowy = centery - ((rows/3)*GridSize);
-            var buttonsleftx =  centerx - (5.5*GridSize);
+        @if(Model.LevelsCompleted.Levels[2].Locked)
+        {
+            @:ctx.drawImage(Resource.img.locked, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
+                        }
+        else if (Model.LevelsCompleted.Levels[2].Stars == 0)
+        {
+            @:ctx.drawImage(Resource.img.pump, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
+                        }
+        else if (Model.LevelsCompleted.Levels[2].Stars == 1)
+        {
+            @:ctx.drawImage(Resource.img.star1, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
+                        }
+        else if (Model.LevelsCompleted.Levels[2].Stars == 2)
+        {
+            @:ctx.drawImage(Resource.img.star2, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
+                        }
+        else if (Model.LevelsCompleted.Levels[2].Stars == 3)
+        {
+            @:ctx.drawImage(Resource.img.star3, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
+                        }
+        ctx.rect(buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
+        ctx.stroke();
+        ctx.fillText('Level @Model.LevelsCompleted.Levels[2].LevelNum', buttonsleftx+(GridSize * 9.5), buttonstoprowy+(GridSize * 1));
 
-            ctx.rect(buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
-            ctx.stroke();
-            ctx.fillText('Level @Model.LevelsCompleted.Levels[0].LevelNum', buttonsleftx+(GridSize * 1.5), buttonstoprowy+(GridSize * 1));
+        buttonstoprowy = buttonstoprowy + (GridSize * 4);
 
-            ctx.rect(buttonsleftx+(4*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
-            ctx.stroke();
-            ctx.fillText('Level @Model.LevelsCompleted.Levels[1].LevelNum', buttonsleftx+(GridSize * 5.5), buttonstoprowy+(GridSize * 1));
 
-            ctx.rect(buttonsleftx+(8*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
-            ctx.stroke();
-            ctx.fillText('Level @Model.LevelsCompleted.Levels[2].LevelNum', buttonsleftx+(GridSize * 9.5), buttonstoprowy+(GridSize * 1));
+        @if(Model.LevelsCompleted.Levels[3].Locked)
+        {
+            @:ctx.drawImage(Resource.img.locked, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
+                }
+        else if (Model.LevelsCompleted.Levels[3].Stars == 0)
+        {
+            @:ctx.drawImage(Resource.img.pump, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
+                }
+        else if (Model.LevelsCompleted.Levels[3].Stars == 1)
+        {
+            @:ctx.drawImage(Resource.img.star1, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
+                }
+        else if (Model.LevelsCompleted.Levels[3].Stars == 2)
+        {
+            @:ctx.drawImage(Resource.img.star2, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
+                }
+        else if (Model.LevelsCompleted.Levels[3].Stars == 3)
+        {
+            @:ctx.drawImage(Resource.img.star3, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
+                }
+        ctx.rect(buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
+        ctx.stroke();
+        ctx.fillText('Level @Model.LevelsCompleted.Levels[3].LevelNum', buttonsleftx+(GridSize * 1.5), buttonstoprowy+(GridSize * 1));
 
-            buttonstoprowy = buttonstoprowy + (GridSize * 4);
+        @if(Model.LevelsCompleted.Levels[4].Locked)
+        {
+            @:ctx.drawImage(Resource.img.locked, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
+                }
+        else if (Model.LevelsCompleted.Levels[4].Stars == 0)
+        {
+            @:ctx.drawImage(Resource.img.pump, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
+                }
+        else if (Model.LevelsCompleted.Levels[4].Stars == 1)
+        {
+            @:ctx.drawImage(Resource.img.star1, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
+                }
+        else if (Model.LevelsCompleted.Levels[4].Stars == 2)
+        {
+            @:ctx.drawImage(Resource.img.star2, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
+                }
+        else if (Model.LevelsCompleted.Levels[4].Stars == 3)
+        {
+            @:ctx.drawImage(Resource.img.star3, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
+                }
+        ctx.rect(buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
+        ctx.stroke();
+        ctx.fillText('Level @Model.LevelsCompleted.Levels[4].LevelNum', buttonsleftx+(GridSize * 5.5), buttonstoprowy+(GridSize * 1));
 
-            ctx.rect(buttonsleftx, buttonstoprowy, GridSize * 3, GridSize * 3);
-            ctx.stroke();
-            ctx.fillText('Level @Model.LevelsCompleted.Levels[3].LevelNum', buttonsleftx+(GridSize * 1.5), buttonstoprowy+(GridSize * 1));
+        @if(Model.LevelsCompleted.Levels[5].Locked)
+        {
+            @:ctx.drawImage(Resource.img.locked, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
+                }
+        else if (Model.LevelsCompleted.Levels[5].Stars == 0)
+        {
+            @:ctx.drawImage(Resource.img.pump, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
+                }
+        else if (Model.LevelsCompleted.Levels[5].Stars == 1)
+        {
+            @:ctx.drawImage(Resource.img.star1, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
+                }
+        else if (Model.LevelsCompleted.Levels[5].Stars == 2)
+        {
+            @:ctx.drawImage(Resource.img.star2, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
+                }
+        else if (Model.LevelsCompleted.Levels[5].Stars == 3)
+        {
+            @:ctx.drawImage(Resource.img.star3, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
+                }
+        ctx.rect(buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
+        ctx.stroke();
+        ctx.fillText('Level @Model.LevelsCompleted.Levels[5].LevelNum', buttonsleftx+(GridSize * 9.5), buttonstoprowy+(GridSize * 1));
 
-            ctx.rect(buttonsleftx+(4*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
-            ctx.stroke();
-            ctx.fillText('Level @Model.LevelsCompleted.Levels[4].LevelNum', buttonsleftx+(GridSize * 5.5), buttonstoprowy+(GridSize * 1));
+        buttonstoprowy = buttonstoprowy + (GridSize * 4);
 
-            ctx.rect(buttonsleftx+(8*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
-            ctx.stroke();
-            ctx.fillText('Level @Model.LevelsCompleted.Levels[5].LevelNum', buttonsleftx+(GridSize * 9.5), buttonstoprowy+(GridSize * 1));
+        @if(Model.LevelsCompleted.Levels[6].Locked)
+        {
+            @:ctx.drawImage(Resource.img.locked, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
+                }
+        else if (Model.LevelsCompleted.Levels[6].Stars == 0)
+        {
+            @:ctx.drawImage(Resource.img.pump, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
+                }
+        else if (Model.LevelsCompleted.Levels[6].Stars == 1)
+        {
+            @:ctx.drawImage(Resource.img.star1, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
+                }
+        else if (Model.LevelsCompleted.Levels[6].Stars == 2)
+        {
+            @:ctx.drawImage(Resource.img.star2, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
+                }
+        else if (Model.LevelsCompleted.Levels[6].Stars == 3)
+        {
+            @:ctx.drawImage(Resource.img.star3, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
+                }
+        ctx.rect(buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
+        ctx.stroke();
+        ctx.fillText('Level @Model.LevelsCompleted.Levels[6].LevelNum', buttonsleftx+(GridSize * 1.5), buttonstoprowy+(GridSize * 1));
 
-            buttonstoprowy = buttonstoprowy + (GridSize * 4);
-
-            ctx.rect(buttonsleftx, buttonstoprowy, GridSize * 3, GridSize * 3);
-            ctx.stroke();
-            ctx.fillText('Level @Model.LevelsCompleted.Levels[6].LevelNum', buttonsleftx+(GridSize * 1.5), buttonstoprowy+(GridSize * 1));
-
-            ctx.rect(buttonsleftx+(4*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
-            ctx.stroke();
-            ctx.fillText('Level @Model.LevelsCompleted.Levels[7].LevelNum', buttonsleftx+(GridSize * 5.5), buttonstoprowy+(GridSize * 1));
-
-            ctx.rect(buttonsleftx+(8*GridSize), buttonstoprowy, GridSize * 3, GridSize * 3);
-            ctx.stroke();
-            ctx.fillText('Level @Model.LevelsCompleted.Levels[8].LevelNum', buttonsleftx+(GridSize * 9.5), buttonstoprowy+(GridSize * 1));
+        @if(Model.LevelsCompleted.Levels[7].Locked)
+        {
+            @:ctx.drawImage(Resource.img.locked, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
         }
+        else if (Model.LevelsCompleted.Levels[7].Stars == 0)
+        {
+            @:ctx.drawImage(Resource.img.pump, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
+        }
+        else if (Model.LevelsCompleted.Levels[7].Stars == 1)
+        {
+            @:ctx.drawImage(Resource.img.star1, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
+        }
+        else if (Model.LevelsCompleted.Levels[7].Stars == 2)
+        {
+            @:ctx.drawImage(Resource.img.star2, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
+        }
+        else if (Model.LevelsCompleted.Levels[7].Stars == 3)
+        {
+            @:ctx.drawImage(Resource.img.star3, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
+        }
+        ctx.rect(buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
+        ctx.stroke();
+        ctx.fillText('Level @Model.LevelsCompleted.Levels[7].LevelNum', buttonsleftx+(GridSize * 5.5), buttonstoprowy+(GridSize * 1));
+
+        @if(Model.LevelsCompleted.Levels[8].Locked)
+        {
+            @:ctx.drawImage(Resource.img.locked, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
+        }
+        else if (Model.LevelsCompleted.Levels[8].Stars == 0)
+        {
+            @:ctx.drawImage(Resource.img.pump, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
+        }
+        else if (Model.LevelsCompleted.Levels[8].Stars == 1)
+        {
+            @:ctx.drawImage(Resource.img.star1, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
+        }
+        else if (Model.LevelsCompleted.Levels[8].Stars == 2)
+        {
+            @:ctx.drawImage(Resource.img.star2, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
+        }
+        else if (Model.LevelsCompleted.Levels[8].Stars == 3)
+        {
+            @:ctx.drawImage(Resource.img.star3, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
+        }
+        ctx.rect(buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
+        ctx.stroke();
+        ctx.fillText('Level @Model.LevelsCompleted.Levels[8].LevelNum', buttonsleftx+(GridSize * 9.5), buttonstoprowy+(GridSize * 1));
+    }
     </script>
     }
     <canvas id="canvas">
