@@ -541,7 +541,7 @@ namespace Pumps101.Repositories
             using (SqlCommand command = new SqlCommand("", connection))
             {
                 connection.Open();
-                command.CommandText = "SELECT level_id,user FROM Levels WHERE is_active = 1 AND level = @level";
+                command.CommandText = "SELECT * FROM Levels WHERE is_active = 1 AND level = @level";
                 command.Parameters.AddWithValue("@level", _level);
                 
                 SqlDataReader reader = command.ExecuteReader();
@@ -573,11 +573,12 @@ namespace Pumps101.Repositories
             using (SqlCommand command = new SqlCommand("", connection))
             {
                 connection.Open();
-                command.CommandText = "SELECT * FROM Level_Setup WHERE is_active = 1 AND level = @level";
+                command.CommandText = "SELECT * FROM Level_Setup WHERE level_id = @level";
                 command.Parameters.AddWithValue("@level", level_id);
                 SqlDataReader reader = command.ExecuteReader();
                 if (reader.HasRows)
-                {    
+                {
+                    reader.Read();
                     density = (double)reader["density"];
                     diam = (double)reader["diam"];
                     time = (double)reader["time"];
