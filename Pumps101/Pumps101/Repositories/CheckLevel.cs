@@ -317,7 +317,7 @@ namespace Pumps101.Repositories
             Guid user;
             int ID = 0;
             int stars_prev = 0;
-
+            // gets user and level #
             var conn = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             using (SqlConnection connection = new SqlConnection(conn))
             using (SqlCommand command = new SqlCommand("", connection))
@@ -342,7 +342,7 @@ namespace Pumps101.Repositories
                 command.ExecuteNonQuery();
                 connection.Close();
             }
-
+            // gets id of current level in all levels and stars
             using (SqlConnection connection = new SqlConnection(conn))
             using (SqlCommand command = new SqlCommand("", connection))
             {
@@ -380,6 +380,7 @@ namespace Pumps101.Repositories
             }
             if (level != 9)
             {
+
                 using (SqlConnection connection = new SqlConnection(conn))
                 using (SqlCommand command = new SqlCommand("", connection))
                 {

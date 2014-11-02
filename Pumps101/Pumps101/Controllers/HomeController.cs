@@ -27,8 +27,16 @@ namespace Pumps101.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                LevelModel model = repository.getLevel(level, 3);
-                return View(model);
+                try
+                {
+                    LevelModel model = repository.getLevel(level, 3);
+                    return View(model);
+                }
+                catch
+                {
+                    ErrorHandler.LevelError(new Guid(User.Identity.GetUserId()), level);
+                    return RedirectToAction("Index", "Home", new {level= 0});
+                }
             }
             else
             {
@@ -44,7 +52,15 @@ namespace Pumps101.Controllers
             String message ="place_holder";
             star = 0;
             max = false;
-            message = CheckLevel.checkLevel(levelId, guess, out star, out max);
+            try
+            {
+                message = CheckLevel.checkLevel(levelId, guess, out star, out max);
+            }
+            catch
+            {
+                ErrorHandler.LevelError(levelId);
+            }
+
             if (star == 0)
             {
                 if (message.Equals(""))
