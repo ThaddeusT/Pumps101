@@ -271,11 +271,29 @@
 
     function submitPage()
     {
+        alert($("#HPGuess").val());
         $.getJSON('@Url.Action("SubmitLevel","Home")', { levelId: $("#LevelId").val(), HPGuess: $("#HPGuess").val()},
             function(data) {
                 alert(data.message);
                 alert(data.star);
                 alert(data.max);
+                console.log(data.max);
+                if(data.star != 0)
+                {
+                    var video = document.getElementsByTagName('video')[0];
+                    var sources = video.getElementsByTagName('source');
+                    sources[0].src = '@Url.Content("/Content/Video/YouWin1.mp4")';
+                    video.load();
+                    $("#gameresult").show();
+                    $("#videoresult").get(0).play();
+                }
+                else{
+                    if(data.max==true)
+                    {
+                        $("#gameresult").show();
+                        $("#videoresult").get(0).play();
+                    }
+                }
             }
         );
 
@@ -536,3 +554,13 @@
     </menu>
 <div id="fix">&copy; @DateTime.Now.Year - Pumps101</div>
 @Html.HiddenFor(m => m.LevelId)
+@Html.Hidden("redirect", Url.Action("Index", "Home", new { level = 0 }))
+<div id="gameresult">
+    <video class="video" id="videoresult">
+        <source id="src" src="@Url.Content("/Content/Video/YouLose1.mp4")" type="video/mp4" />
+    </video>
+    <div class="centeredtext">
+        <div id="response">
+        </div>
+    </div>
+</div>

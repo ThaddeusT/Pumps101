@@ -187,6 +187,8 @@
     <Content Include="Content\Images\Locked.PNG" />
     <Content Include="Content\Images\outer_space.jpg" />
     <Content Include="Content\Images\pump.PNG" />
+    <Content Include="Content\Video\YouLose1.mp4" />
+    <Content Include="Content\Video\YouWin1.mp4" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

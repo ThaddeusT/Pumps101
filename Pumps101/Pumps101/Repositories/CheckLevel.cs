@@ -26,9 +26,9 @@ namespace Pumps101.Repositories
                 command.CommandText = "SELECT hp FROM Level_Answers WHERE level_id = @lvl_id";
                 command.Parameters.AddWithValue("@lvl_id", level_id);
                 //SqlDataReader reader =  //.ExecuteReader();
-                
-                    _hpCorrect = (double)command.ExecuteScalar();
-                
+
+                _hpCorrect = (double)command.ExecuteScalar();
+
                 command.Connection.Close();
             }
             maxReached = isMaxReached(level_id);
@@ -61,17 +61,17 @@ namespace Pumps101.Repositories
                 }
                 command.Connection.Close();
             }
-            
+
             maxReached = isMaxReached(level_id);
             stars = 0;
             int hpS = compare(horsePowerUser, _hpCorrect);
             int npshS = compare(npshUser, _npshCorrect);
 
-            if(hpS == 0 && npshS == 0)
+            if (hpS == 0 && npshS == 0)
             {
                 return "";
             }
-            else if(hpS == 0)
+            else if (hpS == 0)
             {
                 return "Horsepower is Incorrect";
             }
@@ -121,8 +121,8 @@ namespace Pumps101.Repositories
             stars = 0;
             int hpS = compare(horsePowerUser, _hpCorrect);
             int npshS = compare(npshUser, _npshCorrect);
-            
-            if(pumpUser.Equals(_pumpCorrect))
+
+            if (pumpUser.Equals(_pumpCorrect))
             {
                 return "Incorrect Pump Type";
             }
@@ -141,7 +141,7 @@ namespace Pumps101.Repositories
             else
             {
                 stars = (hpS + npshS) / 2;
-                if(stars > 0)
+                if (stars > 0)
                 {
                     levelPassed(level_id, stars);
                 }
@@ -184,7 +184,7 @@ namespace Pumps101.Repositories
             int npshS = compare(npshUser, _npshCorrect);
             int costC = compare(costUser, _costCorrect);
 
-            
+
 
             if (pumpUser.Equals(_pumpCorrect))
             {
@@ -194,22 +194,22 @@ namespace Pumps101.Repositories
             {
                 return "";
             }
-            if(hpS == 0 || npshS == 0 || costC == 0)
+            if (hpS == 0 || npshS == 0 || costC == 0)
             {
                 StringBuilder s = new StringBuilder();
-                if(hpS == 0)
+                if (hpS == 0)
                 {
                     s.Append("Horsepower");
                 }
                 if (npshS == 0)
                 {
-                    if(s.Length > 2)
+                    if (s.Length > 2)
                     {
                         s.Append(", NPSH");
                     }
                     else { s.Append("NPSH"); }
                 }
-                if(costC == 0)
+                if (costC == 0)
                 {
                     if (s.Length > 2)
                     {
@@ -217,12 +217,12 @@ namespace Pumps101.Repositories
                     }
                     else { s.Append("Cost"); }
                 }
-                if(s.Length > 10)
+                if (s.Length > 10)
                 {
                     s.Append(" are Incorrect");
                 }
-                else{s.Append(" is Inccorect");}
-                
+                else { s.Append(" is Inccorect"); }
+
                 return s.ToString();
             }
             else
@@ -269,8 +269,8 @@ namespace Pumps101.Repositories
                 SqlDataReader reader = command.ExecuteReader();
                 reader.Read();
                 chances = (int)reader["chances"];
-                attempts = (int)reader["attempts"];   
-                
+                attempts = (int)reader["attempts"];
+
                 command.Connection.Close();
             }
 
@@ -327,7 +327,7 @@ namespace Pumps101.Repositories
                 command.Parameters.AddWithValue("@lvl_id", level_id);
                 SqlDataReader reader = command.ExecuteReader();
                 reader.Read();
-                user = (Guid)reader["user"];    
+                user = new Guid(reader["user"].ToString());
                 level = (int)reader["level"];
                 command.Connection.Close();
             }
@@ -400,20 +400,18 @@ namespace Pumps101.Repositories
                     }
                     command.Connection.Close();
                 }
+
                 // unlocks next level
                 using (SqlConnection connection = new SqlConnection(conn))
                 using (SqlCommand command = new SqlCommand("", connection))
                 {
                     connection.Open();
-                    command.CommandText = "UPDATE Levels SET locked = 0 Where ID = @id";
+                    command.CommandText = "UPDATE Levels_Completed SET locked = 0 Where ID = @id";
                     command.Parameters.AddWithValue("@id", ID);
                     command.ExecuteNonQuery();
                     connection.Close();
                 }
             }
-
-
-
         }
     }
 }

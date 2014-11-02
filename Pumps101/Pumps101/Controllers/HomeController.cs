@@ -36,14 +36,15 @@ namespace Pumps101.Controllers
             }
         }
 
-        public ActionResult SubmitLevel(int levelId, int HPGuess = 0)
+        public ActionResult SubmitLevel(int levelId, string HPGuess)
         {
+            double guess = Convert.ToDouble(HPGuess);
             int star;
             bool max;
             String message ="place_holder";
             star = 0;
             max = false;
-            message = CheckLevel.checkLevel(levelId, HPGuess, out star, out max);
+            message = CheckLevel.checkLevel(levelId, guess, out star, out max);
             if (star == 0)
             {
                 if (message.Equals(""))

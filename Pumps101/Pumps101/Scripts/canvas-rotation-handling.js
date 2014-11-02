@@ -1,5 +1,5 @@
 ﻿$(function () { // document ready, resize container
-
+    $("#gameresult").hide();
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
     var orientation = "";
@@ -13,6 +13,10 @@
         var clickx = e.pageX;
         var clicky = e.pageY;
         getLevel(clickx, clicky);
+    });
+
+    $("#videoresult").on('ended', function () {
+        window.location.href = $("#redirect").val();
     });
 
     function resizeCanvas() {
