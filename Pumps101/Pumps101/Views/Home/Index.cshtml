@@ -21,7 +21,6 @@
     var buttonSize =0;
     var level = @Model.Level;
 
-
     function drawcanvas() {
         canvas = document.getElementById("canvas");
         ctx = canvas.getContext("2d");
@@ -89,21 +88,6 @@
                 break;
             case 2: ctx.drawImage(Resource.img.pump, ((columns / 2)-2) * GridSize, ((rows / 2)+2)*GridSize, GridSize * 3, GridSize * 3);
                 break;
-        }
-    }
-
-    function getLevel(x,y)
-    {
-        firstButtonMinX = (centerx - (5.5*GridSize));
-        firstButtonMinY = centery - ((rows/3)*GridSize);
-        firstButtonMaxX = (x+buttonSize);
-        firstButtonMaxY = (y+buttonSize);
-        if(x>firstButtonMinX)
-        {
-            if(x < firstButtonMaxX && y>firstButtonMinY && y<firstButtonMaxY)
-            {
-                window.location.href = '@Url.Action("Index","Home",new{level = 1})';
-            }
         }
     }
 
@@ -320,23 +304,23 @@
         @if(Model.LevelsCompleted.Levels[0].Locked)
         {
             @:ctx.drawImage(Resource.img.locked, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
-                                }
+                                        }
         else if (Model.LevelsCompleted.Levels[0].Stars == 0)
         {
             @:ctx.drawImage(Resource.img.pump, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
-                                }
+                                        }
         else if (Model.LevelsCompleted.Levels[0].Stars == 1)
         {
             @:ctx.drawImage(Resource.img.star1, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
-                                }
+                                        }
         else if (Model.LevelsCompleted.Levels[0].Stars == 2)
         {
             @:ctx.drawImage(Resource.img.star2, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
-                                }
+                                        }
         else if (Model.LevelsCompleted.Levels[0].Stars == 3)
         {
             @:ctx.drawImage(Resource.img.star3, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
-                                }
+                                        }
         ctx.rect(buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
         ctx.stroke();
         ctx.fillText('Level @Model.LevelsCompleted.Levels[0].LevelNum', buttonsleftx+(GridSize * 1.5), buttonstoprowy+(GridSize * 1));
@@ -344,23 +328,23 @@
         @if(Model.LevelsCompleted.Levels[1].Locked)
         {
             @:ctx.drawImage(Resource.img.locked, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
-                                                        }
+                                                                }
         else if (Model.LevelsCompleted.Levels[1].Stars == 0)
         {
             @:ctx.drawImage(Resource.img.pump, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
-                                                        }
+                                                                }
         else if (Model.LevelsCompleted.Levels[1].Stars == 1)
         {
             @:ctx.drawImage(Resource.img.star1, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
-                                                }
+                                                        }
         else if (Model.LevelsCompleted.Levels[1].Stars == 2)
         {
             @:ctx.drawImage(Resource.img.star2, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
-                                        }
+                                                }
         else if (Model.LevelsCompleted.Levels[1].Stars == 3)
         {
             @:ctx.drawImage(Resource.img.star3, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
-                                }
+                                        }
         ctx.rect(buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
         ctx.stroke();
         ctx.fillText('Level @Model.LevelsCompleted.Levels[1].LevelNum', buttonsleftx+(GridSize * 5.5), buttonstoprowy+(GridSize * 1));
@@ -368,23 +352,23 @@
         @if(Model.LevelsCompleted.Levels[2].Locked)
         {
             @:ctx.drawImage(Resource.img.locked, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
-                        }
+                                }
         else if (Model.LevelsCompleted.Levels[2].Stars == 0)
         {
             @:ctx.drawImage(Resource.img.pump, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
-                        }
+                                }
         else if (Model.LevelsCompleted.Levels[2].Stars == 1)
         {
             @:ctx.drawImage(Resource.img.star1, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
-                        }
+                                }
         else if (Model.LevelsCompleted.Levels[2].Stars == 2)
         {
             @:ctx.drawImage(Resource.img.star2, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
-                        }
+                                }
         else if (Model.LevelsCompleted.Levels[2].Stars == 3)
         {
             @:ctx.drawImage(Resource.img.star3, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
-                        }
+                                }
         ctx.rect(buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
         ctx.stroke();
         ctx.fillText('Level @Model.LevelsCompleted.Levels[2].LevelNum', buttonsleftx+(GridSize * 9.5), buttonstoprowy+(GridSize * 1));
@@ -395,23 +379,23 @@
         @if(Model.LevelsCompleted.Levels[3].Locked)
         {
             @:ctx.drawImage(Resource.img.locked, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
-                }
+                        }
         else if (Model.LevelsCompleted.Levels[3].Stars == 0)
         {
             @:ctx.drawImage(Resource.img.pump, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
-                }
+                        }
         else if (Model.LevelsCompleted.Levels[3].Stars == 1)
         {
             @:ctx.drawImage(Resource.img.star1, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
-                }
+                        }
         else if (Model.LevelsCompleted.Levels[3].Stars == 2)
         {
             @:ctx.drawImage(Resource.img.star2, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
-                }
+                        }
         else if (Model.LevelsCompleted.Levels[3].Stars == 3)
         {
             @:ctx.drawImage(Resource.img.star3, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
-                }
+                        }
         ctx.rect(buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
         ctx.stroke();
         ctx.fillText('Level @Model.LevelsCompleted.Levels[3].LevelNum', buttonsleftx+(GridSize * 1.5), buttonstoprowy+(GridSize * 1));
@@ -419,23 +403,23 @@
         @if(Model.LevelsCompleted.Levels[4].Locked)
         {
             @:ctx.drawImage(Resource.img.locked, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
-                }
+                        }
         else if (Model.LevelsCompleted.Levels[4].Stars == 0)
         {
             @:ctx.drawImage(Resource.img.pump, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
-                }
+                        }
         else if (Model.LevelsCompleted.Levels[4].Stars == 1)
         {
             @:ctx.drawImage(Resource.img.star1, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
-                }
+                        }
         else if (Model.LevelsCompleted.Levels[4].Stars == 2)
         {
             @:ctx.drawImage(Resource.img.star2, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
-                }
+                        }
         else if (Model.LevelsCompleted.Levels[4].Stars == 3)
         {
             @:ctx.drawImage(Resource.img.star3, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
-                }
+                        }
         ctx.rect(buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
         ctx.stroke();
         ctx.fillText('Level @Model.LevelsCompleted.Levels[4].LevelNum', buttonsleftx+(GridSize * 5.5), buttonstoprowy+(GridSize * 1));
@@ -443,23 +427,23 @@
         @if(Model.LevelsCompleted.Levels[5].Locked)
         {
             @:ctx.drawImage(Resource.img.locked, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
-                }
+                        }
         else if (Model.LevelsCompleted.Levels[5].Stars == 0)
         {
             @:ctx.drawImage(Resource.img.pump, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
-                }
+                        }
         else if (Model.LevelsCompleted.Levels[5].Stars == 1)
         {
             @:ctx.drawImage(Resource.img.star1, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
-                }
+                        }
         else if (Model.LevelsCompleted.Levels[5].Stars == 2)
         {
             @:ctx.drawImage(Resource.img.star2, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
-                }
+                        }
         else if (Model.LevelsCompleted.Levels[5].Stars == 3)
         {
             @:ctx.drawImage(Resource.img.star3, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
-                }
+                        }
         ctx.rect(buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
         ctx.stroke();
         ctx.fillText('Level @Model.LevelsCompleted.Levels[5].LevelNum', buttonsleftx+(GridSize * 9.5), buttonstoprowy+(GridSize * 1));
@@ -469,23 +453,23 @@
         @if(Model.LevelsCompleted.Levels[6].Locked)
         {
             @:ctx.drawImage(Resource.img.locked, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
-                }
+                        }
         else if (Model.LevelsCompleted.Levels[6].Stars == 0)
         {
             @:ctx.drawImage(Resource.img.pump, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
-                }
+                        }
         else if (Model.LevelsCompleted.Levels[6].Stars == 1)
         {
             @:ctx.drawImage(Resource.img.star1, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
-                }
+                        }
         else if (Model.LevelsCompleted.Levels[6].Stars == 2)
         {
             @:ctx.drawImage(Resource.img.star2, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
-                }
+                        }
         else if (Model.LevelsCompleted.Levels[6].Stars == 3)
         {
             @:ctx.drawImage(Resource.img.star3, buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
-                }
+                        }
         ctx.rect(buttonsleftx, buttonstoprowy, buttonSize, buttonSize);
         ctx.stroke();
         ctx.fillText('Level @Model.LevelsCompleted.Levels[6].LevelNum', buttonsleftx+(GridSize * 1.5), buttonstoprowy+(GridSize * 1));
@@ -493,23 +477,23 @@
         @if(Model.LevelsCompleted.Levels[7].Locked)
         {
             @:ctx.drawImage(Resource.img.locked, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
-        }
+                }
         else if (Model.LevelsCompleted.Levels[7].Stars == 0)
         {
             @:ctx.drawImage(Resource.img.pump, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
-        }
+                }
         else if (Model.LevelsCompleted.Levels[7].Stars == 1)
         {
             @:ctx.drawImage(Resource.img.star1, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
-        }
+                }
         else if (Model.LevelsCompleted.Levels[7].Stars == 2)
         {
             @:ctx.drawImage(Resource.img.star2, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
-        }
+                }
         else if (Model.LevelsCompleted.Levels[7].Stars == 3)
         {
             @:ctx.drawImage(Resource.img.star3, buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
-        }
+                }
         ctx.rect(buttonsleftx+(4*GridSize), buttonstoprowy, buttonSize, buttonSize);
         ctx.stroke();
         ctx.fillText('Level @Model.LevelsCompleted.Levels[7].LevelNum', buttonsleftx+(GridSize * 5.5), buttonstoprowy+(GridSize * 1));
@@ -517,27 +501,130 @@
         @if(Model.LevelsCompleted.Levels[8].Locked)
         {
             @:ctx.drawImage(Resource.img.locked, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
-        }
+                }
         else if (Model.LevelsCompleted.Levels[8].Stars == 0)
         {
             @:ctx.drawImage(Resource.img.pump, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
-        }
+                }
         else if (Model.LevelsCompleted.Levels[8].Stars == 1)
         {
             @:ctx.drawImage(Resource.img.star1, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
-        }
+                }
         else if (Model.LevelsCompleted.Levels[8].Stars == 2)
         {
             @:ctx.drawImage(Resource.img.star2, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
-        }
+                }
         else if (Model.LevelsCompleted.Levels[8].Stars == 3)
         {
             @:ctx.drawImage(Resource.img.star3, buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
-        }
+                }
         ctx.rect(buttonsleftx+(8*GridSize), buttonstoprowy, buttonSize, buttonSize);
         ctx.stroke();
         ctx.fillText('Level @Model.LevelsCompleted.Levels[8].LevelNum', buttonsleftx+(GridSize * 9.5), buttonstoprowy+(GridSize * 1));
     }
+    function getLevel(x,y)
+    {
+        var firstButtonMinX = (centerx - (5.5*GridSize));
+        var firstButtonMinY = centery - ((rows/3)*GridSize);
+        var firstButtonMaxX = (firstButtonMinX+buttonSize);
+        var firstButtonMaxY = (firstButtonMinY+buttonSize);
+        var secondButtonMinX = (firstButtonMaxX+GridSize);
+        var secondButtonMaxX = secondButtonMinX + buttonSize;
+        var thirdButtonMinX = (secondButtonMaxX+GridSize);
+        var thirdButtonMaxX= thirdButtonMinX + buttonSize;
+        var fourthButtonMinX= firstButtonMinX;
+        var fourthButtonMaxX = (fourthButtonMinX+ buttonSize);
+        var fourthButtonMinY = (firstButtonMaxY+GridSize);
+        var fourthButtonMaxY = (fourthButtonMinY+ buttonSize);
+        var fifthButtonMinX = (fourthButtonMaxX + GridSize);
+        var fifthButtonMaxX = (fifthButtonMinX + buttonSize);
+        var sixthButtonMinX = (fifthButtonMaxX + GridSize);
+        var sixthButtonMaxX = (sixthButtonMinX + buttonSize);
+        var seventhButtonMinY = (fourthButtonMaxY+GridSize);
+        var seventhButtonMaxY = (seventhButtonMinY + buttonSize);
+        var seventhButtonMinX= fourthButtonMinX;
+        var seventhButtonMaxX = (seventhButtonMinX+ buttonSize);
+        var eighthButtonMinX = (seventhButtonMaxX + GridSize);
+        var eighthButtonMaxX = (eighthButtonMinX + buttonSize);
+        var ninthButtonMinX = (eighthButtonMaxX + GridSize);
+        var ninthButtonMaxX = (ninthButtonMinX + buttonSize);
+
+        console.log(x+','+y);
+        if(x>firstButtonMinX && x<thirdButtonMaxX && y>firstButtonMinY && y < firstButtonMaxY)
+        {
+            if(x < firstButtonMaxX && y<firstButtonMaxY)
+            {
+                @if(!Model.LevelsCompleted.Levels[0].Locked)
+                        {
+                            @:window.location.href = '@Url.Action("Index","Home",new{level = 1})';
+                                        }
+            }
+            if(x > secondButtonMinX && x < secondButtonMaxX &&  y<firstButtonMaxY)
+            {
+                @if(!Model.LevelsCompleted.Levels[1].Locked)
+                        {
+                            @:window.location.href = '@Url.Action("Index","Home",new{level = 2})';
+                                        }
+            }
+            if(x > thirdButtonMinX && x < thirdButtonMaxX &&  y<firstButtonMaxY)
+            {
+                @if(!Model.LevelsCompleted.Levels[2].Locked)
+                {
+                    @:window.location.href = '@Url.Action("Index","Home",new{level = 3})';
+                }
+            }
+        }
+        if(x>fourthButtonMinX && x<thirdButtonMaxX &&  y > fourthButtonMinY && y < fourthButtonMaxY)
+        {
+            if(x>fourthButtonMinX && x<fourthButtonMaxX)
+            {
+                @if(!Model.LevelsCompleted.Levels[3].Locked)
+                {
+                    @:window.location.href = '@Url.Action("Index","Home",new{level = 4})';
+                }
+            }
+            if(x>fifthButtonMinX && x<fifthButtonMaxX)
+            {
+                @if(!Model.LevelsCompleted.Levels[4].Locked)
+                {
+                    @:window.location.href = '@Url.Action("Index","Home",new{level = 5})';
+                }
+            }
+            if(x>sixthButtonMinX && x<sixthButtonMaxX)
+            {
+                @if(!Model.LevelsCompleted.Levels[5].Locked)
+                {
+                    @:window.location.href = '@Url.Action("Index","Home",new{level = 6})';
+                }
+            }
+        }
+        if(x>seventhButtonMinX && x<ninthButtonMaxX && y >seventhButtonMinY && y<seventhButtonMaxY)
+        {
+            if(x>seventhButtonMinX && x<seventhButtonMaxX)
+            {
+                @if(!Model.LevelsCompleted.Levels[6].Locked)
+                {
+                    @:window.location.href = '@Url.Action("Index","Home",new{level = 7})';
+                }
+            }
+            if(x>eighthButtonMinX && x<eighthButtonMaxX)
+            {
+                @if(!Model.LevelsCompleted.Levels[7].Locked)
+                {
+                    @:window.location.href = '@Url.Action("Index","Home",new{level = 8})';
+                }
+            }
+            if(x>ninthButtonMinX && x<ninthButtonMaxX)
+            {
+                @if(!Model.LevelsCompleted.Levels[8].Locked)
+                {
+                    @:window.location.href = '@Url.Action("Index","Home",new{level = 9})';
+                }
+            }
+        }
+
+    }
+
     </script>
     }
     <canvas id="canvas">
