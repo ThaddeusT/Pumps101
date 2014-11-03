@@ -40,6 +40,7 @@
         {
             $("#hpEntry").hide();
             $("#submitButton").hide();
+            $("#returnButton").hide();
         }
 
         drawImages();
@@ -88,6 +89,10 @@
                 break;
             case 2: ctx.drawImage(Resource.img.pump, ((columns / 2)-2) * GridSize, ((rows / 2)+2)*GridSize, GridSize * 3, GridSize * 3);
                 break;
+            case 3: ctx.drawImage(Resource.img.pump, ((columns / 2)-2) * GridSize, ((rows / 2)+2)*GridSize, GridSize * 3, GridSize * 3);
+                break;
+            case 4: ctx.drawImage(Resource.img.pump, ((columns / 2)-2) * GridSize, ((rows / 2)+2)*GridSize, GridSize * 3, GridSize * 3);
+                break;
         }
     }
 
@@ -107,6 +112,10 @@
             ctx.fillText('Diameter of Pipes: @Model.Diameter inches', (cwidth / 2), GridSize*4);
             ctx.fillText('Volume of Containers: @Model.Volume ft^3', (cwidth / 2), GridSize*5);
             ctx.fillText('Liquid Density: @Model.Density lbm/ft^3', (cwidth / 2), GridSize*6);
+            if(level > 3)
+            {
+                ctx.fillText('Viscosity of Liquid: @Model.Viscosity lbm/(ft*s)', (cwidth / 2), GridSize*7);
+            }
         }
 
         switch(level)
@@ -326,9 +335,98 @@
                 ctx.font = '10pt Arial';
                 ctx.textAlign = 'right';
                 ctx.fillText('Height: @Model.TankOneElevation ft', xleft-(GridSize*1), y - (GridSize*2));
-                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*3.5), rightContainerY+(GridSize*5));
+                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*4), rightContainerY+(GridSize*5));
                 ctx.fillText('Pressure: @Model.TankOnePressure lbm/ft^3', leftContainerX-GridSize, (leftContainerY+(buttonSize*.5)));
-                ctx.fillText('Pressure: @Model.TankTwoPressure lbm/ft^3', rightContainerX+buttonSize+GridSize, (rightContainerY+(buttonSize*.5)));
+                ctx.fillText('Pressure: @Model.TankTwoPressure lbm/ft^3', rightContainerX+(GridSize*9), (rightContainerY+(buttonSize*.5)));
+
+
+                $("#hpEntry").css("top", ((rows / 2))*GridSize+"px");
+                $("#hpEntry").css("left", ((columns / 2)-3) * GridSize+"px");
+                $("#HPGuess").css("width", 2*GridSize+"px");
+                $("#HPGuess").css("font-size", "x-small");
+                $("#hpEntry label").css("font-size", "x-small");
+                break;
+
+            case 4:
+
+                ctx.strokeStyle = "black";
+
+                //Draw pipes and container to the right of the pump
+
+                ctx.beginPath();
+                var x = ((columns / 2)+1) * GridSize;
+                var xright = x+(Math.round(columns / 6) * GridSize);
+                var y = (((rows / 2)+3)*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xright, y);
+                ctx.stroke();
+
+                ctx.beginPath();
+                x = ((columns / 2)+1) * GridSize;
+                y = (((rows / 2)+3)*GridSize)+(.5*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xright+(.5*GridSize), y);
+                ctx.stroke();
+
+                rightContainerX = xright - (1.5*GridSize);
+                rightContainerY = y - (GridSize*10);
+
+                ctx.drawImage(Resource.img.container, rightContainerX, rightContainerY, GridSize * 3, GridSize * 3);
+                ctx.rect(rightContainerX, rightContainerY, GridSize * 3, GridSize * 3);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xright+(.5*GridSize), y);
+                ctx.lineTo(xright+(.5*GridSize), y-(GridSize*7));
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xright, y-(.5*GridSize));
+                ctx.lineTo(xright, y-(.5*GridSize)-(GridSize*6.5));
+                ctx.stroke();
+
+                //Draw pipes and container to the left of the pump
+                var x = ((columns / 2)-2) * GridSize;
+                var xleft = x-((Math.round(columns / 6)) * GridSize);
+                var y = (((rows / 2)+3)*GridSize);
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(xleft, y);
+                ctx.stroke();
+
+                ctx.beginPath();
+                x = ((columns / 2)-2) * GridSize;
+                y = (((rows / 2)+3)*GridSize)+(.5*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xleft-(.5*GridSize), y);
+                ctx.stroke();
+
+                leftContainerX = xleft - (1.5*GridSize);
+                leftContainerY = y - (GridSize*6);
+
+                ctx.drawImage(Resource.img.container, leftContainerX, leftContainerY, GridSize * 3, GridSize * 3);
+                ctx.rect(leftContainerX, leftContainerY, GridSize * 3, GridSize * 3);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xleft-(.5*GridSize), y);
+                ctx.lineTo(xleft-(.5*GridSize), y - (GridSize*3));
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xleft, y - (.5*GridSize));
+                ctx.lineTo(xleft, y - (GridSize*3));
+                ctx.stroke();
+
+                ctx.fillStyle ='black';
+                ctx.font = '10pt Arial';
+                ctx.textAlign = 'right';
+                ctx.fillText('Height: @Model.TankOneElevation ft', xleft-(GridSize*1), y - (GridSize*2));
+                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*4), rightContainerY+(GridSize*5));
+                ctx.fillText('Pressure: @Model.TankOnePressure lbm/ft^3', leftContainerX-GridSize, (leftContainerY+(buttonSize*.5)));
+                ctx.fillText('Pressure: @Model.TankTwoPressure lbm/ft^3', rightContainerX+(GridSize*9), (rightContainerY+(buttonSize*.5)));
+                ctx.fillText('Vert Length: @Model.VertLengthOne', centerx - (4*GridSize),centery + (5*GridSize));
+                ctx.fillText('Vert Length: @Model.VertLengthTwo', centerx + (6*GridSize),centery + (5*GridSize));
 
 
                 $("#hpEntry").css("top", ((rows / 2))*GridSize+"px");
@@ -342,37 +440,45 @@
 
     function submitPage()
     {
-        alert($("#HPGuess").val());
-        $.getJSON('@Url.Action("SubmitLevel","Home")', { levelId: $("#LevelId").val(), HPGuess: $("#HPGuess").val()},
-            function(data) {
-                alert(data.message);
-                alert(data.star);
-                alert(data.max);
-                console.log(data.max);
-                if(data.star != 0)
-                {
-                    var video = document.getElementsByTagName('video')[0];
-                    var sources = video.getElementsByTagName('source');
-                    sources[0].src = '@Url.Content("/Content/Video/YouWin1.mp4")';
-                    video.load();
-                    $("#gameresult").show();
-                    $("#videoresult").get(0).play();
-                }
-                else{
-                    if(data.max==true)
+        if(level < 7)
+        {
+            $.getJSON('@Url.Action("SubmitLevel","Home")', { levelId: $("#LevelId").val(), HPGuess: $("#HPGuess").val()},
+                function(data) {
+                    alert(data.message);
+                    alert(data.star);
+                    alert(data.max);
+                    console.log(data.max);
+                    if(data.star != 0)
                     {
+                        var video = document.getElementsByTagName('video')[0];
+                        var sources = video.getElementsByTagName('source');
+                        sources[0].src = '@Url.Content("/Content/Video/YouWin1.mp4")';
+                        video.load();
                         $("#gameresult").show();
                         $("#videoresult").get(0).play();
                     }
+                    else{
+                        if(data.max==true)
+                        {
+                            $("#gameresult").show();
+                            $("#videoresult").get(0).play();
+                        }
+                    }
                 }
-            }
-        );
+            );
+        }
 
     }
 
     function levelselectPage(){
         window.location.href = '@Url.Action("Index","Home",new{level = 0})';
     }
+
+    function logOut()
+    {
+        window.location.href = '@Url.Action("LogOff", "Account")';
+    }
+
 </script>
 
     @if (Model.LevelsCompleted != null)
@@ -728,8 +834,9 @@
     </tr>
 </table>
     <menu id="controls">
-        <input type="submit" id="returnButton" value="Return to Level Select" onclick="levelselectPage()" />
         <input type="submit" id="submitButton" value="Submit Answer" onclick="submitPage()" />
+        <input type="submit" id="returnButton" value="Return to Level Select" onclick="levelselectPage()" />
+        <input type="submit" id="logoutButton" value="Log Out" onclick="logOut()"/>
     </menu>
 <div id="fix">&copy; @DateTime.Now.Year - Pumps101</div>
 @Html.HiddenFor(m => m.LevelId)
