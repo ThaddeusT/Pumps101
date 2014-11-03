@@ -18,6 +18,21 @@
     Resource.img.Win = new Image();
     Resource.img.Lvl1Equations = new Image();
     Resource.img.Lvl2Equations = new Image();
+    Resource.img.Lvl3Equations = new Image();
+    Resource.img.Lvl4Equations = new Image();
+    Resource.img.Lvl5Equations = new Image();
+    Resource.img.Lvl6Equations = new Image();
+    Resource.img.Lvl7Equations = new Image();
+    Resource.img.Lvl8Equations = new Image();
+    Resource.img.Lvl9Equations = new Image();
+    Resource.img.Lvl5Tables = new Image();
+    Resource.img.Lvl6Tables = new Image();
+    Resource.img.Lvl7Tables = new Image();
+    Resource.img.Lvl8Tables = new Image();
+    Resource.img.Lvl9TablesP1 = new Image();
+    Resource.img.Lvl9TablesP2 = new Image();
+    Resource.img.star = new Image();
+
     var imagesLoaded = false;
     var columns = 0;
     var rows = 0;
@@ -52,15 +67,49 @@
                 case 2:
                     ctx.drawImage(Resource.img.Lvl2Equations, centerx -((width/2)/2), centery -((height/2)/2), (width/2), (height/2));
                     break;
+                case 3:
+                    ctx.drawImage(Resource.img.Lvl3Equations, centerx -((width/2)/2), centery -((height/2)/2), (width/2), (height/2));
+                    break;
+                case 4:
+                    ctx.drawImage(Resource.img.Lvl4Equations, centerx -((width/2)/2), centery -((height/2)/2), (width/2), (height/2));
+                    break;
+                case 5:
+                    ctx.drawImage(Resource.img.Lvl5Equations, GridSize, (height/4), (width/2)-(GridSize), (height/2));
+                    ctx.drawImage(Resource.img.Lvl5Tables,(width/2)+GridSize, (height/4), (width/2)-(GridSize*2), (height/2));
+                    break;
+                case 6:
+                    ctx.drawImage(Resource.img.Lvl6Equations, GridSize, (height/4), (width/2)-(GridSize), (height/2));
+                    ctx.drawImage(Resource.img.Lvl6Tables,(width/2)+GridSize, (height/4), (width/2)-(GridSize*2), (height/2));
+                    break;
+                case 7:
+                    ctx.drawImage(Resource.img.Lvl7quations, GridSize, (height/4), (width/2)-(GridSize), (height/2));
+                    ctx.drawImage(Resource.img.Lvl7Tables,(width/2)+GridSize, (height/4), (width/2)-(GridSize*2), (height/2));
+                    break;
+                case 8:
+                    ctx.drawImage(Resource.img.Lvl8Equations, GridSize, (height/4), (width/2)-(GridSize), (height/2));
+                    ctx.drawImage(Resource.img.Lvl8Tables,(width/2)+GridSize, (height/4), (width/2)-(GridSize*2), (height/2));
+                    break;
+                case 9:
+                    ctx.drawImage(Resource.img.Lvl9Equations, GridSize, (height/8), (width/2)-(GridSize), (height/2));
+                    ctx.drawImage(Resource.img.Lvl9TablesP1,0,0,468,478,(width/2)+GridSize, (height/8), (width/2)-(GridSize*4), (height/2));
+                    ctx.drawImage(Resource.img.Lvl9TablesP2,0,0,277,292,(width/2)+GridSize, (height/8)+(height/2), (width/2)-(GridSize*5), (height/3));
+                    break;
+
             }
             $("#equationsButton").val("Return to Level");
             $("#hpEntry").hide();
+            $("#submitButton").hide();
+            $("#returnButton").hide();
+            $("#logoutButton").hide();
         }
         else{
             showingEquations = false;
             drawcanvas();
             $("#equationsButton").val("Show Equations/Tables");
             $("#hpEntry").show();
+            $("#submitButton").show();
+            $("#returnButton").show();
+            $("#logoutButton").show();
         }
     }
 
@@ -78,12 +127,62 @@
         buttonSize = GridSize * 3;
     }
 
+    function drawResponse(success, max, message, stars){
+        console.log("Drawing Response");
+        //setVariables();
+        //ctx.clearRect ( 0 , 0 , width , height );
+        $("#equationsButton").hide();
+        $("#hpEntry").hide();
+        $("#submitButton").hide();
+        $("#returnButton").hide();
+        $("#logoutButton").hide();
+        if(success)
+        {
+            ctx.drawImage(Resource.img.Win, 0, 0, width, height);
+            if(stars==1)
+            {
+                ctx.drawImage(Resource.img.star, 0, 70, 120, 120, centerx-(buttonSize/2),height-(GridSize*3), buttonSize, buttonSize);
+            }
+            else if(stars == 2)
+            {
+                ctx.drawImage(Resource.img.star, 0, 70, 120, 120, centerx-(buttonSize/2)-(buttonSize),height-(GridSize*3), buttonSize, buttonSize);
+                ctx.drawImage(Resource.img.star, 0, 70, 120, 120, centerx-(buttonSize/2),height-(GridSize*3), buttonSize, buttonSize);
+            }
+            else if(stars == 3)
+            {
+                ctx.drawImage(Resource.img.star, 0, 70, 120, 120, centerx-(buttonSize/2)-(buttonSize),height-(GridSize*3), buttonSize, buttonSize);
+                ctx.drawImage(Resource.img.star, 0, 70, 120, 120, centerx-(buttonSize/2),height-(GridSize*3), buttonSize, buttonSize);
+                ctx.drawImage(Resource.img.star, 0, 70, 120, 120, centerx-(buttonSize/2)+(buttonSize),height-(GridSize*3), buttonSize, buttonSize);
+            }
+            setTimeout(function(){ window.location.href = '@Url.Action("Index","Home",new{level = 0})'; }, 3000);
+        }
+        else if(max)
+        {
+            ctx.drawImage(Resource.img.Lose, 0, 0, width, height);
+            setTimeout(function(){ window.location.href = '@Url.Action("Index","Home",new{level = 0})'; }, 3000);
+        }
+        else{
+            ctx.fillStyle = 'red';
+            ctx.font = '72pt Arial'
+            ctx.textAlign = 'center';
+            ctx.fillText(message, width / 2, height /2);
+
+            setTimeout(function(){ drawcanvas(); }, 3000);
+        }
+
+    }
+
     function drawcanvas() {
         setVariables();
         ctx.clearRect ( 0 , 0 , width , height );
         if(level != 0)
         {
             drawGrid();
+            $("#equationsButton").show();
+            $("#hpEntry").show();
+            $("#submitButton").show();
+            $("#returnButton").show();
+            $("#logoutButton").show();
         }
         else
         {
@@ -132,6 +231,21 @@
             Resource.img.Win.src = '@Url.Content("/Content/Images/Win.PNG")';
             Resource.img.Lvl1Equations.src = '@Url.Content("/Content/Images/Lvl1Equations.PNG")';
             Resource.img.Lvl2Equations.src = '@Url.Content("/Content/Images/Lvl2Equations.PNG")';
+            Resource.img.Lvl3Equations.src = '@Url.Content("/Content/Images/Lvl3Equations.PNG")';
+            Resource.img.Lvl4Equations.src = '@Url.Content("/Content/Images/Lvl4Equations.PNG")';
+            Resource.img.Lvl5Equations.src = '@Url.Content("/Content/Images/Lvl5Equations.PNG")';
+            Resource.img.Lvl6Equations.src = '@Url.Content("/Content/Images/Lvl6Equations.PNG")';
+            Resource.img.Lvl7Equations.src = '@Url.Content("/Content/Images/Lvl7Equations.PNG")';
+            Resource.img.Lvl8Equations.src = '@Url.Content("/Content/Images/Lvl8Equations.PNG")';
+            Resource.img.Lvl9Equations.src = '@Url.Content("/Content/Images/Lvl9Equations.PNG")';
+            Resource.img.Lvl5Tables.src = '@Url.Content("/Content/Images/Lvl5Tables.PNG")';
+            Resource.img.Lvl6Tables.src = '@Url.Content("/Content/Images/Lvl6Tables.PNG")';
+            Resource.img.Lvl7Tables.src = '@Url.Content("/Content/Images/Lvl7Tables.PNG")';
+            Resource.img.Lvl8Tables.src = '@Url.Content("/Content/Images/Lvl8Tables.PNG")';
+            Resource.img.Lvl9TablesP1.src = '@Url.Content("/Content/Images/Lvl9TablesP1.PNG")';
+            Resource.img.Lvl9TablesP2.src = '@Url.Content("/Content/Images/Lvl9TablesP2.PNG")';
+            Resource.img.star.src = '@Url.Content("/Content/Images/star-rating.png")';
+
             imagesLoaded = true;
         }
     }
@@ -153,9 +267,9 @@
                 break;
             case 7: ctx.drawImage(Resource.img.pump, ((columns / 2)-2) * GridSize, ((rows / 2)+2)*GridSize, GridSize * 3, GridSize * 3);
                 break;
-            case 8: ctx.drawImage(Resource.img.pump, ((columns / 2)-2) * GridSize, ((rows / 2)+2)*GridSize, GridSize * 3, GridSize * 3);
+            case 8: ctx.drawImage(Resource.img.pump, ((columns / 2)-2) * GridSize, ((rows / 2)+4)*GridSize, GridSize * 3, GridSize * 3);
                 break;
-            case 9: ctx.drawImage(Resource.img.pump, ((columns / 2)-2) * GridSize, ((rows / 2)+2)*GridSize, GridSize * 3, GridSize * 3);
+            case 9: ctx.drawImage(Resource.img.pump, ((columns / 2)-2) * GridSize, ((rows / 2)+4)*GridSize, GridSize * 3, GridSize * 3);
                 break;
         }
     }
@@ -186,7 +300,7 @@
             }
             if(level > 5)
             {
-                ctx.fillText("Efficiency Factor: @Model.EfficencyFactor %", (cwidth / 2), GridSize*9);
+                ctx.fillText("Efficiency Factor: @(Model.EfficencyFactor*100) %", (cwidth / 2), GridSize*9);
             }
             if(level > 6)
             {
@@ -246,7 +360,7 @@
 
                 $("#hpEntry").css("top", ((rows / 2)-3)*GridSize+"px");
                 $("#hpEntry").css("left", ((columns / 2)-3) * GridSize+"px");
-                $("#HPGuess").css("width", 2*GridSize+"px");
+                $("#HPGuess").css("width", 3*GridSize+"px");
                 $("#HPGuess").css("font-size", "x-small");
                 $("#hpEntry label").css("font-size", "x-small");
 
@@ -327,11 +441,11 @@
                 ctx.font = '10pt Arial';
                 ctx.textAlign = 'right';
                 ctx.fillText('Height: @Model.TankOneElevation ft', xleft-(GridSize*1), y - (GridSize*2));
-                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*3.5), rightContainerY+(GridSize*5));
+                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*5.5), rightContainerY+(GridSize*5));
 
                 $("#hpEntry").css("top", ((rows / 2))*GridSize+"px");
                 $("#hpEntry").css("left", ((columns / 2)-3) * GridSize+"px");
-                $("#HPGuess").css("width", 2*GridSize+"px");
+                $("#HPGuess").css("width", 3*GridSize+"px");
                 $("#HPGuess").css("font-size", "x-small");
                 $("#hpEntry label").css("font-size", "x-small");
                 break;
@@ -411,14 +525,14 @@
                 ctx.font = '10pt Arial';
                 ctx.textAlign = 'right';
                 ctx.fillText('Height: @Model.TankOneElevation ft', xleft-(GridSize*1), y - (GridSize*2));
-                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*4), rightContainerY+(GridSize*5));
-                ctx.fillText('Pressure: @Model.TankOnePressure lbm/ft^3', leftContainerX-GridSize, (leftContainerY+(buttonSize*.5)));
-                ctx.fillText('Pressure: @Model.TankTwoPressure lbm/ft^3', rightContainerX+(GridSize*9), (rightContainerY+(buttonSize*.5)));
+                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*6), rightContainerY+(GridSize*8));
+                ctx.fillText('Pressure: @Model.TankOnePressure lbm/in^2', leftContainerX-GridSize, (leftContainerY+(buttonSize*.5)));
+                ctx.fillText('Pressure: @Model.TankTwoPressure lbm/in^2', rightContainerX+(GridSize*11), (rightContainerY+(buttonSize*.5)));
 
 
                 $("#hpEntry").css("top", ((rows / 2))*GridSize+"px");
                 $("#hpEntry").css("left", ((columns / 2)-3) * GridSize+"px");
-                $("#HPGuess").css("width", 2*GridSize+"px");
+                $("#HPGuess").css("width", 3*GridSize+"px");
                 $("#HPGuess").css("font-size", "x-small");
                 $("#hpEntry label").css("font-size", "x-small");
                 break;
@@ -498,16 +612,16 @@
                 ctx.font = '10pt Arial';
                 ctx.textAlign = 'right';
                 ctx.fillText('Height: @Model.TankOneElevation ft', xleft-(GridSize*1), y - (GridSize*2));
-                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*4), rightContainerY+(GridSize*5));
-                ctx.fillText('Pressure: @Model.TankOnePressure lbm/ft^3', leftContainerX-GridSize, (leftContainerY+(buttonSize*.5)));
-                ctx.fillText('Pressure: @Model.TankTwoPressure lbm/ft^3', rightContainerX+(GridSize*9), (rightContainerY+(buttonSize*.5)));
-                ctx.fillText('Vert Length: @Model.VertLengthOne', centerx - (4*GridSize),centery + (5*GridSize));
-                ctx.fillText('Vert Length: @Model.VertLengthTwo', centerx + (6*GridSize),centery + (5*GridSize));
+                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*6), rightContainerY+(GridSize*8));
+                ctx.fillText('Pressure: @Model.TankOnePressure lbm/in^2', leftContainerX-GridSize, (leftContainerY+(buttonSize*.5)));
+                ctx.fillText('Pressure: @Model.TankTwoPressure lbm/in^2', rightContainerX+(GridSize*11), (rightContainerY+(buttonSize*.5)));
+                ctx.fillText('Horizontal Length: @Model.VertLengthOne', centerx - (4*GridSize),centery + (5*GridSize));
+                ctx.fillText('Horizontal Length: @Model.VertLengthTwo', centerx + (10*GridSize),centery + (5*GridSize));
 
 
                 $("#hpEntry").css("top", ((rows / 2))*GridSize+"px");
                 $("#hpEntry").css("left", ((columns / 2)-3) * GridSize+"px");
-                $("#HPGuess").css("width", 2*GridSize+"px");
+                $("#HPGuess").css("width", 3*GridSize+"px");
                 $("#HPGuess").css("font-size", "x-small");
                 $("#hpEntry label").css("font-size", "x-small");
                 break;
@@ -597,16 +711,16 @@
                 ctx.font = '10pt Arial';
                 ctx.textAlign = 'right';
                 ctx.fillText('Height: @Model.TankOneElevation ft', xleft-(GridSize*1), y - (GridSize*2));
-                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*4), rightContainerY+(GridSize*5));
-                ctx.fillText('Pressure: @Model.TankOnePressure lbm/ft^3', leftContainerX-GridSize, (leftContainerY+(buttonSize*.5)));
-                ctx.fillText('Pressure: @Model.TankTwoPressure lbm/ft^3', rightContainerX+(GridSize*9), (rightContainerY+(buttonSize*.5)));
-                ctx.fillText('Vert Length: @Model.VertLengthOne', centerx - (4*GridSize),centery + (5*GridSize));
-                ctx.fillText('Vert Length: @Model.VertLengthTwo', centerx + (6*GridSize),centery + (5*GridSize));
+                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*6), rightContainerY+(GridSize*8));
+                ctx.fillText('Pressure: @Model.TankOnePressure lbm/in^2', leftContainerX-GridSize, (leftContainerY+(buttonSize*.5)));
+                ctx.fillText('Pressure: @Model.TankTwoPressure lbm/in^2', rightContainerX+(GridSize*11), (rightContainerY+(buttonSize*.5)));
+                ctx.fillText('Horizontal Length: @Model.VertLengthOne', centerx - (4*GridSize),centery + (6*GridSize));
+                ctx.fillText('Horizontal Length: @Model.VertLengthTwo', centerx + (10*GridSize),centery + (6*GridSize));
 
 
                 $("#hpEntry").css("top", ((rows / 2))*GridSize+"px");
                 $("#hpEntry").css("left", ((columns / 2)-3) * GridSize+"px");
-                $("#HPGuess").css("width", 2*GridSize+"px");
+                $("#HPGuess").css("width", 3*GridSize+"px");
                 $("#HPGuess").css("font-size", "x-small");
                 $("#hpEntry label").css("font-size", "x-small");
                 break;
@@ -695,16 +809,16 @@
                 ctx.font = '10pt Arial';
                 ctx.textAlign = 'right';
                 ctx.fillText('Height: @Model.TankOneElevation ft', xleft-(GridSize*1), y - (GridSize*2));
-                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*4), rightContainerY+(GridSize*5));
-                ctx.fillText('Pressure: @Model.TankOnePressure lbm/ft^3', leftContainerX-GridSize, (leftContainerY+(buttonSize*.5)));
-                ctx.fillText('Pressure: @Model.TankTwoPressure lbm/ft^3', rightContainerX+(GridSize*9), (rightContainerY+(buttonSize*.5)));
-                ctx.fillText('Vert Length: @Model.VertLengthOne ft', centerx - (4*GridSize),centery + (5*GridSize));
-                ctx.fillText('Vert Length: @Model.VertLengthTwo ft', centerx + (6*GridSize),centery + (5*GridSize));
+                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*6), rightContainerY+(GridSize*8));
+                ctx.fillText('Pressure: @Model.TankOnePressure lbm/in^2', leftContainerX-GridSize, (leftContainerY+(buttonSize*.5)));
+                ctx.fillText('Pressure: @Model.TankTwoPressure lbm/in^2', rightContainerX+(GridSize*11), (rightContainerY+(buttonSize*.5)));
+                ctx.fillText('Horizontal Length: @Model.VertLengthOne', centerx - (4*GridSize),centery + (6*GridSize));
+                ctx.fillText('Horizontal Length: @Model.VertLengthTwo', centerx + (10*GridSize),centery + (6*GridSize));
 
 
                 $("#hpEntry").css("top", ((rows / 2))*GridSize+"px");
                 $("#hpEntry").css("left", ((columns / 2)-3) * GridSize+"px");
-                $("#HPGuess").css("width", 2*GridSize+"px");
+                $("#HPGuess").css("width", 3*GridSize+"px");
                 $("#HPGuess").css("font-size", "x-small");
                 $("#hpEntry label").css("font-size", "x-small");
                 break;
@@ -793,18 +907,18 @@
                 ctx.font = '10pt Arial';
                 ctx.textAlign = 'right';
                 ctx.fillText('Height: @Model.TankOneElevation ft', xleft-(GridSize*1), y - (GridSize*2));
-                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*4), rightContainerY+(GridSize*5));
-                ctx.fillText('Pressure: @Model.TankOnePressure lbm/ft^3', leftContainerX-GridSize, (leftContainerY+(buttonSize*.5)));
-                ctx.fillText('Pressure: @Model.TankTwoPressure lbm/ft^3', rightContainerX+(GridSize*9), (rightContainerY+(buttonSize*.5)));
-                ctx.fillText('Vert Length: @Model.VertLengthOne ft', centerx - (4*GridSize),centery + (5*GridSize));
-                ctx.fillText('Vert Length: @Model.VertLengthTwo ft', centerx + (6*GridSize),centery + (5*GridSize));
+                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*6), rightContainerY+(GridSize*8));
+                ctx.fillText('Pressure: @Model.TankOnePressure lbm/in^2', leftContainerX-GridSize, (leftContainerY+(buttonSize*.5)));
+                ctx.fillText('Pressure: @Model.TankTwoPressure lbm/in^2', rightContainerX+(GridSize*11), (rightContainerY+(buttonSize*.5)));
+                ctx.fillText('Horizontal Length: @Model.VertLengthOne', centerx - (4*GridSize),centery + (6*GridSize));
+                ctx.fillText('Horizontal Length: @Model.VertLengthTwo', centerx + (10*GridSize),centery + (6*GridSize));
 
 
-                $("#hpEntry").css("top", ((rows / 2))*GridSize+"px");
+                $("#hpEntry").css("top", (((rows / 2))*GridSize -(1.5*GridSize))+"px");
                 $("#hpEntry").css("left", ((columns / 2)-3) * GridSize+"px");
-                $("#HPGuess").css("width", 2*GridSize+"px");
+                $("#HPGuess").css("width", 3*GridSize+"px");
                 $("#HPGuess").css("font-size", "x-small");
-                $("#NPSHGuess").css("width", 2*GridSize+"px");
+                $("#NPSHGuess").css("width", 3*GridSize+"px");
                 $("#NPSHGuess").css("font-size", "x-small");
                 $("#hpEntry label").css("font-size", "x-small");
                 break;
@@ -817,14 +931,14 @@
                 ctx.beginPath();
                 var x = ((columns / 2)+1) * GridSize;
                 var xright = x+(Math.round(columns / 6) * GridSize);
-                var y = (((rows / 2)+3)*GridSize);
+                var y = (((rows / 2)+5)*GridSize);
                 ctx.moveTo(x, y);
                 ctx.lineTo(xright, y);
                 ctx.stroke();
 
                 ctx.beginPath();
                 x = ((columns / 2)+1) * GridSize;
-                y = (((rows / 2)+3)*GridSize)+(.5*GridSize);
+                y = (((rows / 2)+5)*GridSize)+(.5*GridSize);
                 ctx.moveTo(x, y);
                 ctx.lineTo(xright+(.5*GridSize), y);
                 ctx.stroke();
@@ -852,7 +966,7 @@
                 //Draw pipes and container to the left of the pump
                 var x = ((columns / 2)-2) * GridSize;
                 var xleft = x-((Math.round(columns / 6)) * GridSize);
-                var y = (((rows / 2)+3)*GridSize);
+                var y = (((rows / 2)+5)*GridSize);
                 ctx.beginPath();
                 ctx.moveTo(x, y);
                 ctx.lineTo(xleft, y);
@@ -860,7 +974,7 @@
 
                 ctx.beginPath();
                 x = ((columns / 2)-2) * GridSize;
-                y = (((rows / 2)+3)*GridSize)+(.5*GridSize);
+                y = (((rows / 2)+5)*GridSize)+(.5*GridSize);
                 ctx.moveTo(x, y);
                 ctx.lineTo(xleft-(.5*GridSize), y);
                 ctx.stroke();
@@ -893,14 +1007,14 @@
                 ctx.font = '10pt Arial';
                 ctx.textAlign = 'right';
                 ctx.fillText('Height: @Model.TankOneElevation ft', xleft-(GridSize*1), y - (GridSize*2));
-                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*4), rightContainerY+(GridSize*5));
-                ctx.fillText('Pressure: @Model.TankOnePressure lbm/ft^3', leftContainerX-GridSize, (leftContainerY+(buttonSize*.5)));
-                ctx.fillText('Pressure: @Model.TankTwoPressure lbm/ft^3', rightContainerX+(GridSize*9), (rightContainerY+(buttonSize*.5)));
-                ctx.fillText('Vert Length: @Model.VertLengthOne ft', centerx - (4*GridSize),centery + (5*GridSize));
-                ctx.fillText('Vert Length: @Model.VertLengthTwo ft', centerx + (6*GridSize),centery + (5*GridSize));
+                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*6), rightContainerY+(GridSize*8));
+                ctx.fillText('Pressure: @Model.TankOnePressure lbm/in^2', leftContainerX-GridSize, (leftContainerY+(buttonSize*.5)));
+                ctx.fillText('Pressure: @Model.TankTwoPressure lbm/in^2', rightContainerX+(GridSize*11), (rightContainerY+(buttonSize*.5)));
+                ctx.fillText('Horizontal Length: @Model.VertLengthOne', centerx - (4*GridSize),centery + (8*GridSize));
+                ctx.fillText('Horizontal Length: @Model.VertLengthTwo', centerx + (10*GridSize),centery + (8*GridSize));
 
 
-                $("#hpEntry").css("top", ((((rows / 2))*GridSize)-(2*GridSize))+"px");
+                $("#hpEntry").css("top", ((((rows / 2))*GridSize)-(GridSize))+"px");
                 $("#hpEntry").css("left", ((columns / 2)-3) * GridSize+"px");
                 $("#HPGuess").css("width", 2*GridSize+"px");
                 $("#HPGuess").css("font-size", "x-small");
@@ -917,14 +1031,14 @@
                 ctx.beginPath();
                 var x = ((columns / 2)+1) * GridSize;
                 var xright = x+(Math.round(columns / 6) * GridSize);
-                var y = (((rows / 2)+3)*GridSize);
+                var y = (((rows / 2)+5)*GridSize);
                 ctx.moveTo(x, y);
                 ctx.lineTo(xright, y);
                 ctx.stroke();
 
                 ctx.beginPath();
                 x = ((columns / 2)+1) * GridSize;
-                y = (((rows / 2)+3)*GridSize)+(.5*GridSize);
+                y = (((rows / 2)+5)*GridSize)+(.5*GridSize);
                 ctx.moveTo(x, y);
                 ctx.lineTo(xright+(.5*GridSize), y);
                 ctx.stroke();
@@ -952,7 +1066,7 @@
                 //Draw pipes and container to the left of the pump
                 var x = ((columns / 2)-2) * GridSize;
                 var xleft = x-((Math.round(columns / 6)) * GridSize);
-                var y = (((rows / 2)+3)*GridSize);
+                var y = (((rows / 2)+5)*GridSize);
                 ctx.beginPath();
                 ctx.moveTo(x, y);
                 ctx.lineTo(xleft, y);
@@ -960,7 +1074,7 @@
 
                 ctx.beginPath();
                 x = ((columns / 2)-2) * GridSize;
-                y = (((rows / 2)+3)*GridSize)+(.5*GridSize);
+                y = (((rows / 2)+5)*GridSize)+(.5*GridSize);
                 ctx.moveTo(x, y);
                 ctx.lineTo(xleft-(.5*GridSize), y);
                 ctx.stroke();
@@ -993,15 +1107,15 @@
                 ctx.font = '10pt Arial';
                 ctx.textAlign = 'right';
                 ctx.fillText('Height: @Model.TankOneElevation ft', xleft-(GridSize*1), y - (GridSize*2));
-                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*4), rightContainerY+(GridSize*5));
-                ctx.fillText('Pressure: @Model.TankOnePressure lbm/ft^3', leftContainerX-GridSize, (leftContainerY+(buttonSize*.5)));
-                ctx.fillText('Pressure: @Model.TankTwoPressure lbm/ft^3', rightContainerX+(GridSize*9), (rightContainerY+(buttonSize*.5)));
-                ctx.fillText('Vert Length: @Model.VertLengthOne ft', centerx - (4*GridSize),centery + (5*GridSize));
-                ctx.fillText('Vert Length: @Model.VertLengthTwo ft', centerx + (6*GridSize),centery + (5*GridSize));
+                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*6), rightContainerY+(GridSize*8));
+                ctx.fillText('Pressure: @Model.TankOnePressure lbm/in^2', leftContainerX-GridSize, (leftContainerY+(buttonSize*.5)));
+                ctx.fillText('Pressure: @Model.TankTwoPressure lbm/in^2', rightContainerX+(GridSize*11), (rightContainerY+(buttonSize*.5)));
+                ctx.fillText('Horizontal Length: @Model.VertLengthOne', centerx - (4*GridSize),centery + (8*GridSize));
+                ctx.fillText('Horizontal Length: @Model.VertLengthTwo', centerx + (10*GridSize),centery + (8*GridSize));
 
 
-                $("#hpEntry").css("top", ((((rows / 2))*GridSize)-(2*GridSize))+"px");
-                $("#hpEntry").css("left", ((columns / 2)-3) * GridSize+"px");
+                $("#hpEntry").css("top", ((((rows / 2))*GridSize)-(1.5*GridSize))+"px");
+                $("#hpEntry").css("left", ((columns / 2)-4) * GridSize+"px");
                 $("#HPGuess").css("width", 3*GridSize+"px");
                 $("#HPGuess").css("font-size", "x-small");
                 $("#NPSHGuess").css("width", 3*GridSize+"px");
@@ -1020,20 +1134,22 @@
         {
             $.getJSON('@Url.Action("SubmitLevel","Home")', { levelId: $("#LevelId").val(), level: level, HPGuess: $("#HPGuess").val()},
                 function(data) {
-                    alert(data.message);
-                    alert(data.star);
-                    alert(data.max);
-                    console.log(data.max);
                     if(data.star != 0)
                     {
-                        ctx.drawImage(Resource.img.Win, 0, 0, width, height);
-                        setTimeout(function(){ window.location.href = '@Url.Action("Index","Home",new{level = 0})'; }, 3000);
+                        drawResponse(true,false,data.message, data.star);
                     }
                     else{
                         if(data.max==true)
                         {
-                            ctx.drawImage(Resource.img.Lose, 0, 0, width, height);
-                            setTimeout(function(){ window.location.href = '@Url.Action("Index","Home",new{level = 0})'; }, 3000);
+                            drawResponse(false,true,data.message, data.star);
+                        }
+                        else{
+                            var message = data.message;
+                            if(message == "place_holder")
+                            {
+                                message = "Invalid Input";
+                            }
+                            drawResponse(false, false, message, data.star);
                         }
                     }
                 }
@@ -1044,18 +1160,22 @@
         {
             $.getJSON('@Url.Action("SubmitLevel","Home")', { levelId: $("#LevelId").val(), level: level, HPGuess: $("#HPGuess").val(), NPSHGuess: $("#NPSHGuess").val() },
                 function(data) {
-                    alert(data.message);
-                    alert(data.star);
-                    alert(data.max);
-                    console.log(data.max);
                     if(data.star != 0)
                     {
-                        setTimeout(function(){ window.location.href = '@Url.Action("Index","Home",new{level = 0})'; }, 3000);
+                        drawResponse(true,false,data.message, data.star);
                     }
                     else{
                         if(data.max==true)
                         {
-                            setTimeout(function(){ window.location.href = '@Url.Action("Index","Home",new{level = 0})'; }, 3000);
+                            drawResponse(false,true,data.message, data.star);
+                        }
+                        else{
+                            var message = data.message;
+                            if(message == "place_holder")
+                            {
+                                message = "Invalid Input";
+                            }
+                            drawResponse(false, false, message, data.star);
                         }
                     }
                 }
@@ -1066,19 +1186,22 @@
             var pumptype = $( "#PumpType option:selected" ).text();
             $.getJSON('@Url.Action("SubmitLevel","Home")', { levelId: $("#LevelId").val(), level: level, HPGuess: $("#HPGuess").val(), NPSHGuess: $("#NPSHGuess").val(), pumpType:pumptype  },
                 function(data) {
-                    alert(data.message);
-                    alert(data.star);
-                    alert(data.max);
-                    console.log(data.max);
                     if(data.star != 0)
                     {
-
-                        setTimeout(function(){ window.location.href = '@Url.Action("Index","Home",new{level = 0})'; }, 10000);
+                        drawResponse(true,false,data.message, data.star);
                     }
                     else{
                         if(data.max==true)
                         {
-                            setTimeout(function(){ window.location.href = '@Url.Action("Index","Home",new{level = 0})'; }, 3000);
+                            drawResponse(false,true,data.message, data.star);
+                        }
+                        else{
+                            var message = data.message;
+                            if(message == "place_holder")
+                            {
+                                message = "Invalid Input";
+                            }
+                            drawResponse(false, false, message, data.star);
                         }
                     }
                 }
@@ -1091,17 +1214,22 @@
                 var pumptype = $( "#PumpType option:selected" ).text();
                 $.getJSON('@Url.Action("SubmitLevel","Home")', { levelId: $("#LevelId").val(), level: level, HPGuess: $("#HPGuess").val(), NPSHGuess: $("#NPSHGuess").val(), pumpType:pumptype, cost:$("#CostGuess").val() },
                     function(data) {
-                        alert(data.message);
-                        alert(data.star);
-                        alert(data.max);
                         if(data.star != 0)
                         {
-                            setTimeout(function(){ window.location.href = '@Url.Action("Index","Home",new{level = 0})'; }, 3000);
+                            drawResponse(true,false,data.message, data.star);
                         }
                         else{
                             if(data.max==true)
                             {
-                                setTimeout(function(){ window.location.href = '@Url.Action("Index","Home",new{level = 0})'; }, 3000);
+                                drawResponse(false,true,data.message, data.star);
+                            }
+                            else{
+                                var message = data.message;
+                                if(message == "place_holder")
+                                {
+                                    message = "Invalid Input";
+                                }
+                                drawResponse(false, false, message, data.star);
                             }
                         }
                     }
@@ -1501,7 +1629,7 @@
             <td><input type="submit" id="submitButton" value="Submit Answer" style="font-size:xx-small; width:100%;" onclick="submitPage()" /></td>
             <td><input type="submit" id="returnButton" value="Level Select" style="font-size:xx-small; width:100%;" onclick="levelselectPage()" /></td>
         </tr>
-        <tr>
+        <tr style="padding-top:3%;">
             <td><input type="submit" id="equationsButton" value="Show Equations/Tables" style="font-size:xx-small; width:100%;" onclick="openEquations()"></td>
             <td><input type="submit" id="logoutButton" value="Log Out" style="font-size:xx-small; width:100%;" onclick="logOut()" /></td>
         </tr>
