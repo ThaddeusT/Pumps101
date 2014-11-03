@@ -78,6 +78,9 @@ namespace Pumps101.Repositories
         // level 10
         private double _cost_correct = -1;
 
+        double _f;
+        double _v2;
+        
         //The Constructor
         public CalculationsRepository(Guid User, Boolean Authenticated)
         {
@@ -97,38 +100,36 @@ namespace Pumps101.Repositories
         /// <param name="Re"> level 4 - 5 = Reynalds number (not used by later levels </param>
         /// <returns>Correct hp to set the pump at</returns>
         private double getHorsePower(bool withHeight, bool withPressure, bool Re)
-        {
-            double v2;
+        {            
             double workPerMass = 0;
             _volumetricFlowRate = (_volume / (_time * 3600));
             double crossSectionalArea = (Math.PI * (Math.Pow(_diam / 12, 2) / 4));
 
-            v2 = _volumetricFlowRate / crossSectionalArea;
-            if(!withHeight && !withPressure)        workPerMass = getWorkFromVelocities(0, v2);
-            else if (withHeight && !withPressure)   workPerMass = getWorkFromVelocities(0, v2) + getWorkFromHeight();
-            else                                    workPerMass = getWorkFromVelocities(0, v2) + getWorkFromHeight() + getPressureFromWork();
+            _v2 = _volumetricFlowRate / crossSectionalArea;
+            if(!withHeight && !withPressure)        workPerMass = getWorkFromVelocities(0, _v2);
+            else if (withHeight && !withPressure)   workPerMass = getWorkFromVelocities(0, _v2) + getWorkFromHeight();
+            else                                    workPerMass = getWorkFromVelocities(0, _v2) + getWorkFromHeight() + getPressureFromWork();
             
             // level 4
             if (_level > 3)
             {
-                double f;
                 int L = _vertLength[0] + _vertLength[1] + _tankElevation[0] + _tankElevation[1];
                 // only lvl 4 and 5
                 if (Re) { 
-                    double rey = (_density * v2 * (_diam / 12)) / _viscosity;
-                    f = 0.0791 / Math.Pow(rey, 0.25);
+                    double rey = (_density * _v2 * (_diam / 12)) / _viscosity;
+                    _f = 0.0791 / Math.Pow(rey, 0.25);
                 }
                 else
                 {
-                    f = (((_A * Math.Pow(v2, 2)) + (_B * v2) + _C) * (2 * (_diam / 12))) / (_density* Math.Pow(v2, 2)) ;
+                    _f = (((_A * Math.Pow(_v2, 2)) + (_B * _v2) + _C) * (2 * (_diam / 12))) / (_density* Math.Pow(_v2, 2)) ;
                 }
                 
-                workPerMass += 0.5 * Math.Pow(v2, 2) * (L / (_diam / 48)) * f;
+                workPerMass += 0.5 * Math.Pow(_v2, 2) * (L / (_diam / 48)) * _f;
 
                 if (_level > 4)
                 {
                     // value 3.4 assumes we always have 2 90 degree elbows (always 1.5) and 2gate valve(open) always (0.2)
-                    workPerMass += 0.5 * Math.Pow(v2, 2) * 3.4;
+                    workPerMass += 0.5 * Math.Pow(_v2, 2) * 3.4;
                 }
             }
 
@@ -173,7 +174,7 @@ namespace Pumps101.Repositories
         // Level 7 - 10
         private double getNetPositiveSuctionHead()
         {
-            return (144 / _density) * (_tankPressure[0] - _vaporPressure) + _tankElevation[0] - (_vertLength[0] + _tankElevation[0]);
+            return (144 / _density) * (_tankPressure[0] - _vaporPressure) + _tankElevation[0] - (_f * ((_tankElevation[0]+_vertLength[0])/(_diam/12)) * (Math.Pow(_v2,2)/ (2*32.174)));
         }
 
         // Based on flow rate decide what pump to use
