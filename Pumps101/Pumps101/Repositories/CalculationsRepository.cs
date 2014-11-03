@@ -454,8 +454,8 @@ namespace Pumps101.Repositories
                 using (SqlCommand command = new SqlCommand("", connection))
                 {
                     connection.Open();
-                    command.CommandText = "SELECT * FROM Levels WHERE is_active = 1";
-                    //string ld = command.ExecuteScalar().ToString();
+                    command.CommandText = "SELECT * FROM Levels WHERE is_active = 1 AND level = @lvl";
+                    command.Parameters.AddWithValue("@lvl", _level);
                     SqlDataReader reader = command.ExecuteReader();
                     if (reader.HasRows)
                     {
