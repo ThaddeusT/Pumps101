@@ -371,7 +371,7 @@ namespace Pumps101.Repositories
 
             }
             _density = 62.4;
-            _efficencyFactor = rn.Next(65, 86) * 0.001;
+            _efficencyFactor = rn.Next(65, 86) * 0.01;
             _tankElevation = new int[2];
             _tankPressure = new double[2];
             for (int i = 0; i < 2; i++)
