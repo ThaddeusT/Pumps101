@@ -16,6 +16,8 @@
     Resource.img.locked = new Image();
     Resource.img.Lose = new Image();
     Resource.img.Win = new Image();
+    Resource.img.Lvl1Equations = new Image();
+    Resource.img.Lvl2Equations = new Image();
     var imagesLoaded = false;
     var columns = 0;
     var rows = 0;
@@ -23,8 +25,47 @@
     var centery = 0;
     var buttonSize =0;
     var level = @Model.Level;
+    var showingEquations = false;
+    var canvas;
+    var ctx;
+    var width;
+    var height;
+    var GridSize;
+    var rows;
+    var columns;
+    var centerx;
+    var centery;
+    var buttonSize;
 
-    function drawcanvas() {
+    function openEquations()
+    {
+        setVariables();
+        if(!showingEquations)
+        {
+            showingEquations = true;
+            ctx.clearRect ( 0 , 0 , width , height );
+            switch(level)
+            {
+                case 1:
+                    ctx.drawImage(Resource.img.Lvl1Equations, centerx -((width/2)/2), centery -((height/2)/2), (width/2), (height/2));
+                    break;
+                case 2:
+                    ctx.drawImage(Resource.img.Lvl2Equations, centerx -((width/2)/2), centery -((height/2)/2), (width/2), (height/2));
+                    break;
+            }
+            $("#equationsButton").val("Return to Level");
+            $("#hpEntry").hide();
+        }
+        else{
+            showingEquations = false;
+            drawcanvas();
+            $("#equationsButton").val("Show Equations/Tables");
+            $("#hpEntry").show();
+        }
+    }
+
+    function setVariables()
+    {
         canvas = document.getElementById("canvas");
         ctx = canvas.getContext("2d");
         width = canvas.width;
@@ -35,6 +76,11 @@
         centerx = (columns / 2) * GridSize;
         centery = (rows / 2) * GridSize;
         buttonSize = GridSize * 3;
+    }
+
+    function drawcanvas() {
+        setVariables();
+        ctx.clearRect ( 0 , 0 , width , height );
         if(level != 0)
         {
             drawGrid();
@@ -44,9 +90,10 @@
             $("#hpEntry").hide();
             $("#submitButton").hide();
             $("#returnButton").hide();
+            $("#equationsButton").hide();
         }
-
-        drawImages();
+        loadImages();
+        drawPump();
         drawComponents();
     }
 
@@ -67,9 +114,8 @@
         }
     }
 
-    function drawImages() {
+    function loadImages() {
         if (imagesLoaded) {
-            drawPump();
         }
         else {
             Resource.img.container.onload = function () {
@@ -84,6 +130,8 @@
             Resource.img.locked.src ='@Url.Content("/Content/Images/Locked.PNG")';
             Resource.img.Lose.src = '@Url.Content("/Content/Images/Lose.PNG")';
             Resource.img.Win.src = '@Url.Content("/Content/Images/Win.PNG")';
+            Resource.img.Lvl1Equations.src = '@Url.Content("/Content/Images/Lvl1Equations.PNG")';
+            Resource.img.Lvl2Equations.src = '@Url.Content("/Content/Images/Lvl2Equations.PNG")';
             imagesLoaded = true;
         }
     }
@@ -1448,18 +1496,21 @@
         }
 </table>
     <menu id="controls">
-        <input type="submit" id="submitButton" value="Submit Answer" style="font-size:xx-small" onclick="submitPage()" />
-        <input type="submit" id="returnButton" value="Level Select" style="font-size:xx-small" onclick="levelselectPage()" />
-        <input type="submit" id="logoutButton" value="Log Out" style="font-size:xx-small" onclick="logOut()" />
-    </menu>
+    <table >
+        <tr>
+            <td><input type="submit" id="submitButton" value="Submit Answer" style="font-size:xx-small; width:100%;" onclick="submitPage()" /></td>
+            <td><input type="submit" id="returnButton" value="Level Select" style="font-size:xx-small; width:100%;" onclick="levelselectPage()" /></td>
+        </tr>
+        <tr>
+            <td><input type="submit" id="equationsButton" value="Show Equations/Tables" style="font-size:xx-small; width:100%;" onclick="openEquations()"></td>
+            <td><input type="submit" id="logoutButton" value="Log Out" style="font-size:xx-small; width:100%;" onclick="logOut()" /></td>
+        </tr>
+    </table>
+</menu>
 <div id="fix">&copy; @DateTime.Now.Year - Pumps101</div>
 @Html.HiddenFor(m => m.LevelId)
 @Html.Hidden("redirect", Url.Action("Index", "Home", new { level = 0 }))
 <div id="gameresult">
-    <video class="video" id="videoresult">
-        <source id="src" src="@Url.Content("/Content/Video/YouLose1.mp4")"/>
-        Your browser does not support the video tag.
-    </video>
     <div class="centeredtext">
         <div id="response">
         </div>

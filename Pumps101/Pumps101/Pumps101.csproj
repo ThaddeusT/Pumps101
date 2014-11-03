@@ -395,6 +395,8 @@
     <Content Include="Content\Images\icons-svg\video-white.svg" />
     <Content Include="Content\Images\Locked.PNG" />
     <Content Include="Content\Images\Lose.PNG" />
+    <Content Include="Content\Images\Lvl1Equations.PNG" />
+    <Content Include="Content\Images\Lvl2Equations.PNG" />
     <Content Include="Content\Images\outer_space.jpg" />
     <Content Include="Content\Images\pump.PNG" />
     <Content Include="Content\Images\Valve.PNG" />
