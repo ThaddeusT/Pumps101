@@ -9,10 +9,13 @@
     var GridSize = 0;
     Resource.img.container = new Image();
     Resource.img.pump = new Image();
+    Resource.img.valve = new Image();
     Resource.img.star1 = new Image();
     Resource.img.star2 = new Image();
     Resource.img.star3 = new Image();
     Resource.img.locked = new Image();
+    Resource.img.Lose = new Image();
+    Resource.img.Win = new Image();
     var imagesLoaded = false;
     var columns = 0;
     var rows = 0;
@@ -74,10 +77,13 @@
             };
             Resource.img.pump.src = '@Url.Content("/Content/Images/pump.PNG")';
             Resource.img.container.src ='@Url.Content("/Content/Images/container.PNG")';
+            Resource.img.valve.src = '@Url.Content("/Content/Images/Valve.PNG")';
             Resource.img.star1.src ='@Url.Content("/Content/Images/1Stars.PNG")';
             Resource.img.star2.src ='@Url.Content("/Content/Images/2Stars.PNG")';
             Resource.img.star3.src ='@Url.Content("/Content/Images/3Stars.PNG")';
             Resource.img.locked.src ='@Url.Content("/Content/Images/Locked.PNG")';
+            Resource.img.Lose.src = '@Url.Content("/Content/Images/Lose.PNG")';
+            Resource.img.Win.src = '@Url.Content("/Content/Images/Win.PNG")';
             imagesLoaded = true;
         }
     }
@@ -479,6 +485,9 @@
                 ctx.lineTo(xright+(.5*GridSize), y);
                 ctx.stroke();
 
+                var rightValvex = ((xright+(.5*GridSize))-((xright-x)/2))-(3*GridSize);
+                var rightValvey = (y-(2*GridSize));
+
                 rightContainerX = xright - (1.5*GridSize);
                 rightContainerY = y - (GridSize*10);
 
@@ -512,6 +521,9 @@
                 ctx.lineTo(xleft-(.5*GridSize), y);
                 ctx.stroke();
 
+                var leftValvex = ((xleft-(.5*GridSize))+((x-(xleft-(.5*GridSize)))/2));
+                var leftValvey = (y-(2*GridSize));
+
                 leftContainerX = xleft - (1.5*GridSize);
                 leftContainerY = y - (GridSize*6);
 
@@ -528,6 +540,10 @@
                 ctx.moveTo(xleft, y - (.5*GridSize));
                 ctx.lineTo(xleft, y - (GridSize*3));
                 ctx.stroke();
+
+                //Draw Valves
+                ctx.drawImage(Resource.img.valve, leftValvex, leftValvey, GridSize * 3, GridSize * 3);
+                ctx.drawImage(Resource.img.valve, rightValvex, rightValvey, GridSize * 3, GridSize * 3);
 
                 ctx.fillStyle ='black';
                 ctx.font = '10pt Arial';
@@ -567,6 +583,9 @@
                 ctx.lineTo(xright+(.5*GridSize), y);
                 ctx.stroke();
 
+                var rightValvex = ((xright+(.5*GridSize))-((xright-x)/2))-(3*GridSize);
+                var rightValvey = (y-(2*GridSize));
+
                 rightContainerX = xright - (1.5*GridSize);
                 rightContainerY = y - (GridSize*10);
 
@@ -600,6 +619,9 @@
                 ctx.lineTo(xleft-(.5*GridSize), y);
                 ctx.stroke();
 
+                var leftValvex = ((xleft-(.5*GridSize))+((x-(xleft-(.5*GridSize)))/2));
+                var leftValvey = (y-(2*GridSize));
+
                 leftContainerX = xleft - (1.5*GridSize);
                 leftContainerY = y - (GridSize*6);
 
@@ -616,6 +638,10 @@
                 ctx.moveTo(xleft, y - (.5*GridSize));
                 ctx.lineTo(xleft, y - (GridSize*3));
                 ctx.stroke();
+
+                //Draw Valves
+                ctx.drawImage(Resource.img.valve, leftValvex, leftValvey, GridSize * 3, GridSize * 3);
+                ctx.drawImage(Resource.img.valve, rightValvex, rightValvey, GridSize * 3, GridSize * 3);
 
                 ctx.fillStyle ='black';
                 ctx.font = '10pt Arial';
@@ -655,6 +681,9 @@
                 ctx.lineTo(xright+(.5*GridSize), y);
                 ctx.stroke();
 
+                var rightValvex = ((xright+(.5*GridSize))-((xright-x)/2))-(3*GridSize);
+                var rightValvey = (y-(2*GridSize));
+
                 rightContainerX = xright - (1.5*GridSize);
                 rightContainerY = y - (GridSize*10);
 
@@ -688,6 +717,9 @@
                 ctx.lineTo(xleft-(.5*GridSize), y);
                 ctx.stroke();
 
+                var leftValvex = ((xleft-(.5*GridSize))+((x-(xleft-(.5*GridSize)))/2));
+                var leftValvey = (y-(2*GridSize));
+
                 leftContainerX = xleft - (1.5*GridSize);
                 leftContainerY = y - (GridSize*6);
 
@@ -704,6 +736,10 @@
                 ctx.moveTo(xleft, y - (.5*GridSize));
                 ctx.lineTo(xleft, y - (GridSize*3));
                 ctx.stroke();
+
+                //Draw Valves
+                ctx.drawImage(Resource.img.valve, leftValvex, leftValvey, GridSize * 3, GridSize * 3);
+                ctx.drawImage(Resource.img.valve, rightValvex, rightValvey, GridSize * 3, GridSize * 3);
 
                 ctx.fillStyle ='black';
                 ctx.font = '10pt Arial';
@@ -745,6 +781,9 @@
                 ctx.lineTo(xright+(.5*GridSize), y);
                 ctx.stroke();
 
+                var rightValvex = ((xright+(.5*GridSize))-((xright-x)/2))-(3*GridSize);
+                var rightValvey = (y-(2*GridSize));
+
                 rightContainerX = xright - (1.5*GridSize);
                 rightContainerY = y - (GridSize*10);
 
@@ -778,6 +817,9 @@
                 ctx.lineTo(xleft-(.5*GridSize), y);
                 ctx.stroke();
 
+                var leftValvex = ((xleft-(.5*GridSize))+((x-(xleft-(.5*GridSize)))/2));
+                var leftValvey = (y-(2*GridSize));
+
                 leftContainerX = xleft - (1.5*GridSize);
                 leftContainerY = y - (GridSize*6);
 
@@ -794,6 +836,10 @@
                 ctx.moveTo(xleft, y - (.5*GridSize));
                 ctx.lineTo(xleft, y - (GridSize*3));
                 ctx.stroke();
+
+                //Draw Valves
+                ctx.drawImage(Resource.img.valve, leftValvex, leftValvey, GridSize * 3, GridSize * 3);
+                ctx.drawImage(Resource.img.valve, rightValvex, rightValvey, GridSize * 3, GridSize * 3);
 
                 ctx.fillStyle ='black';
                 ctx.font = '10pt Arial';
@@ -835,6 +881,9 @@
                 ctx.lineTo(xright+(.5*GridSize), y);
                 ctx.stroke();
 
+                var rightValvex = ((xright+(.5*GridSize))-((xright-x)/2))-(3*GridSize);
+                var rightValvey = (y-(2*GridSize));
+
                 rightContainerX = xright - (1.5*GridSize);
                 rightContainerY = y - (GridSize*10);
 
@@ -868,6 +917,9 @@
                 ctx.lineTo(xleft-(.5*GridSize), y);
                 ctx.stroke();
 
+                var leftValvex = ((xleft-(.5*GridSize))+((x-(xleft-(.5*GridSize)))/2));
+                var leftValvey = (y-(2*GridSize));
+
                 leftContainerX = xleft - (1.5*GridSize);
                 leftContainerY = y - (GridSize*6);
 
@@ -884,6 +936,10 @@
                 ctx.moveTo(xleft, y - (.5*GridSize));
                 ctx.lineTo(xleft, y - (GridSize*3));
                 ctx.stroke();
+
+                //Draw Valves
+                ctx.drawImage(Resource.img.valve, leftValvex, leftValvey, GridSize * 3, GridSize * 3);
+                ctx.drawImage(Resource.img.valve, rightValvex, rightValvey, GridSize * 3, GridSize * 3);
 
                 ctx.fillStyle ='black';
                 ctx.font = '10pt Arial';
@@ -922,11 +978,13 @@
                     console.log(data.max);
                     if(data.star != 0)
                     {
+                        ctx.drawImage(Resource.img.Win, 0, 0, width, height);
                         setTimeout(function(){ window.location.href = '@Url.Action("Index","Home",new{level = 0})'; }, 3000);
                     }
                     else{
                         if(data.max==true)
                         {
+                            ctx.drawImage(Resource.img.Lose, 0, 0, width, height);
                             setTimeout(function(){ window.location.href = '@Url.Action("Index","Home",new{level = 0})'; }, 3000);
                         }
                     }
@@ -966,7 +1024,8 @@
                     console.log(data.max);
                     if(data.star != 0)
                     {
-                        setTimeout(function(){ window.location.href = '@Url.Action("Index","Home",new{level = 0})'; }, 3000);
+
+                        setTimeout(function(){ window.location.href = '@Url.Action("Index","Home",new{level = 0})'; }, 10000);
                     }
                     else{
                         if(data.max==true)

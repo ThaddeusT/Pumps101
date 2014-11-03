@@ -397,6 +397,7 @@
     <Content Include="Content\Images\Lose.PNG" />
     <Content Include="Content\Images\outer_space.jpg" />
     <Content Include="Content\Images\pump.PNG" />
+    <Content Include="Content\Images\Valve.PNG" />
     <Content Include="Content\Images\Win.PNG" />
     <Content Include="Content\jquery.mobile-1.4.2.css" />
     <Content Include="Content\jquery.mobile.external-png-1.4.2.css" />
