@@ -173,7 +173,7 @@ namespace Pumps101.Repositories
         // Level 7 - 10
         private double getNetPositiveSuctionHead()
         {
-            return (144 / _density) * (_tankPressure[0] - _vaporPressure) + (_tankElevation[0] - _tankElevation[1]) - (_vertLength[0] + _tankElevation[0]);
+            return (144 / _density) * (_tankPressure[0] - _vaporPressure) + _tankElevation[0] - (_vertLength[0] + _tankElevation[0]);
         }
 
         // Based on flow rate decide what pump to use
@@ -418,7 +418,7 @@ namespace Pumps101.Repositories
                 _pumpType_correct = getPumpToUse();
             }
             // set material for level 10 since there is no level 9 where they select it themself
-            if(_level > 9)
+            if(_level > 8)
             {
                 string[] materialArr = new string[] { "Cast Iron", "Cast Steel", "Stainless Steel", "Nickel Alloy" };
                 _material = materialArr[rn.Next(4)];
