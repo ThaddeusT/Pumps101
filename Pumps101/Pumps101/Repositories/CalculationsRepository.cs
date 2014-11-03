@@ -323,8 +323,8 @@ namespace Pumps101.Repositories
             // later levels have more options for diam
             else
             {
-                _diams = new double[] { 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5};
-                _diam = _diams[rn.Next(8)];
+                _diams = new double[] { 1.5, 2, 2.5, 3, 3.5, 4, 5};
+                _diam = _diams[rn.Next(7)];
                 switch ((int)(_diam*10))
                 {
                     case 15:
@@ -357,16 +357,11 @@ namespace Pumps101.Repositories
                         _B = 0.0373;
                         _C = -0.0311;
                         break;
-                    case 45:
+                    case 50:
                         _A = 0.0251;
                         _B = 0.027;
                         _C = -0.0209;
-                        break;
-                    case 50:
-                        _A = 0.104;
-                        _B = 0.1111;
-                        _C = -0.0606;
-                        break;
+                        break;                    
                 }
 
             }
