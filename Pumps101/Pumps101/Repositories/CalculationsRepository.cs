@@ -124,7 +124,7 @@ namespace Pumps101.Repositories
                     _f = (((_A * Math.Pow(_v2, 2)) + (_B * _v2) + _C) * (2 * (_diam / 12))) / (_density* Math.Pow(_v2, 2)) ;
                 }
                 
-                workPerMass += 0.5 * Math.Pow(_v2, 2) * (L / (_diam / 48)) * _f;
+                workPerMass += 0.5 * Math.Pow(_v2, 2) * (L / (_diam / 4)) * _f;
 
                 if (_level > 4)
                 {
