@@ -163,7 +163,7 @@ namespace Pumps101.Repositories
             using (SqlCommand command = new SqlCommand("", connection))
             {
                 connection.Open();
-                command.CommandText = "SELECT hp,npsh FROM Level_Answers WHERE level_id = @lvl_id";
+                command.CommandText = "SELECT hp,npsh,pump_type,cost FROM Level_Answers WHERE level_id = @lvl_id";
                 command.Parameters.AddWithValue("@lvl_id", level_id);
                 SqlDataReader reader = command.ExecuteReader();
                 if (reader.HasRows)
@@ -186,7 +186,7 @@ namespace Pumps101.Repositories
 
 
 
-            if (pumpUser.Equals(_pumpCorrect))
+            if (!pumpUser.Equals(_pumpCorrect))
             {
                 return "Incorrect Pump Type";
             }
