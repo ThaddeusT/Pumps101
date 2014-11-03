@@ -44,23 +44,74 @@ namespace Pumps101.Controllers
             }
         }
 
-        public ActionResult SubmitLevel(int levelId, string HPGuess)
+        public ActionResult SubmitLevel(int levelId, int level, string HPGuess, string NPSHGuess, string pumpType, string cost)
         {
-            double guess = Convert.ToDouble(HPGuess);
-            int star;
-            bool max;
-            String message ="place_holder";
-            star = 0;
-            max = false;
-            try
+            double hpguess;
+            double npshguess;
+            double costguess;
+            int star = 0;
+            bool max = false;
+            String message = "place_holder";
+            
+            bool hpWasNum = Double.TryParse(HPGuess, out hpguess);
+            bool npshWasNum = Double.TryParse(NPSHGuess, out npshguess);
+            bool costWasNum = Double.TryParse(cost, out costguess);
+            if (level < 7)
             {
-                message = CheckLevel.checkLevel(levelId, guess, out star, out max);
+                if (hpWasNum)
+                {
+                    try
+                    {
+                        message = CheckLevel.checkLevel(levelId, hpguess, out star, out max);
+                    }
+                    catch
+                    {
+                        ErrorHandler.LevelError(levelId);
+                    }
+                }
             }
-            catch
+            else if (level == 7)
             {
-                ErrorHandler.LevelError(levelId);
+                if (hpWasNum && npshWasNum)
+                {
+                    try
+                    {
+                        message = CheckLevel.checkLevel(levelId, hpguess, npshguess,out star,out max);
+                    }
+                    catch
+                    {
+                        ErrorHandler.LevelError(levelId);
+                    }
+                }
             }
-
+            else if (level == 8)
+            {
+                if (hpWasNum && npshWasNum && !String.IsNullOrEmpty(pumpType))
+                {
+                    try
+                    {
+                        message = CheckLevel.checkLevel(levelId, hpguess, npshguess, pumpType, out star, out max);
+                    }
+                    catch
+                    {
+                        ErrorHandler.LevelError(levelId);
+                    }
+                }
+            }
+            else if(level ==9)
+            {
+                if (hpWasNum && npshWasNum && !String.IsNullOrEmpty(pumpType) && costWasNum)
+                {
+                    try
+                    {
+                        message = CheckLevel.checkLevel(levelId, hpguess, npshguess, pumpType, costguess,out star, out max);
+                    }
+                    catch
+                    {
+                        ErrorHandler.LevelError(levelId);
+                    }
+                }
+            }
             if (star == 0)
             {
                 if (message.Equals(""))

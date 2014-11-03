@@ -104,7 +104,7 @@ namespace Pumps101.Repositories
             using (SqlCommand command = new SqlCommand("", connection))
             {
                 connection.Open();
-                command.CommandText = "SELECT hp,npsh FROM Level_Answers WHERE level_id = @lvl_id";
+                command.CommandText = "SELECT hp,npsh,pump_type FROM Level_Answers WHERE level_id = @lvl_id";
                 command.Parameters.AddWithValue("@lvl_id", level_id);
                 SqlDataReader reader = command.ExecuteReader();
                 if (reader.HasRows)
@@ -122,7 +122,7 @@ namespace Pumps101.Repositories
             int hpS = compare(horsePowerUser, _hpCorrect);
             int npshS = compare(npshUser, _npshCorrect);
 
-            if (pumpUser.Equals(_pumpCorrect))
+            if (!pumpUser.Equals(_pumpCorrect))
             {
                 return "Incorrect Pump Type";
             }
@@ -239,15 +239,20 @@ namespace Pumps101.Repositories
 
         private static int compare(double val, double correct)
         {
+            if(correct < 0)
+            {
+                correct = correct * -1;
+                val = val * -1;
+            }
             if (val <= correct + (0.01 * correct) && val >= correct - (0.01 * correct))
             {
                 return 3;
             }
-            else if (val <= correct + (0.05 * correct) && val >= correct - (0.05 * correct))
+            else if (val <= correct + (0.03 * correct) && val >= correct - (0.03 * correct))
             {
                 return 2;
             }
-            else if (val <= correct + (0.1 * correct) && val >= correct - (0.1 * correct))
+            else if (val <= correct + (0.05 * correct) && val >= correct - (0.05 * correct))
             {
                 return 1;
             }

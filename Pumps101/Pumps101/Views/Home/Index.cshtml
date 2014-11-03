@@ -93,6 +93,16 @@
                 break;
             case 4: ctx.drawImage(Resource.img.pump, ((columns / 2)-2) * GridSize, ((rows / 2)+2)*GridSize, GridSize * 3, GridSize * 3);
                 break;
+            case 5: ctx.drawImage(Resource.img.pump, ((columns / 2)-2) * GridSize, ((rows / 2)+2)*GridSize, GridSize * 3, GridSize * 3);
+                break;
+            case 6: ctx.drawImage(Resource.img.pump, ((columns / 2)-2) * GridSize, ((rows / 2)+2)*GridSize, GridSize * 3, GridSize * 3);
+                break;
+            case 7: ctx.drawImage(Resource.img.pump, ((columns / 2)-2) * GridSize, ((rows / 2)+2)*GridSize, GridSize * 3, GridSize * 3);
+                break;
+            case 8: ctx.drawImage(Resource.img.pump, ((columns / 2)-2) * GridSize, ((rows / 2)+2)*GridSize, GridSize * 3, GridSize * 3);
+                break;
+            case 9: ctx.drawImage(Resource.img.pump, ((columns / 2)-2) * GridSize, ((rows / 2)+2)*GridSize, GridSize * 3, GridSize * 3);
+                break;
         }
     }
 
@@ -115,6 +125,18 @@
             if(level > 3)
             {
                 ctx.fillText('Viscosity of Liquid: @Model.Viscosity lbm/(ft*s)', (cwidth / 2), GridSize*7);
+            }
+            if(level > 4)
+            {
+                ctx.fillText("Don't forget to calculate for ev.", (cwidth / 2), GridSize*8);
+            }
+            if(level > 5)
+            {
+                ctx.fillText("Efficiency Factor: @Model.EfficencyFactor %", (cwidth / 2), GridSize*9);
+            }
+            if(level > 6)
+            {
+                ctx.fillText("Vapor Pressure: @Model.VaporPressure psi", (cwidth / 2), GridSize*10);
             }
         }
 
@@ -435,6 +457,456 @@
                 $("#HPGuess").css("font-size", "x-small");
                 $("#hpEntry label").css("font-size", "x-small");
                 break;
+
+            case 5:
+
+                ctx.strokeStyle = "black";
+
+                //Draw pipes and container to the right of the pump
+
+                ctx.beginPath();
+                var x = ((columns / 2)+1) * GridSize;
+                var xright = x+(Math.round(columns / 6) * GridSize);
+                var y = (((rows / 2)+3)*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xright, y);
+                ctx.stroke();
+
+                ctx.beginPath();
+                x = ((columns / 2)+1) * GridSize;
+                y = (((rows / 2)+3)*GridSize)+(.5*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xright+(.5*GridSize), y);
+                ctx.stroke();
+
+                rightContainerX = xright - (1.5*GridSize);
+                rightContainerY = y - (GridSize*10);
+
+                ctx.drawImage(Resource.img.container, rightContainerX, rightContainerY, GridSize * 3, GridSize * 3);
+                ctx.rect(rightContainerX, rightContainerY, GridSize * 3, GridSize * 3);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xright+(.5*GridSize), y);
+                ctx.lineTo(xright+(.5*GridSize), y-(GridSize*7));
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xright, y-(.5*GridSize));
+                ctx.lineTo(xright, y-(.5*GridSize)-(GridSize*6.5));
+                ctx.stroke();
+
+                //Draw pipes and container to the left of the pump
+                var x = ((columns / 2)-2) * GridSize;
+                var xleft = x-((Math.round(columns / 6)) * GridSize);
+                var y = (((rows / 2)+3)*GridSize);
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(xleft, y);
+                ctx.stroke();
+
+                ctx.beginPath();
+                x = ((columns / 2)-2) * GridSize;
+                y = (((rows / 2)+3)*GridSize)+(.5*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xleft-(.5*GridSize), y);
+                ctx.stroke();
+
+                leftContainerX = xleft - (1.5*GridSize);
+                leftContainerY = y - (GridSize*6);
+
+                ctx.drawImage(Resource.img.container, leftContainerX, leftContainerY, GridSize * 3, GridSize * 3);
+                ctx.rect(leftContainerX, leftContainerY, GridSize * 3, GridSize * 3);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xleft-(.5*GridSize), y);
+                ctx.lineTo(xleft-(.5*GridSize), y - (GridSize*3));
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xleft, y - (.5*GridSize));
+                ctx.lineTo(xleft, y - (GridSize*3));
+                ctx.stroke();
+
+                ctx.fillStyle ='black';
+                ctx.font = '10pt Arial';
+                ctx.textAlign = 'right';
+                ctx.fillText('Height: @Model.TankOneElevation ft', xleft-(GridSize*1), y - (GridSize*2));
+                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*4), rightContainerY+(GridSize*5));
+                ctx.fillText('Pressure: @Model.TankOnePressure lbm/ft^3', leftContainerX-GridSize, (leftContainerY+(buttonSize*.5)));
+                ctx.fillText('Pressure: @Model.TankTwoPressure lbm/ft^3', rightContainerX+(GridSize*9), (rightContainerY+(buttonSize*.5)));
+                ctx.fillText('Vert Length: @Model.VertLengthOne', centerx - (4*GridSize),centery + (5*GridSize));
+                ctx.fillText('Vert Length: @Model.VertLengthTwo', centerx + (6*GridSize),centery + (5*GridSize));
+
+
+                $("#hpEntry").css("top", ((rows / 2))*GridSize+"px");
+                $("#hpEntry").css("left", ((columns / 2)-3) * GridSize+"px");
+                $("#HPGuess").css("width", 2*GridSize+"px");
+                $("#HPGuess").css("font-size", "x-small");
+                $("#hpEntry label").css("font-size", "x-small");
+                break;
+            case 6:
+
+                ctx.strokeStyle = "black";
+
+                //Draw pipes and container to the right of the pump
+
+                ctx.beginPath();
+                var x = ((columns / 2)+1) * GridSize;
+                var xright = x+(Math.round(columns / 6) * GridSize);
+                var y = (((rows / 2)+3)*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xright, y);
+                ctx.stroke();
+
+                ctx.beginPath();
+                x = ((columns / 2)+1) * GridSize;
+                y = (((rows / 2)+3)*GridSize)+(.5*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xright+(.5*GridSize), y);
+                ctx.stroke();
+
+                rightContainerX = xright - (1.5*GridSize);
+                rightContainerY = y - (GridSize*10);
+
+                ctx.drawImage(Resource.img.container, rightContainerX, rightContainerY, GridSize * 3, GridSize * 3);
+                ctx.rect(rightContainerX, rightContainerY, GridSize * 3, GridSize * 3);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xright+(.5*GridSize), y);
+                ctx.lineTo(xright+(.5*GridSize), y-(GridSize*7));
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xright, y-(.5*GridSize));
+                ctx.lineTo(xright, y-(.5*GridSize)-(GridSize*6.5));
+                ctx.stroke();
+
+                //Draw pipes and container to the left of the pump
+                var x = ((columns / 2)-2) * GridSize;
+                var xleft = x-((Math.round(columns / 6)) * GridSize);
+                var y = (((rows / 2)+3)*GridSize);
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(xleft, y);
+                ctx.stroke();
+
+                ctx.beginPath();
+                x = ((columns / 2)-2) * GridSize;
+                y = (((rows / 2)+3)*GridSize)+(.5*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xleft-(.5*GridSize), y);
+                ctx.stroke();
+
+                leftContainerX = xleft - (1.5*GridSize);
+                leftContainerY = y - (GridSize*6);
+
+                ctx.drawImage(Resource.img.container, leftContainerX, leftContainerY, GridSize * 3, GridSize * 3);
+                ctx.rect(leftContainerX, leftContainerY, GridSize * 3, GridSize * 3);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xleft-(.5*GridSize), y);
+                ctx.lineTo(xleft-(.5*GridSize), y - (GridSize*3));
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xleft, y - (.5*GridSize));
+                ctx.lineTo(xleft, y - (GridSize*3));
+                ctx.stroke();
+
+                ctx.fillStyle ='black';
+                ctx.font = '10pt Arial';
+                ctx.textAlign = 'right';
+                ctx.fillText('Height: @Model.TankOneElevation ft', xleft-(GridSize*1), y - (GridSize*2));
+                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*4), rightContainerY+(GridSize*5));
+                ctx.fillText('Pressure: @Model.TankOnePressure lbm/ft^3', leftContainerX-GridSize, (leftContainerY+(buttonSize*.5)));
+                ctx.fillText('Pressure: @Model.TankTwoPressure lbm/ft^3', rightContainerX+(GridSize*9), (rightContainerY+(buttonSize*.5)));
+                ctx.fillText('Vert Length: @Model.VertLengthOne ft', centerx - (4*GridSize),centery + (5*GridSize));
+                ctx.fillText('Vert Length: @Model.VertLengthTwo ft', centerx + (6*GridSize),centery + (5*GridSize));
+
+
+                $("#hpEntry").css("top", ((rows / 2))*GridSize+"px");
+                $("#hpEntry").css("left", ((columns / 2)-3) * GridSize+"px");
+                $("#HPGuess").css("width", 2*GridSize+"px");
+                $("#HPGuess").css("font-size", "x-small");
+                $("#hpEntry label").css("font-size", "x-small");
+                break;
+            case 7:
+
+                ctx.strokeStyle = "black";
+
+                //Draw pipes and container to the right of the pump
+
+                ctx.beginPath();
+                var x = ((columns / 2)+1) * GridSize;
+                var xright = x+(Math.round(columns / 6) * GridSize);
+                var y = (((rows / 2)+3)*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xright, y);
+                ctx.stroke();
+
+                ctx.beginPath();
+                x = ((columns / 2)+1) * GridSize;
+                y = (((rows / 2)+3)*GridSize)+(.5*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xright+(.5*GridSize), y);
+                ctx.stroke();
+
+                rightContainerX = xright - (1.5*GridSize);
+                rightContainerY = y - (GridSize*10);
+
+                ctx.drawImage(Resource.img.container, rightContainerX, rightContainerY, GridSize * 3, GridSize * 3);
+                ctx.rect(rightContainerX, rightContainerY, GridSize * 3, GridSize * 3);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xright+(.5*GridSize), y);
+                ctx.lineTo(xright+(.5*GridSize), y-(GridSize*7));
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xright, y-(.5*GridSize));
+                ctx.lineTo(xright, y-(.5*GridSize)-(GridSize*6.5));
+                ctx.stroke();
+
+                //Draw pipes and container to the left of the pump
+                var x = ((columns / 2)-2) * GridSize;
+                var xleft = x-((Math.round(columns / 6)) * GridSize);
+                var y = (((rows / 2)+3)*GridSize);
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(xleft, y);
+                ctx.stroke();
+
+                ctx.beginPath();
+                x = ((columns / 2)-2) * GridSize;
+                y = (((rows / 2)+3)*GridSize)+(.5*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xleft-(.5*GridSize), y);
+                ctx.stroke();
+
+                leftContainerX = xleft - (1.5*GridSize);
+                leftContainerY = y - (GridSize*6);
+
+                ctx.drawImage(Resource.img.container, leftContainerX, leftContainerY, GridSize * 3, GridSize * 3);
+                ctx.rect(leftContainerX, leftContainerY, GridSize * 3, GridSize * 3);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xleft-(.5*GridSize), y);
+                ctx.lineTo(xleft-(.5*GridSize), y - (GridSize*3));
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xleft, y - (.5*GridSize));
+                ctx.lineTo(xleft, y - (GridSize*3));
+                ctx.stroke();
+
+                ctx.fillStyle ='black';
+                ctx.font = '10pt Arial';
+                ctx.textAlign = 'right';
+                ctx.fillText('Height: @Model.TankOneElevation ft', xleft-(GridSize*1), y - (GridSize*2));
+                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*4), rightContainerY+(GridSize*5));
+                ctx.fillText('Pressure: @Model.TankOnePressure lbm/ft^3', leftContainerX-GridSize, (leftContainerY+(buttonSize*.5)));
+                ctx.fillText('Pressure: @Model.TankTwoPressure lbm/ft^3', rightContainerX+(GridSize*9), (rightContainerY+(buttonSize*.5)));
+                ctx.fillText('Vert Length: @Model.VertLengthOne ft', centerx - (4*GridSize),centery + (5*GridSize));
+                ctx.fillText('Vert Length: @Model.VertLengthTwo ft', centerx + (6*GridSize),centery + (5*GridSize));
+
+
+                $("#hpEntry").css("top", ((rows / 2))*GridSize+"px");
+                $("#hpEntry").css("left", ((columns / 2)-3) * GridSize+"px");
+                $("#HPGuess").css("width", 2*GridSize+"px");
+                $("#HPGuess").css("font-size", "x-small");
+                $("#NPSHGuess").css("width", 2*GridSize+"px");
+                $("#NPSHGuess").css("font-size", "x-small");
+                $("#hpEntry label").css("font-size", "x-small");
+                break;
+            case 8:
+
+                ctx.strokeStyle = "black";
+
+                //Draw pipes and container to the right of the pump
+
+                ctx.beginPath();
+                var x = ((columns / 2)+1) * GridSize;
+                var xright = x+(Math.round(columns / 6) * GridSize);
+                var y = (((rows / 2)+3)*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xright, y);
+                ctx.stroke();
+
+                ctx.beginPath();
+                x = ((columns / 2)+1) * GridSize;
+                y = (((rows / 2)+3)*GridSize)+(.5*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xright+(.5*GridSize), y);
+                ctx.stroke();
+
+                rightContainerX = xright - (1.5*GridSize);
+                rightContainerY = y - (GridSize*10);
+
+                ctx.drawImage(Resource.img.container, rightContainerX, rightContainerY, GridSize * 3, GridSize * 3);
+                ctx.rect(rightContainerX, rightContainerY, GridSize * 3, GridSize * 3);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xright+(.5*GridSize), y);
+                ctx.lineTo(xright+(.5*GridSize), y-(GridSize*7));
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xright, y-(.5*GridSize));
+                ctx.lineTo(xright, y-(.5*GridSize)-(GridSize*6.5));
+                ctx.stroke();
+
+                //Draw pipes and container to the left of the pump
+                var x = ((columns / 2)-2) * GridSize;
+                var xleft = x-((Math.round(columns / 6)) * GridSize);
+                var y = (((rows / 2)+3)*GridSize);
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(xleft, y);
+                ctx.stroke();
+
+                ctx.beginPath();
+                x = ((columns / 2)-2) * GridSize;
+                y = (((rows / 2)+3)*GridSize)+(.5*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xleft-(.5*GridSize), y);
+                ctx.stroke();
+
+                leftContainerX = xleft - (1.5*GridSize);
+                leftContainerY = y - (GridSize*6);
+
+                ctx.drawImage(Resource.img.container, leftContainerX, leftContainerY, GridSize * 3, GridSize * 3);
+                ctx.rect(leftContainerX, leftContainerY, GridSize * 3, GridSize * 3);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xleft-(.5*GridSize), y);
+                ctx.lineTo(xleft-(.5*GridSize), y - (GridSize*3));
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xleft, y - (.5*GridSize));
+                ctx.lineTo(xleft, y - (GridSize*3));
+                ctx.stroke();
+
+                ctx.fillStyle ='black';
+                ctx.font = '10pt Arial';
+                ctx.textAlign = 'right';
+                ctx.fillText('Height: @Model.TankOneElevation ft', xleft-(GridSize*1), y - (GridSize*2));
+                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*4), rightContainerY+(GridSize*5));
+                ctx.fillText('Pressure: @Model.TankOnePressure lbm/ft^3', leftContainerX-GridSize, (leftContainerY+(buttonSize*.5)));
+                ctx.fillText('Pressure: @Model.TankTwoPressure lbm/ft^3', rightContainerX+(GridSize*9), (rightContainerY+(buttonSize*.5)));
+                ctx.fillText('Vert Length: @Model.VertLengthOne ft', centerx - (4*GridSize),centery + (5*GridSize));
+                ctx.fillText('Vert Length: @Model.VertLengthTwo ft', centerx + (6*GridSize),centery + (5*GridSize));
+
+
+                $("#hpEntry").css("top", ((((rows / 2))*GridSize)-(2*GridSize))+"px");
+                $("#hpEntry").css("left", ((columns / 2)-3) * GridSize+"px");
+                $("#HPGuess").css("width", 2*GridSize+"px");
+                $("#HPGuess").css("font-size", "x-small");
+                $("#NPSHGuess").css("width", 2*GridSize+"px");
+                $("#NPSHGuess").css("font-size", "x-small");
+                $("#hpEntry label").css("font-size", "x-small");
+                break;
+            case 9:
+
+                ctx.strokeStyle = "black";
+
+                //Draw pipes and container to the right of the pump
+
+                ctx.beginPath();
+                var x = ((columns / 2)+1) * GridSize;
+                var xright = x+(Math.round(columns / 6) * GridSize);
+                var y = (((rows / 2)+3)*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xright, y);
+                ctx.stroke();
+
+                ctx.beginPath();
+                x = ((columns / 2)+1) * GridSize;
+                y = (((rows / 2)+3)*GridSize)+(.5*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xright+(.5*GridSize), y);
+                ctx.stroke();
+
+                rightContainerX = xright - (1.5*GridSize);
+                rightContainerY = y - (GridSize*10);
+
+                ctx.drawImage(Resource.img.container, rightContainerX, rightContainerY, GridSize * 3, GridSize * 3);
+                ctx.rect(rightContainerX, rightContainerY, GridSize * 3, GridSize * 3);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xright+(.5*GridSize), y);
+                ctx.lineTo(xright+(.5*GridSize), y-(GridSize*7));
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xright, y-(.5*GridSize));
+                ctx.lineTo(xright, y-(.5*GridSize)-(GridSize*6.5));
+                ctx.stroke();
+
+                //Draw pipes and container to the left of the pump
+                var x = ((columns / 2)-2) * GridSize;
+                var xleft = x-((Math.round(columns / 6)) * GridSize);
+                var y = (((rows / 2)+3)*GridSize);
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(xleft, y);
+                ctx.stroke();
+
+                ctx.beginPath();
+                x = ((columns / 2)-2) * GridSize;
+                y = (((rows / 2)+3)*GridSize)+(.5*GridSize);
+                ctx.moveTo(x, y);
+                ctx.lineTo(xleft-(.5*GridSize), y);
+                ctx.stroke();
+
+                leftContainerX = xleft - (1.5*GridSize);
+                leftContainerY = y - (GridSize*6);
+
+                ctx.drawImage(Resource.img.container, leftContainerX, leftContainerY, GridSize * 3, GridSize * 3);
+                ctx.rect(leftContainerX, leftContainerY, GridSize * 3, GridSize * 3);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xleft-(.5*GridSize), y);
+                ctx.lineTo(xleft-(.5*GridSize), y - (GridSize*3));
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(xleft, y - (.5*GridSize));
+                ctx.lineTo(xleft, y - (GridSize*3));
+                ctx.stroke();
+
+                ctx.fillStyle ='black';
+                ctx.font = '10pt Arial';
+                ctx.textAlign = 'right';
+                ctx.fillText('Height: @Model.TankOneElevation ft', xleft-(GridSize*1), y - (GridSize*2));
+                ctx.fillText('Height: @Model.TankTwoElevation ft', xright+(GridSize*4), rightContainerY+(GridSize*5));
+                ctx.fillText('Pressure: @Model.TankOnePressure lbm/ft^3', leftContainerX-GridSize, (leftContainerY+(buttonSize*.5)));
+                ctx.fillText('Pressure: @Model.TankTwoPressure lbm/ft^3', rightContainerX+(GridSize*9), (rightContainerY+(buttonSize*.5)));
+                ctx.fillText('Vert Length: @Model.VertLengthOne ft', centerx - (4*GridSize),centery + (5*GridSize));
+                ctx.fillText('Vert Length: @Model.VertLengthTwo ft', centerx + (6*GridSize),centery + (5*GridSize));
+
+
+                $("#hpEntry").css("top", ((((rows / 2))*GridSize)-(2*GridSize))+"px");
+                $("#hpEntry").css("left", ((columns / 2)-3) * GridSize+"px");
+                $("#HPGuess").css("width", 3*GridSize+"px");
+                $("#HPGuess").css("font-size", "x-small");
+                $("#NPSHGuess").css("width", 3*GridSize+"px");
+                $("#NPSHGuess").css("font-size", "x-small");
+                $("#CostGuess").css("width", 3*GridSize+"px");
+                $("#CostGuess").css("font-size", "x-small");
+                $("#PumpType").css("font-size", "x-small");
+                $("#hpEntry label").css("font-size", "x-small");
+                break;
         }
     }
 
@@ -442,7 +914,7 @@
     {
         if(level < 7)
         {
-            $.getJSON('@Url.Action("SubmitLevel","Home")', { levelId: $("#LevelId").val(), HPGuess: $("#HPGuess").val()},
+            $.getJSON('@Url.Action("SubmitLevel","Home")', { levelId: $("#LevelId").val(), level: level, HPGuess: $("#HPGuess").val()},
                 function(data) {
                     alert(data.message);
                     alert(data.star);
@@ -466,6 +938,92 @@
                     }
                 }
             );
+        }
+        else if(level == 7)
+        {
+            $.getJSON('@Url.Action("SubmitLevel","Home")', { levelId: $("#LevelId").val(), level: level, HPGuess: $("#HPGuess").val(), NPSHGuess: $("#NPSHGuess").val() },
+                function(data) {
+                    alert(data.message);
+                    alert(data.star);
+                    alert(data.max);
+                    console.log(data.max);
+                    if(data.star != 0)
+                    {
+                        var video = document.getElementsByTagName('video')[0];
+                        var sources = video.getElementsByTagName('source');
+                        sources[0].src = '@Url.Content("/Content/Video/YouWin1.mp4")';
+                        video.load();
+                        $("#gameresult").show();
+                        $("#videoresult").get(0).play();
+                    }
+                    else{
+                        if(data.max==true)
+                        {
+                            $("#gameresult").show();
+                            $("#videoresult").get(0).play();
+                        }
+                    }
+                }
+            );
+        }
+        else if (level == 8)
+        {
+            var pumptype = $( "#PumpType option:selected" ).text();
+            $.getJSON('@Url.Action("SubmitLevel","Home")', { levelId: $("#LevelId").val(), level: level, HPGuess: $("#HPGuess").val(), NPSHGuess: $("#NPSHGuess").val(), pumpType:pumptype  },
+                function(data) {
+                    alert(data.message);
+                    alert(data.star);
+                    alert(data.max);
+                    console.log(data.max);
+                    if(data.star != 0)
+                    {
+                        var video = document.getElementsByTagName('video')[0];
+                        var sources = video.getElementsByTagName('source');
+                        sources[0].src = '@Url.Content("/Content/Video/YouWin1.mp4")';
+                        video.load();
+                        $("#gameresult").show();
+                        $("#videoresult").get(0).play();
+                    }
+                    else{
+                        if(data.max==true)
+                        {
+                            $("#gameresult").show();
+                            $("#videoresult").get(0).play();
+                        }
+                    }
+                }
+            );
+        }
+        else if (level ==9)
+        {
+            if($("#HPGuess").val() != "" && $("#NPSHGuess").val() != "" && $("#CostGuess").val() != "")
+            {
+                var pumptype = $( "#PumpType option:selected" ).text();
+                $.getJSON('@Url.Action("SubmitLevel","Home")', { levelId: $("#LevelId").val(), level: level, HPGuess: $("#HPGuess").val(), NPSHGuess: $("#NPSHGuess").val(), pumpType:pumptype, cost:$("#CostGuess").val() },
+                    function(data) {
+                        alert(data.message);
+                        alert(data.star);
+                        alert(data.max);
+                        console.log(data.max);
+                        if(data.star != 0)
+                        {
+                            var video = document.getElementsByTagName('video')[0];
+                            var sources = video.getElementsByTagName('source');
+                            sources[0].src = '@Url.Content("/Content/Video/YouWin1.mp4")';
+                            video.load();
+                            $("#gameresult").show();
+                            $("#videoresult").get(0).play();
+                        }
+                        else{
+                            if(data.max==true)
+                            {
+                                $("#gameresult").show();
+                                $("#videoresult").get(0).play();
+                            }
+                        }
+                    }
+                );
+            }
         }
 
     }
@@ -832,6 +1390,27 @@
         <td>@Html.LabelFor(m => m.HPGuess)</td>
         <td>@Html.TextBoxFor(m => m.HPGuess)</td>
     </tr>
+        @if(Model.Level >6)
+        { 
+            <tr>
+                <td>@Html.Label("NPSHGuess","NPSH:")</td>
+                <td>@Html.TextBox("NPSHGuess","")</td>
+            </tr>
+        }
+        @if (Model.Level > 7)
+        {
+            <tr>
+                <td>@Html.Label("PumpType","Pump Type:")</td>
+                <td>@Html.DropDownListFor(m => m.PumpType, new SelectList(Model.PumpTypes, "Key", "Value"), new { size = 1})</td>
+            </tr>
+        }
+        @if (Model.Level > 8)
+        {
+            <tr>
+                <td>@Html.Label("CostGuess", "Cost:")</td>
+                <td>@Html.TextBox("CostGuess", "")</td>
+            </tr>
+        }
 </table>
     <menu id="controls">
         <input type="submit" id="submitButton" value="Submit Answer" onclick="submitPage()" />

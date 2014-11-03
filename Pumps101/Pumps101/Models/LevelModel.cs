@@ -87,6 +87,11 @@ namespace Pumps101.Models
             _NPSH_correct = NPSH_correct;
             _pumpType_correct = pumpType_correct;
             _cost_correct = cost_correct;
+            List<KeyValuePair<string, string>> pumpTypes = new List<KeyValuePair<string, string>>();
+            pumpTypes.Add(new KeyValuePair<string, string>("Diaphragm", "Diaphragm"));
+            pumpTypes.Add(new KeyValuePair<string, string>("Rotary", "Rotary"));
+            pumpTypes.Add(new KeyValuePair<string, string>("Centrifugal", "Centrifugal"));
+            PumpTypes = pumpTypes;
         }
 
         public LevelModel(int lv_id, int level, int chances, double diam, double density, double time, double volume, int[] tankElevation, double[] tankPressure, double viscosity, int[] vertLength, double efficFactor, double vaporPressure, string material)
@@ -108,6 +113,12 @@ namespace Pumps101.Models
             _efficencyFactor = efficFactor;
             _vaporPressure = vaporPressure;
             _material = material;
+            List<KeyValuePair<string, string>> pumpTypes = new List<KeyValuePair<string, string>>();
+            pumpTypes.Add(new KeyValuePair<string, string>("", ""));
+            pumpTypes.Add(new KeyValuePair<string, string>("Diaphragm", "Diaphragm"));
+            pumpTypes.Add(new KeyValuePair<string, string>("Rotary", "Rotary"));
+            pumpTypes.Add(new KeyValuePair<string, string>("Centrifugal", "Centrifugal"));
+            PumpTypes = pumpTypes;
         }
 
         public LevelModel(int level, Guid User, Boolean Authenticated)
@@ -305,6 +316,10 @@ namespace Pumps101.Models
                 return _level_id;
             }
         }
+
+        public IEnumerable<KeyValuePair<string, string>> PumpTypes { get; set; }
+
+        public String PumpType { get; set; }
         #endregion
 
     }
