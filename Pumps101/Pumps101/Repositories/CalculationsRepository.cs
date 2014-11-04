@@ -195,7 +195,7 @@ namespace Pumps101.Repositories
             }
         }
 
-        // level 10
+        // level 9
         private double getCost()
         {
             double baseCost = 0;
@@ -394,8 +394,20 @@ namespace Pumps101.Repositories
             // use higher volume and less time for later levels
             if (_level > 7)
             {
-                timeUnrounded = (rn.NextDouble() * (1.25) + 0.25);
-                _volume = rn.Next(5000, 10001);
+                if (_diam <= 2.5)
+                {
+                    if (_level == 9)
+                    {
+                        timeUnrounded = ((rn.NextDouble() * 1.25) + 1.25);
+                    }
+                    else { timeUnrounded = ((rn.NextDouble() * 1.75) + 1.25); }
+                    _volume = rn.Next(2000, 4001);
+                }
+                else if (_diam <= 5)
+                {
+                    timeUnrounded = ((rn.NextDouble() * 0.75) + 0.5);
+                    _volume = rn.Next(5000, 10001);
+                }
             }
             else
             {
